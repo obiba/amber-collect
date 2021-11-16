@@ -8,7 +8,7 @@
     <q-separator/>
     <q-card-section>
     <div>
-      <BlitzForm :key='remountCounter' :schema='schema' v-model='formData' :columnCount='1' gridGap='32px'/>
+      <BlitzForm :key='remountCounter' :schema='generatedSchema' v-model='formData' :columnCount='1' gridGap='32px'/>
       <PreviewCode comment='formData'>{{ formData }}</PreviewCode>
     </div>
     </q-card-section>
