@@ -13,7 +13,7 @@ COPY . .
 FROM develop-stage as build-stage
 ARG AMBER_URL
 ARG LOCALES
-RUN npm install
+#RUN npm install
 RUN quasar build --mode pwa
 
 # production stage
