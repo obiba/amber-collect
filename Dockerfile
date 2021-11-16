@@ -6,14 +6,14 @@
 FROM node:lts-alpine as develop-stage
 WORKDIR /app
 COPY package*.json ./
-RUN yarn global add @quasar/cli
+RUN npm install -g @quasar/cli
 COPY . .
 
 # build stage
 FROM develop-stage as build-stage
 ARG AMBER_URL
 ARG LOCALES
-RUN yarn
+RUN npm install
 RUN quasar build --mode pwa
 
 # production stage
