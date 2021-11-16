@@ -12,6 +12,7 @@
   "dependencies": {
     "@blitzar/form": "^1.0.2",
     "@quasar/extras": "^1.0.0",
+    "amber-form": "git+https://github.com/obiba/amber-form.git",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "quasar": "^2.0.0",
