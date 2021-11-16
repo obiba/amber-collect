@@ -5,6 +5,8 @@
 # develop stage
 FROM node:lts-alpine as develop-stage
 WORKDIR /app
+RUN apk update && \
+    apk add git
 COPY package*.json ./
 RUN yarn global add @quasar/cli
 COPY . .
