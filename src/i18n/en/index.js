@@ -9,7 +9,8 @@ export default {
   },
   main: {
     brand: 'Amber Collect',
-    logout: 'Sign out'
+    logout: 'Sign out',
+    powered_by: 'Powered by'
   },
   email: 'Email',
   password: 'Password'

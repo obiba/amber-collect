@@ -69,6 +69,12 @@
           :key="link.title"
           v-bind="link"
         />
+
+        <q-item class="fixed-bottom text-caption">
+          <div>
+            {{$t('main.powered_by')}} <a class="text-weight-bold" href="https://www.obiba.org" target="_blank">OBiBa Amber</a>
+          </div>
+        </q-item>
       </q-list>
     </q-drawer>
 
