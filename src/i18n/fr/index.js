@@ -10,7 +10,20 @@ export default {
   main: {
     brand: 'Amber Collect',
     logout: 'Déconnexion',
+    lock: 'Verrouiller',
+    dashboard: 'Tableau de bord',
+    essential_links: 'Liens utiles',
+    docs: 'Docs',
+    chat: 'Chat',
+    forum: 'Forum',
     powered_by: 'Propulsé par'
+  },
+  loading: {
+    title: 'Chargement',
+    caption: 'Veuillez patienter...'
+  },
+  lock: {
+    code_placeholder: 'Entrer le code'
   },
   email: 'Courriel',
   password: 'Mot de passe'

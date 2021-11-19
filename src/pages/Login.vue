@@ -1,18 +1,18 @@
 <template>
   <q-layout>
     <q-page-container>
-      <q-page class="flex bg-base flex-center">
+      <q-page class="bg-blue text-white flex flex-center">
         <div class="column"  v-bind:style="$q.screen.lt.sm?{'width': '80%'}:{'width':'30%'}">
           <div class="col">
-            <div class="text-center text-h4 text-grey-8 q-pb-lg">
+            <div class="text-center text-h4 q-pb-lg">
               {{$t('main.brand')}}
             </div>
           </div>
           <div class="col">
-            <q-card>
+            <q-card flat color="white" class="bg-blue-7">
               <q-card-section>
                 <div class="text-center q-pt-sm">
-                  <div class="col text-subtitle text-grey-7">
+                  <div class="col text-subtitle">
                     {{$t('login.title')}}
                   </div>
                 </div>
@@ -20,7 +20,7 @@
               <q-card-section>
                 <q-form @submit="onSubmit" class="q-gutter-md">
                   <q-input
-                    filled
+                    dark
                     v-model="email"
                     :label="$t('email')"
                     lazy-rules>
@@ -31,7 +31,7 @@
 
                   <q-input
                     type="password"
-                    filled
+                    dark
                     v-model="password"
                     :label="$t('password')"
                     lazy-rules>
@@ -44,7 +44,7 @@
                     <q-btn
                       :label="$t('login.submit')"
                       type="submit"
-                      color="primary"
+                      color="dark"
                       :disable="disableSubmit"/>
                   </div>
                 </q-form>

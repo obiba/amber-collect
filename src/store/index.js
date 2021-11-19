@@ -1,6 +1,11 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
+import VuexPersistence from 'vuex-persist'
 import authvuex from './store.auth'
+
+const vuexLocal = new VuexPersistence({
+  storage: window.localStorage
+})
 
 /*
  * If not building with SSR mode, you can
@@ -13,7 +18,7 @@ import authvuex from './store.auth'
 
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
-    plugins: [authvuex],
+    plugins: [vuexLocal.plugin, authvuex],
     modules: {},
 
     // enable strict mode (adds overhead!)

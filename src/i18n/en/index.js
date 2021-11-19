@@ -10,7 +10,20 @@ export default {
   main: {
     brand: 'Amber Collect',
     logout: 'Sign out',
+    lock: 'Lock',
+    dashboard: 'Dashboard',
+    essential_links: 'Essential links',
+    docs: 'Docs',
+    chat: 'Chat',
+    forum: 'Forum',
     powered_by: 'Powered by'
+  },
+  loading: {
+    title: 'Loading',
+    caption: 'Please wait...'
+  },
+  lock: {
+    code_placeholder: 'Enter code'
   },
   email: 'Email',
   password: 'Password'

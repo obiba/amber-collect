@@ -1,5 +1,5 @@
 <template>
-  <q-layout class="bg-base text-grey-5" v-cloak>
+  <q-layout class="bg-blue text-white" v-cloak>
     <q-page-container>
       <q-page class="flex flex-center">
         <q-card class="bg-transparent no-border no-shadow">
@@ -8,8 +8,8 @@
               indeterminate
               size="100px"
               :thickness="0.22"
-              color="lime"
-              track-color="grey"
+              color="white"
+              track-color="blue-4"
               class="q-ma-xl"
             />
           </div>

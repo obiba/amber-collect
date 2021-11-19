@@ -21,8 +21,6 @@
                  @click="$q.fullscreen.toggle()"
                  v-if="$q.screen.gt.sm">
           </q-btn>
-          <q-btn round dense flat icon="fab fa-github" type="a" href="https://github.com/obiba/amber-studio" target="_blank">
-          </q-btn>
           <q-btn-dropdown
             v-show="hasLocales"
             flat
@@ -31,20 +29,6 @@
               <q-item clickable v-close-popup @click="onLocaleSelection(localeOpt)" v-for="localeOpt in localeOptions" :key="localeOpt.value">
                 <q-item-section>
                   <q-item-label class="text-uppercase">{{localeOpt.value}}</q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-btn-dropdown>
-          <q-btn-dropdown flat icon="person" no-caps>
-            <template v-slot:label>
-              <div class="text-center q-pl-sm">
-                {{userName}}
-              </div>
-            </template>
-            <q-list>
-              <q-item clickable v-close-popup @click="onLogout">
-                <q-item-section>
-                  <q-item-label>{{$t('main.logout')}}</q-item-label>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -61,7 +45,46 @@
         <q-item-label
           header
         >
-          Essential Links
+          {{userName}}
+        </q-item-label>
+
+        <q-item
+          clickable
+          @click="onLogout"
+        >
+          <q-item-section avatar>
+            <q-icon name="logout" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{$t('main.logout')}}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item
+          clickable
+          @click="onLock"
+        >
+          <q-item-section avatar>
+            <q-icon name="lock" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{$t('main.lock')}}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item to="/" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="dashboard"/>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{$t('main.dashboard')}}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item-label
+          header
+        >
+          {{$t('main.essential_links')}}
         </q-item-label>
 
         <EssentialLink
@@ -85,44 +108,33 @@
 </template>
 
 <script>
+import { useI18n } from 'vue-i18n'
+import { locales } from '../boot/i18n'
+import { defineComponent, ref } from 'vue'
+import { mapState } from 'vuex'
+
 import EssentialLink from 'components/EssentialLink.vue'
 
 const linksList = [
   {
-    title: 'Docs',
+    title: 'main.docs',
     caption: 'amberdoc.obiba.org',
     icon: 'school',
     link: 'https://amberdoc.obiba.org'
   },
   {
-    title: 'Github',
-    caption: 'github.com/obiba/amber-collect',
-    icon: 'code',
-    link: 'https://github.com/obiba/amber-collect'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
+    title: 'main.chat',
+    caption: 'chat.obiba.org',
     icon: 'chat',
-    link: 'https://chat.quasar.dev'
+    link: 'https://chat.obiba.org'
   },
   {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
+    title: 'main.forum',
+    caption: 'forum.obiba.org',
     icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
+    link: 'https://forum.obiba.org'
   }
 ]
-
-import { useI18n } from 'vue-i18n'
-import { locales } from '../boot/i18n'
-import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
   name: 'MainLayout',
@@ -146,6 +158,9 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState({
+      user: state => state.auth.payload ? state.auth.payload.user : undefined
+    }),
     localeOptions () {
       return locales.map(loc => {
         return {
@@ -157,11 +172,9 @@ export default defineComponent({
     hasLocales () {
       return locales.length > 1
     },
-    user () {
-      return this.$store.state.auth.payload ? this.$store.state.auth.payload.user : undefined
-    },
     userName () {
-      return this.userEmail.split('@')[0]
+      const fullname = this.user.firstname + ' ' + this.user.lastname
+      return fullname.trim().length === 0 ? this.userEmail : fullname
     },
     userEmail () {
       if (this.user) {
@@ -176,6 +189,9 @@ export default defineComponent({
     },
     onLogout () {
       this.$store.dispatch('auth/logout')
+    },
+    onLock () {
+      this.$router.push('/lock')
     }
   }
 })
