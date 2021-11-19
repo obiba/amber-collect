@@ -8,13 +8,13 @@ const routes = [
         path: '',
         component: () => import('pages/Dashboard.vue'),
         meta: { requiresAuth: true }
-      },
-      {
-        path: '/test',
-        component: () => import('pages/Test.vue'),
-        meta: {}
       }
     ]
+  },
+  {
+    path: '/test',
+    component: () => import('pages/Test.vue'),
+    meta: {}
   },
   {
     path: '/loading',

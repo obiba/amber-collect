@@ -1,22 +1,15 @@
 <template>
   <q-card>
     <q-card-section>
-      <div class='text-h6 text-grey-8'>
-        Case Report
+      <div>
+        <BlitzForm :key='remountCounter' :schema='generatedSchema' v-model='formData' :columnCount='1' gridGap='32px'/>
       </div>
     </q-card-section>
-    <q-separator/>
     <q-card-section>
-    <div>
-      <BlitzForm :key='remountCounter' :schema='generatedSchema' v-model='formData' :columnCount='1' gridGap='32px'/>
-      <PreviewCode comment='formData'>{{ formData }}</PreviewCode>
-    </div>
+      <div id="data">
+        <PreviewCode comment='formData'>{{ formData }}</PreviewCode>
+      </div>
     </q-card-section>
-    <q-card-actions align='left'>
-      <q-btn label='Submit' class='text-capitalize q-ma-sm' color='primary' @click='submitFormData'/>
-      <q-btn label='Validate' class='text-capitalize q-ma-sm' @click='validateFormData'/>
-      <q-btn label='Reset' class='text-capitalize q-ma-sm' @click='resetFormData'/>
-    </q-card-actions>
   </q-card>
 </template>
 
