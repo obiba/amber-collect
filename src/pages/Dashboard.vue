@@ -10,30 +10,6 @@
       <div class="col-xs-12 col-sm-6 col-md-3">
         <case-report-form-card/>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <case-report-form-card/>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <case-report-form-card/>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <case-report-form-card/>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <case-report-form-card/>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <case-report-form-card/>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <case-report-form-card/>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <case-report-form-card/>
-      </div>
-      <div class="col-xs-12 col-sm-6 col-md-3">
-        <case-report-form-card/>
-      </div>
     </div>
   </q-page>
 </template>
