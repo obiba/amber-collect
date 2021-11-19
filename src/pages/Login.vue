@@ -2,7 +2,7 @@
   <q-layout>
     <q-page-container>
       <q-page class="bg-blue text-white flex flex-center">
-        <div class="column"  v-bind:style="$q.screen.lt.sm?{'width': '80%'}:{'width':'30%'}">
+        <div class="column" v-bind:style="$q.screen.lt.sm?{'width': '80%'}:$q.screen.lt.md?{'width':'50%'}:{'width':'30%'}">
           <div class="col">
             <div class="text-center text-h4 q-pb-lg">
               {{$t('main.brand')}}
@@ -21,6 +21,7 @@
                 <q-form @submit="onSubmit" class="q-gutter-md">
                   <q-input
                     dark
+                    color="white"
                     v-model="email"
                     :label="$t('email')"
                     lazy-rules>
@@ -32,6 +33,7 @@
                   <q-input
                     type="password"
                     dark
+                    color="white"
                     v-model="password"
                     :label="$t('password')"
                     lazy-rules>
