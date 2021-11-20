@@ -23,7 +23,7 @@ export default {
     caption: 'Veuillez patienter...'
   },
   lock: {
-    code_placeholder: 'Entrer le code de vérouillage'
+    code_placeholder: 'Entrer le code de dévérouillage'
   },
   email: 'Courriel',
   password: 'Mot de passe'

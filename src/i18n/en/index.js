@@ -23,7 +23,7 @@ export default {
     caption: 'Please wait...'
   },
   lock: {
-    code_placeholder: 'Enter lock code'
+    code_placeholder: 'Enter unlock code'
   },
   email: 'Email',
   password: 'Password'
