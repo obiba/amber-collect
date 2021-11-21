@@ -1,76 +1,78 @@
 <template>
-  <div class="row q-mb-lg">
-    <div class="col" v-for="num in nums1" :key="num">
-      <q-btn
-        class="q-ml-md"
-        round
-        dense
-        color="primary"
-        size="lg"
-        :label="num"
-        @click="onAppend(num)"
-      />
+  <div>
+    <div class="row q-mb-lg">
+      <div class="col" v-for="num in nums1" :key="num">
+        <q-btn
+          class="q-ml-md"
+          round
+          dense
+          color="primary"
+          size="lg"
+          :label="num"
+          @click="onAppend(num)"
+        />
+      </div>
     </div>
-  </div>
-  <div class="row q-mb-lg">
-    <div class="col" v-for="num in nums2" :key="num">
-      <q-btn
-        class="q-ml-md"
-        round
-        dense
-        color="primary"
-        size="lg"
-        :label="num"
-        @click="onAppend(num)"
-      />
+    <div class="row q-mb-lg">
+      <div class="col" v-for="num in nums2" :key="num">
+        <q-btn
+          class="q-ml-md"
+          round
+          dense
+          color="primary"
+          size="lg"
+          :label="num"
+          @click="onAppend(num)"
+        />
+      </div>
     </div>
-  </div>
-  <div class="row q-mb-lg">
-    <div class="col" v-for="num in nums3" :key="num">
-      <q-btn
-        class="q-ml-md"
-        round
-        dense
-        color="primary"
-        size="lg"
-        :label="num"
-        @click="onAppend(num)"
-      />
+    <div class="row q-mb-lg">
+      <div class="col" v-for="num in nums3" :key="num">
+        <q-btn
+          class="q-ml-md"
+          round
+          dense
+          color="primary"
+          size="lg"
+          :label="num"
+          @click="onAppend(num)"
+        />
+      </div>
     </div>
-  </div>
-  <div class="row q-mb-lg">
-    <div class="col">
-      <q-btn
-        class="q-ml-md bg-blue-5"
-        round
-        dense
-        color="primary"
-        size="lg"
-        icon="clear"
-        @click="onClear"
-      />
-    </div>
-    <div class="col" v-for="num in nums4" :key="num">
-      <q-btn
-        class="q-ml-md"
-        round
-        dense
-        color="primary"
-        size="lg"
-        :label="num"
-        @click="onAppend(num)"
-      />
-    </div>
-    <div class="col">
-      <q-btn
-        class="q-ml-md bg-blue-5"
-        round
-        dense
-        color="primary"
-        size="lg"
-        icon="chevron_left"
-        @click="onErase"
-      />
+    <div class="row q-mb-lg">
+      <div class="col">
+        <q-btn
+          class="q-ml-md bg-blue-5"
+          round
+          dense
+          color="primary"
+          size="lg"
+          icon="clear"
+          @click="onClear"
+        />
+      </div>
+      <div class="col" v-for="num in nums4" :key="num">
+        <q-btn
+          class="q-ml-md"
+          round
+          dense
+          color="primary"
+          size="lg"
+          :label="num"
+          @click="onAppend(num)"
+        />
+      </div>
+      <div class="col">
+        <q-btn
+          class="q-ml-md bg-blue-5"
+          round
+          dense
+          color="primary"
+          size="lg"
+          icon="chevron_left"
+          @click="onErase"
+        />
+      </div>
     </div>
   </div>
 </template>

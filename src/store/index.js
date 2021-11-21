@@ -1,51 +1,33 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
-import VuexPersistence from 'vuex-persist'
+import createPersistedState from 'vuex-persistedstate'
 import authvuex from './store.auth'
-import Crypto from 'crypto-js'
-import Cookie from 'js-cookie'
-import { v4 as uuidv4 } from 'uuid'
+import SecureLS from 'secure-ls'
 
-const cookieName = 'amberuuid'
-const storageKey = 'amberstore'
+const ls = new SecureLS({ isCompression: false })
+const debug = false
+const lsVuex = debug ? createPersistedState()
+  : createPersistedState({
+    key: 'astore',
+    storage: {
+      getItem: (key) => ls.get(key),
+      setItem: (key, value) => ls.set(key, value),
+      removeItem: (key) => ls.remove(key)
+    }
+  })
 
-// Get the encryption token from cookie or generate a new one.
-const encryptionToken = Cookie.get(cookieName) || uuidv4()
-
-// Store the encryption token in a secure cookie.
-Cookie.set(cookieName, encryptionToken, { secure: true, sameSite: 'strict', expires: 365 })
-
-const vuexLocal = new VuexPersistence({
-  storage: {
-    getItem: () => {
-      // Get the store from local storage.
-      const store = window.localStorage.getItem(storageKey)
-
-      if (store) {
-        try {
-          // Decrypt the store retrieved from local storage
-          // using our encryption token stored in cookies.
-          const bytes = Crypto.AES.decrypt(store, encryptionToken)
-
-          return JSON.parse(bytes.toString(Crypto.enc.Utf8))
-        } catch (e) {
-          // The store will be reset if decryption fails.
-          window.localStorage.removeItem(storageKey)
-        }
-      }
-
-      return null
-    },
-    setItem: (key, value) => {
-      // Encrypt the store using our encryption token stored in cookies.
-      const store = Crypto.AES.encrypt(value, encryptionToken).toString()
-
-      // Save the encrypted store in local storage.
-      return window.localStorage.setItem(storageKey, store)
-    },
-    removeItem: () => window.localStorage.removeItem(storageKey)
-  }
-})
+const logPlugin = (store) => {
+  // called when the store is initialized
+  store.subscribe((mutation, state) => {
+    // called after every mutation.
+    // The mutation comes in the format of `{ type, payload }`.
+    if (debug) {
+      console.log('store.logPlugin')
+      console.log(mutation)
+      console.log(state)
+    }
+  })
+}
 
 /*
  * If not building with SSR mode, you can
@@ -58,7 +40,7 @@ const vuexLocal = new VuexPersistence({
 
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
-    plugins: [vuexLocal.plugin, authvuex],
+    plugins: [authvuex, lsVuex, logPlugin],
     modules: {},
 
     // enable strict mode (adds overhead!)
