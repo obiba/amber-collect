@@ -4,11 +4,10 @@
       <q-page class="flex flex-center">
         <q-card v-if="!$q.screen.lt.sm" class="bg-transparent no-border no-shadow">
           <q-item>
-
             <q-item-section class="text-white">
               <q-item-label>{{userName}}</q-item-label>
               <q-item-label caption>
-                <q-input dark v-model="password" color="white" :type="isPwd ? 'password' : 'text'"
+                <q-input readonly dark v-model="password" color="white" :type="isPwd ? 'password' : 'text'"
                          :placeholder="$t('lock.code_placeholder')">
                   <template v-slot:append>
                     <q-icon
@@ -26,11 +25,16 @@
               <q-btn to="/" round flat color="white" class="q-mt-lg bg-blue-5" icon="arrow_right_alt"></q-btn>
             </q-item-section>
           </q-item>
+          <q-item>
+            <q-item-section>
+              <lock-pad v-model="password"/>
+            </q-item-section>
+          </q-item>
         </q-card>
         <q-card v-if="$q.screen.lt.sm" class="bg-transparent no-border no-shadow">
           <q-card-section class="text-center">
             <div class="text-h6 text-white">{{userName}}</div>
-            <q-input dark v-model="password" color="white" :type="isPwd ? 'password' : 'text'"
+            <q-input readonly dark v-model="password" color="white" :type="isPwd ? 'password' : 'text'"
                      :placeholder="$t('lock.code_placeholder')">
               <template v-slot:append>
                 <q-icon
@@ -41,7 +45,8 @@
 
               </template>
             </q-input>
-            <q-btn to="/" round flat color="white" class="q-mt-lg bg-blue-5" icon="arrow_right_alt"></q-btn>
+            <q-btn to="/" round flat color="white" class="q-mt-lg q-mb-lg bg-blue-5" icon="arrow_right_alt"></q-btn>
+            <lock-pad v-model="password"/>
           </q-card-section>
         </q-card>
       </q-page>
@@ -52,14 +57,20 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { mapState } from 'vuex'
+import LockPad from '../components/LockPad.vue'
 
 export default defineComponent({
   name: 'LockScreen',
 
+  components: {
+    LockPad
+  },
+
   setup () {
     return {
       password: ref(''),
-      isPwd: ref('password')
+      isPwd: ref('password'),
+      code: ''
     }
   },
 
