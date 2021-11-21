@@ -71,6 +71,21 @@
           </q-item-section>
         </q-item>
 
+        <q-item
+          clickable
+          @click="onUpgrade"
+        >
+          <q-item-section avatar>
+            <q-icon name="upgrade" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{$t('main.upgrade')}}</q-item-label>
+            <q-item-label caption>
+              {{ $t('main.upgrade_available') }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+
         <q-item to="/" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>
             <q-icon name="dashboard"/>
@@ -191,6 +206,9 @@ export default defineComponent({
     },
     onLock () {
       this.$router.push('/lock')
+    },
+    onUpgrade () {
+      window.location.reload()
     }
   }
 })

@@ -11,6 +11,8 @@ export default {
     brand: 'Amber Collect',
     logout: 'Déconnexion',
     lock: 'Verrouiller',
+    upgrade: 'Mise à jour',
+    upgrade_available: 'Nouvelle version de l\'app disponible',
     dashboard: 'Tableau de bord',
     essential_links: 'Liens utiles',
     docs: 'Docs',

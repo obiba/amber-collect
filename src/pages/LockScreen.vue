@@ -21,9 +21,6 @@
               </q-item-label>
               <q-item-label></q-item-label>
             </q-item-section>
-            <q-item-section side center>
-              <q-btn to="/" round flat color="white" class="q-mt-lg bg-blue-5" icon="arrow_right_alt"></q-btn>
-            </q-item-section>
           </q-item>
           <q-item>
             <q-item-section>
@@ -45,8 +42,7 @@
 
               </template>
             </q-input>
-            <q-btn to="/" round flat color="white" class="q-mt-lg q-mb-lg bg-blue-5" icon="arrow_right_alt"></q-btn>
-            <lock-pad v-model="password"/>
+            <lock-pad v-model="password" class="q-mt-lg"/>
           </q-card-section>
         </q-card>
       </q-page>
@@ -69,8 +65,17 @@ export default defineComponent({
   setup () {
     return {
       password: ref(''),
-      isPwd: ref('password'),
-      code: ''
+      isPwd: ref('password')
+    }
+  },
+
+  watch: {
+    password (newValue, oldValue) {
+      console.log(newValue)
+      // TODO verify code and remove lock wall
+      if (newValue.length === 4) {
+        this.$router.push('/')
+      }
     }
   },
 

@@ -3,7 +3,7 @@
     <div class="row q-mb-lg">
       <div class="col" v-for="num in nums1" :key="num">
         <q-btn
-          class="q-ml-md"
+          class="q-ml-sm"
           round
           dense
           color="primary"
@@ -16,7 +16,7 @@
     <div class="row q-mb-lg">
       <div class="col" v-for="num in nums2" :key="num">
         <q-btn
-          class="q-ml-md"
+          class="q-ml-sm"
           round
           dense
           color="primary"
@@ -29,7 +29,7 @@
     <div class="row q-mb-lg">
       <div class="col" v-for="num in nums3" :key="num">
         <q-btn
-          class="q-ml-md"
+          class="q-ml-sm"
           round
           dense
           color="primary"
@@ -42,7 +42,7 @@
     <div class="row q-mb-lg">
       <div class="col">
         <q-btn
-          class="q-ml-md bg-blue-5"
+          class="q-ml-sm bg-blue-5"
           round
           dense
           color="primary"
@@ -53,7 +53,7 @@
       </div>
       <div class="col" v-for="num in nums4" :key="num">
         <q-btn
-          class="q-ml-md"
+          class="q-ml-sm"
           round
           dense
           color="primary"
@@ -64,7 +64,7 @@
       </div>
       <div class="col">
         <q-btn
-          class="q-ml-md bg-blue-5"
+          class="q-ml-sm bg-blue-5"
           round
           dense
           color="primary"
