@@ -25,8 +25,13 @@ export default {
     caption: 'Veuillez patienter...'
   },
   lock: {
-    code_placeholder: 'Entrer le code de dévérouillage'
+    code_placeholder: 'Code de déverrouillage',
+    new_code_placeholder: 'Nouveau code de déverrouillage',
+    repeat_code_placeholder: 'Répéter le code de déverrouillage',
+    not_matching_codes: 'Les codes de déverrouillage ne correspondent pas.',
+    incorrect_unclock: 'Le code de déverrouillage est incorrect.'
   },
   email: 'Courriel',
-  password: 'Mot de passe'
+  password: 'Mot de passe',
+  cancel: 'Annuler'
 }

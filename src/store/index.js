@@ -1,6 +1,7 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
+import lock from './lock'
 import authvuex from './store.auth'
 import SecureLS from 'secure-ls'
 
@@ -41,7 +42,9 @@ const logPlugin = (store) => {
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     plugins: [authvuex, lsVuex, logPlugin],
-    modules: {},
+    modules: {
+      lock
+    },
 
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only

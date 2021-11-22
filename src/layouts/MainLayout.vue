@@ -127,6 +127,7 @@ import { locales } from '../boot/i18n'
 import { defineComponent, ref } from 'vue'
 import { mapState } from 'vuex'
 
+import LockMixin from '../mixins/LockMixin'
 import EssentialLink from 'components/EssentialLink.vue'
 
 const linksList = [
@@ -157,6 +158,8 @@ export default defineComponent({
     EssentialLink
   },
 
+  mixins: [LockMixin],
+
   setup () {
     const { locale } = useI18n({ useScope: 'global' })
     const leftDrawerOpen = ref(false)
@@ -168,6 +171,15 @@ export default defineComponent({
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
+    }
+  },
+
+  created () {
+    if (this.lockStatus) {
+      this.$router.push('/lock')
+    }
+    if (this.user._id !== this.lockId) {
+      this.resetLock()
     }
   },
 
@@ -197,6 +209,7 @@ export default defineComponent({
       return '?'
     }
   },
+
   methods: {
     onLocaleSelection (opt) {
       this.locale = opt.value

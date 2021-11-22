@@ -25,8 +25,13 @@ export default {
     caption: 'Please wait...'
   },
   lock: {
-    code_placeholder: 'Enter unlock code'
+    code_placeholder: 'Enter unlock code',
+    new_code_placeholder: 'Enter new unlock code',
+    repeat_code_placeholder: 'Repeat new unlock code',
+    not_matching_codes: 'Unlock codes do not match.',
+    incorrect_unclock: 'Unlock code is incorrect.'
   },
   email: 'Email',
-  password: 'Password'
+  password: 'Password',
+  cancel: 'Cancel'
 }
