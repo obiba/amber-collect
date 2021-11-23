@@ -1241,6 +1241,18 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@obiba/quasar-app-extension-amber@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@obiba/quasar-app-extension-amber/-/quasar-app-extension-amber-0.0.6.tgz#9d56345edca5e08cf77c46aab6a38eaaefe13431"
+  integrity sha512-mhLonvCjAPLFQ74xXpoZUdgxBe+vHIKivOkNxMwPEchAhv+7xwkpVkIZRGAwv3Xm57Fva/C/y8+I5z8Vc8ObzA==
+  dependencies:
+    "@obiba/quasar-ui-amber" "^0.0.5"
+
+"@obiba/quasar-ui-amber@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@obiba/quasar-ui-amber/-/quasar-ui-amber-0.0.5.tgz#5c734b9ec9f158cdeb1cd7d0dc60bc749d9ec32e"
+  integrity sha512-H+iNWJomAiZLhXbUg9d/9wK6J/TYMzXsobE72MXc+8ZVMnREgq2GfKW/30nd04zc8yQX/BlpCfKGq4Nm5BzAHw==
+
 "@polka/url@^1.0.0-next.20":
   version "1.0.0-next.21"
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-1.0.0-next.21.tgz#5de5a2385a35309427f6011992b544514d559aa1"
@@ -1983,10 +1995,6 @@ alphanum-sort@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/alphanum-sort/-/alphanum-sort-1.0.2.tgz#97a1119649b211ad33691d9f9f486a8ec9fbe0a3"
   integrity sha1-l6ERlkmyEa0zaR2fn0hqjsn74KM=
-
-"amber-form@git+https://github.com/obiba/amber-form.git":
-  version "0.1.0"
-  resolved "git+https://github.com/obiba/amber-form.git#fb144ffbf36bfdde31df1d0f9a781bb55ea98867"
 
 ansi-colors@^4.1.1:
   version "4.1.1"

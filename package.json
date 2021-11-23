@@ -20,7 +20,6 @@
     "@quasar/extras": "^1.0.0",
     "@vuelidate/core": "^2.0.0-alpha.32",
     "@vuelidate/validators": "^2.0.0-alpha.25",
-    "amber-form": "git+https://github.com/obiba/amber-form.git",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "core-js": "^3.6.5",
@@ -34,6 +33,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
+    "@obiba/quasar-app-extension-amber": "^0.0.6",
     "@quasar/app": "^3.0.0",
     "eslint": "^7.14.0",
     "eslint-config-standard": "^16.0.2",
