@@ -20,8 +20,66 @@ import { makeBlitzarQuasarSchemaForm } from '@obiba/quasar-ui-amber'
 const amberSchema = {
   items: [
     {
-      name: 'GENDER',
+      name: 'TEXT',
+      type: 'text',
+      label: 'Text label',
+      description: 'Text description',
+      placeholder: 'Text placeholder',
+      hint: 'Text hint'
+    },
+    {
+      name: 'TEXTAREA',
+      type: 'textarea',
+      label: 'Text area label',
+      description: 'Text area description',
+      placeholder: 'Text area placeholder',
+      hint: 'Text area hint'
+    },
+    {
+      name: 'NUMBER',
+      type: 'number',
+      label: 'Number label',
+      description: 'Number description',
+      hint: 'Number hint',
+      default: '123'
+    },
+    {
+      name: 'DATE',
+      type: 'date',
+      label: 'Date label',
+      description: 'Date description',
+      placeholder: 'Date placeholder',
+      hint: 'Date hint'
+    },
+    {
+      name: 'GROUP',
+      type: 'group',
+      label: 'Group label',
+      description: 'Group description',
+      items: [
+        {
+          name: 'DATETIME',
+          type: 'datetime',
+          label: 'Datetime label',
+          description: 'Datetime description',
+          placeholder: 'Datetime placeholder',
+          hint: 'Datetime hint'
+        },
+        {
+          name: 'TIME',
+          type: 'time',
+          label: 'Time label',
+          description: 'Time description',
+          placeholder: 'Time placeholder',
+          hint: 'Time hint'
+        }
+      ]
+    },
+    {
+      name: 'RADIOGROUP',
       type: 'radiogroup',
+      label: 'Radio group label',
+      description: 'Radio group description',
       options: [
         {
           value: '1',
@@ -30,71 +88,14 @@ const amberSchema = {
         {
           value: '2',
           label: 'female'
-        },
-        {
-          value: '3',
-          label: 'other'
-        },
-        {
-          value: '4',
-          label: '????'
-        }
-      ],
-      label: 'What is your gender?',
-      description: 'If you have one....'
-    },
-    {
-      name: 'SHORT',
-      type: 'text',
-      placeholder: 'pwel',
-      label: 'Hello',
-      description: 'qds qsdqs qsdqs dqsddqs. sdqsd'
-    },
-    {
-      name: 'LONG',
-      type: 'textarea',
-      label: 'Long answer',
-      description: 'Lorem ipsum',
-      placeholder: 'pouet'
-    },
-    {
-      name: 'NUMBER',
-      type: 'number',
-      label: 'How much?',
-      description: 'In CAN',
-      default: '123'
-    },
-    {
-      name: 'GROUP',
-      type: 'group',
-      label: 'Date and time',
-      description: 'This the date and time group description',
-      items: [
-        {
-          name: 'DOB',
-          type: 'date',
-          label: 'Birth date?',
-          description: 'The date of your birth'
-        },
-        {
-          name: 'TRAUMA_DT',
-          type: 'datetime',
-          label: 'Date and time of trauma',
-          description: 'Bla bla bla'
-        },
-        {
-          name: 'TRAUMA_T',
-          type: 'time',
-          label: 'Time of the trauma?',
-          description: 'At what time did it happened?'
         }
       ]
     },
     {
-      name: 'TRANSPORT',
+      name: 'CHECKBOXGROUP',
       type: 'checkboxgroup',
-      label: 'Which ones?',
-      description: 'Your preferred types.',
+      label: 'Checkbox group label',
+      description: 'Checkbox group description',
       options: [
         {
           value: '1',
@@ -111,8 +112,11 @@ const amberSchema = {
       ]
     },
     {
-      name: 'CITY',
+      name: 'SELECT',
       type: 'select',
+      label: 'Select label',
+      description: 'Select description',
+      hint: 'Select hint',
       options: [
         {
           value: '1',
@@ -126,15 +130,14 @@ const amberSchema = {
           value: '3',
           label: 'LYS'
         }
-      ],
-      label: 'Which city?',
-      description: 'Blabla'
+      ]
     },
     {
-      name: 'PETS',
+      name: 'MULTISELECT',
       type: 'multiselect',
-      label: 'Favorite pets?',
-      description: 'One or more animals.',
+      label: 'Multiselect label',
+      description: 'Multiselect description',
+      hint: 'Multiselect hint',
       options: [
         {
           value: '1',
@@ -151,38 +154,73 @@ const amberSchema = {
       ]
     },
     {
-      name: 'BOOL',
+      name: 'TOGGLE',
       type: 'toggle',
-      label: 'True or false?',
-      description: 'Is it true or false,that all depends.'
+      label: 'Toggle label',
+      description: 'Toggle description'
     },
     {
-      name: 'NUTRITION_SECTION',
+      name: 'STATIC',
       type: 'static',
-      label: 'Nutrition',
-      description: 'Questions about nutritions'
+      label: 'Static label',
+      description: 'Static description',
+      labelClass: 'text-h4',
+      descriptionClass: 'text-caption text-grey-8'
     },
     {
-      name: 'INT',
+      name: 'SLIDER',
       type: 'slider',
-      label: 'How much do you like it?',
-      description: 'Qdsfsdf sdfdsf.',
+      label: 'Slider label',
+      description: 'Slider description',
       min: 10,
       max: 20,
       format: ''
+    },
+    {
+      name: 'RATING',
+      type: 'rating',
+      label: 'Rating label',
+      description: 'Rating description',
+      max: 10,
+      icon: 'stars'
+    },
+    {
+      name: 'TEXT_COND',
+      type: 'text',
+      label: 'Text with condition label',
+      description: 'Text description',
+      placeholder: 'Text placeholder',
+      hint: 'Text hint',
+      condition: 'formData.RADIOGROUP === "1"'
+    },
+    {
+      name: 'GROUP_COND',
+      type: 'group',
+      label: 'Group with condition label',
+      description: 'Group description',
+      condition: 'formData.RADIOGROUP === "2"',
+      items: [
+        {
+          name: 'DATETIME_COND',
+          type: 'datetime',
+          label: 'Datetime with condition label',
+          description: 'Datetime description',
+          placeholder: 'Datetime placeholder',
+          hint: 'Datetime hint'
+        },
+        {
+          name: 'TIME_COND',
+          type: 'time',
+          label: 'Time with condition label',
+          description: 'Time description',
+          placeholder: 'Time placeholder',
+          hint: 'Time hint',
+          condition: 'formData.RADIOGROUP === "2"'
+        }
+      ]
     }
   ],
-  i18n: {
-    en: {
-      male: 'Male',
-      female: 'Female'
-    },
-    fr: {
-      'What is your gender?': 'Quel est votre sexe?',
-      male: 'Homme',
-      female: 'Femme'
-    }
-  }
+  i18n: {}
 }
 
 export default {
