@@ -83,6 +83,9 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'LockPad',
 
+  props: ['modelValue'],
+  emits: ['update:modelValue'],
+
   data () {
     function shuffleArray (arr) {
       for (let i = arr.length - 1; i > 0; i--) {
@@ -95,7 +98,6 @@ export default defineComponent({
     const nums = shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, 9, 0])
 
     return {
-      modelValue: '',
       nums1: nums.slice(0, 3),
       nums2: nums.slice(3, 6),
       nums3: nums.slice(6, 9),
@@ -103,20 +105,29 @@ export default defineComponent({
     }
   },
 
+  computed: {
+    value: {
+      get () {
+        return this.modelValue
+      },
+      set (value) {
+        this.$emit('update:modelValue', value)
+      }
+    }
+  },
+
   methods: {
-    onAppend (value) {
-      this.modelValue = this.modelValue + value
-      this.$emit('update:modelValue', this.modelValue)
+    onAppend (val) {
+      const nval = this.value ? this.value + '' + val : val + ''
+      this.value = nval
     },
     onErase () {
-      if (this.modelValue.length > 0) {
-        this.modelValue = this.modelValue.substring(0, this.modelValue.length - 1)
-        this.$emit('update:modelValue', this.modelValue)
+      if (this.value && this.value.length > 0) {
+        this.value = this.value.substring(0, this.value.length - 1)
       }
     },
     onClear () {
-      this.modelValue = ''
-      this.$emit('update:modelValue', this.modelValue)
+      this.value = ''
     }
   }
 

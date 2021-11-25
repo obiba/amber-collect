@@ -107,10 +107,15 @@ export default defineComponent({
 
   setup () {
     return {
-      password1: ref(''),
-      password2: ref(''),
-      password: ref(''),
       isPwd: ref('password')
+    }
+  },
+
+  data () {
+    return {
+      password1: '',
+      password2: '',
+      password: ''
     }
   },
 
