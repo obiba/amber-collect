@@ -206,7 +206,7 @@ export default defineComponent({
       if (this.user !== undefined) {
         return this.user.email
       }
-      return '?'
+      return ''
     }
   },
 

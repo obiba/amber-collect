@@ -174,7 +174,7 @@ export default defineComponent({
         const fullname = this.user.firstname + ' ' + this.user.lastname
         return fullname.trim().length === 0 ? this.userEmail : fullname
       } else {
-        return '?'
+        return ''
       }
     },
     isNewPwd () {
