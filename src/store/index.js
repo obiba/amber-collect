@@ -25,7 +25,6 @@ const logPlugin = (store) => {
     if (debug) {
       console.log('store.logPlugin')
       console.log(mutation)
-      console.log(state)
     }
   })
 }

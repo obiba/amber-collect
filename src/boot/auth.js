@@ -7,8 +7,6 @@ export default boot(async ({ router, store }) => {
     if (to.meta.requiresAuth) {
       // if requires admin
       const user = store.state.auth.payload && store.state.auth.payload.user ? store.state.auth.payload.user : undefined
-      console.log('boot.auth')
-      console.log(store.state)
       if (user) {
         if (to.meta.requiresAdmin) {
           if (user.role && user.role === 'administrator') {
