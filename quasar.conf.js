@@ -26,8 +26,7 @@ module.exports = configure(function (ctx) {
       'feathersClient',
       'auth',
       'i18n',
-      'vuelidate',
-      'form-components'
+      'vuelidate'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
