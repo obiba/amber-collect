@@ -36,7 +36,15 @@
         icon="toc"
         title="Go to">
         <q-list>
-          <q-item-label v-for="entry in toc" :key="entry.id" header>{{ entry.label }}</q-item-label>
+          <q-item-label
+            v-for="entry in toc"
+            :key="entry.id"
+            header
+            clickable
+            v-close-popup
+            @click="onScroll(entry.id)">
+            {{ entry.label }}
+          </q-item-label>
         </q-list>
       </q-btn-dropdown>
 
@@ -67,6 +75,8 @@
 import { defineComponent } from 'vue'
 import { mapState } from 'vuex'
 import CaseReportForm from 'components/CaseReportForm.vue'
+import { scroll } from 'quasar'
+const { getScrollTarget, setVerticalScrollPosition } = scroll
 
 export default defineComponent({
   name: 'Test',
@@ -109,6 +119,13 @@ export default defineComponent({
   methods: {
     onShowFormDescription () {
       this.showFormDescription = true
+    },
+    onScroll (id) {
+      const ele = document.getElementById(id)
+      const target = getScrollTarget(ele)
+      const offset = ele.offsetTop // - ele.scrollHeight
+      const duration = 1000
+      setVerticalScrollPosition(target, offset, duration)
     }
   }
 
