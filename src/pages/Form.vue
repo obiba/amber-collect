@@ -74,6 +74,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { mapState } from 'vuex'
+import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import CaseReportForm from 'components/CaseReportForm.vue'
 import { scroll } from 'quasar'
 const { getScrollTarget, setVerticalScrollPosition } = scroll
@@ -108,8 +109,8 @@ export default defineComponent({
       const toc = []
       if (this.schema && this.schema.items) {
         this.schema.items.filter(item => ['group', 'section'].includes(item.type)).forEach(item => toc.push({
-          id: item.name.toLowerCase(),
-          label: item.label
+          id: item.name.replaceAll('.', '_').toLowerCase(),
+          label: this.tr(item.label)
         }))
       }
       return toc
@@ -123,9 +124,12 @@ export default defineComponent({
     onScroll (id) {
       const ele = document.getElementById(id)
       const target = getScrollTarget(ele)
-      const offset = ele.offsetTop // - ele.scrollHeight
-      const duration = 1000
+      const offset = ele.offsetTop
+      const duration = 200
       setVerticalScrollPosition(target, offset, duration)
+    },
+    tr (key) {
+      return makeSchemaFormTr(this.schema, { locale: 'en' })(key)
     }
   }
 
