@@ -1,16 +1,12 @@
 <template>
-  <q-card>
-    <q-card-section>
-      <div>
-        <BlitzForm :key='remountCounter' :schema='schema' v-model='formData' :columnCount='1' gridGap='32px'/>
-      </div>
-    </q-card-section>
-    <q-card-section>
-      <div class="bg-black text-white q-mt-lg q-pa-md">
-        <pre>{{ JSON.stringify(formData, null, '  ') }}</pre>
-      </div>
-    </q-card-section>
-  </q-card>
+  <div class="q-pa-md">
+    <div>
+      <BlitzForm :key='remountCounter' :schema='schema' v-model='formData' :columnCount='1' gridGap='32px'/>
+    </div>
+    <div class="bg-black text-white q-mt-lg q-pa-md">
+      <pre>{{ JSON.stringify(formData, null, '  ') }}</pre>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -25,7 +21,6 @@ export default {
     const formData = {}
     return {
       remountCounter: 0,
-      schema: makeBlitzarQuasarSchemaForm(this.modelValue, { locale: 'en' }),
       formData: formData
     }
   },
@@ -38,6 +33,12 @@ export default {
       set (value) {
         this.$emit('update:modelValue', value)
       }
+    },
+    schema () {
+      if (this.value.items) {
+        return makeBlitzarQuasarSchemaForm(this.modelValue, { locale: 'en' })
+      }
+      return makeBlitzarQuasarSchemaForm({ items: [] }, { locale: 'en' })
     }
   },
 

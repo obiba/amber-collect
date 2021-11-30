@@ -12,6 +12,11 @@ const routes = [
     ]
   },
   {
+    path: '/form/:id',
+    component: () => import('pages/Form.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/test',
     component: () => import('pages/Test.vue'),
     meta: {}

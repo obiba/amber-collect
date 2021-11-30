@@ -71,7 +71,7 @@
           </q-item-section>
         </q-item>
 
-        <q-item
+        <!-- q-item
           clickable
           @click="onUpgrade"
         >
@@ -84,7 +84,7 @@
               {{ $t('main.upgrade_available') }}
             </q-item-label>
           </q-item-section>
-        </q-item>
+        </q-item -->
 
         <q-item to="/" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>

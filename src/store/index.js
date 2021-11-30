@@ -2,11 +2,12 @@ import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import lock from './lock'
+import form from './form'
 import authvuex from './store.auth'
 import SecureLS from 'secure-ls'
 
 const ls = new SecureLS({ isCompression: false })
-const debug = false
+const debug = true
 const lsVuex = debug ? createPersistedState()
   : createPersistedState({
     key: 'astore',
@@ -42,7 +43,8 @@ export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     plugins: [authvuex, lsVuex, logPlugin],
     modules: {
-      lock
+      lock,
+      form
     },
 
     // enable strict mode (adds overhead!)
