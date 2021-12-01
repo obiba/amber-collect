@@ -94,11 +94,8 @@ export default defineComponent({
   },
 
   mounted () {
-    console.log('Form.mounted')
-    console.log(this.forms)
     const formId = this.$route.params.id
     this.schema = this.forms ? this.forms.filter(f => f._id === formId).pop().schema : {}
-    console.log(this.schema)
   },
 
   computed: {
