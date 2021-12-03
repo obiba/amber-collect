@@ -7,8 +7,9 @@
           Case report
         </q-toolbar-title>
         <q-toolbar-title>
-          <span class="text-subtitle2 float-right">{{ schema.label }}
+          <span class="text-subtitle2 float-right">{{ tr(schema.label) }}
           <q-btn
+            v-if="schema.description"
             size="12px"
             flat
             dense
@@ -59,7 +60,7 @@
       <q-card>
 
         <q-card-section>
-          {{ schema.description }}
+          {{ tr(schema.description) }}
         </q-card-section>
 
         <q-card-actions align="right">
