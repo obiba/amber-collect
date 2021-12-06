@@ -215,6 +215,7 @@ export default defineComponent({
       this.locale = opt.value
     },
     onLogout () {
+      this.$store.dispatch('form/clearForms')
       this.$store.dispatch('auth/logout')
     },
     onLock () {

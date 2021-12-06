@@ -19,3 +19,7 @@ export async function getForms ({ commit }, payload) {
     commit('setForms', [])
   }
 }
+
+export async function clearForms ({ commit }, payload) {
+  commit('setForms', [])
+}
