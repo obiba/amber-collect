@@ -58,11 +58,9 @@
 
     <q-dialog v-model="showFormDescription">
       <q-card>
-
         <q-card-section>
-          {{ tr(schema.description) }}
+          <div v-html="md(tr(schema.description))"/>
         </q-card-section>
-
         <q-card-actions align="right">
           <q-btn flat label="OK" color="primary" v-close-popup />
         </q-card-actions>
@@ -75,6 +73,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { mapState } from 'vuex'
+import snarkdown from 'snarkdown'
 import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import CaseReportForm from 'components/CaseReportForm.vue'
 import { scroll } from 'quasar'
@@ -128,6 +127,9 @@ export default defineComponent({
     },
     tr (key) {
       return makeSchemaFormTr(this.schema, { locale: 'en' })(key)
+    },
+    md (text) {
+      return snarkdown(text)
     }
   }
 

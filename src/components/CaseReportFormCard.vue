@@ -7,7 +7,7 @@
     </q-card-section>
     <q-separator/>
     <q-card-section>
-      {{ tr(form.schema.description) }}
+      <div v-html="md(tr(form.schema.description))"/>
     </q-card-section>
     <q-card-actions align="left">
       <q-btn label="Start" icon-right="play_arrow" class="text-capitalize q-ma-sm" color="indigo-7" :to="'/form/' + form._id"/>
@@ -17,6 +17,7 @@
 
 <script>
 import { defineComponent } from 'vue'
+import snarkdown from 'snarkdown'
 import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 
 export default defineComponent({
@@ -25,6 +26,9 @@ export default defineComponent({
   methods: {
     tr (key) {
       return makeSchemaFormTr(this.form.schema, { locale: 'en' })(key)
+    },
+    md (text) {
+      return snarkdown(text)
     }
   }
 })
