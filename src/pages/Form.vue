@@ -129,7 +129,7 @@ export default defineComponent({
       return makeSchemaFormTr(this.schema, { locale: 'en' })(key)
     },
     md (text) {
-      return snarkdown(text)
+      return text ? snarkdown(text) : text
     }
   }
 

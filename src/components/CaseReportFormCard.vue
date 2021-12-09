@@ -28,7 +28,7 @@ export default defineComponent({
       return makeSchemaFormTr(this.form.schema, { locale: 'en' })(key)
     },
     md (text) {
-      return snarkdown(text)
+      return text ? snarkdown(text) : text
     }
   }
 })
