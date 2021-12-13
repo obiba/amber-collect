@@ -71,20 +71,20 @@
           </q-item-section>
         </q-item>
 
-        <!-- q-item
+        <q-item
           clickable
-          @click="onUpgrade"
+          @click="onUpdate"
         >
           <q-item-section avatar>
-            <q-icon name="upgrade" />
+            <q-icon name="refresh" />
           </q-item-section>
           <q-item-section>
-            <q-item-label>{{$t('main.upgrade')}}</q-item-label>
+            <q-item-label>{{$t('main.refresh')}}</q-item-label>
             <q-item-label caption>
-              {{ $t('main.upgrade_available') }}
+              {{ $t('main.refresh_hint') }}
             </q-item-label>
           </q-item-section>
-        </q-item -->
+        </q-item>
 
         <q-item to="/" active-class="q-item-no-link-highlighting">
           <q-item-section avatar>
@@ -125,7 +125,7 @@
 import { useI18n } from 'vue-i18n'
 import { locales } from '../boot/i18n'
 import { defineComponent, ref } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 import LockMixin from '../mixins/LockMixin'
 import EssentialLink from 'components/EssentialLink.vue'
@@ -211,6 +211,9 @@ export default defineComponent({
   },
 
   methods: {
+    ...mapActions({
+      getForms: 'form/getForms'
+    }),
     onLocaleSelection (opt) {
       this.locale = opt.value
     },
@@ -220,6 +223,9 @@ export default defineComponent({
     },
     onLock () {
       this.$router.push('/lock')
+    },
+    onUpdate () {
+      this.getForms({})
     },
     onUpgrade () {
       window.location.reload()

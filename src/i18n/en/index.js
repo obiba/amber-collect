@@ -11,6 +11,8 @@ export default {
     brand: 'Amber Collect',
     logout: 'Sign out',
     lock: 'Lock',
+    refresh: 'Refresh',
+    refresh_hint: 'Refresh forms',
     upgrade: 'Upgrade',
     upgrade_available: 'New app version available',
     dashboard: 'Dashboard',
@@ -30,6 +32,10 @@ export default {
     repeat_code_placeholder: 'Repeat new unlock code',
     not_matching_codes: 'Unlock codes do not match.',
     incorrect_unclock: 'Unlock code is incorrect.'
+  },
+  error: {
+    get_forms: 'Error when getting case report forms.',
+    network_error: 'Network error, please try again later.'
   },
   email: 'Email',
   password: 'Password',

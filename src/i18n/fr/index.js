@@ -11,6 +11,8 @@ export default {
     brand: 'Amber Collect',
     logout: 'Déconnexion',
     lock: 'Verrouiller',
+    refresh: 'Rafraîchir',
+    refresh_hint: 'Rafraîchir les formulaires',
     upgrade: 'Mise à jour',
     upgrade_available: 'Nouvelle version de l\'app disponible',
     dashboard: 'Tableau de bord',
@@ -30,6 +32,10 @@ export default {
     repeat_code_placeholder: 'Répéter le code de déverrouillage',
     not_matching_codes: 'Les codes de déverrouillage ne correspondent pas.',
     incorrect_unclock: 'Le code de déverrouillage est incorrect.'
+  },
+  error: {
+    get_forms: 'Erreur à la récupération des formulaires de rapport de cas.',
+    network_error: 'Erreur réseau, veuillez réessayer plus tard.'
   },
   email: 'Courriel',
   password: 'Mot de passe',

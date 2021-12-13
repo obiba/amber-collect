@@ -11,13 +11,18 @@ export async function getForms ({ commit }, payload) {
         message: t('error.get_forms'),
         color: 'negative'
       })
+    } else if (!err.status) {
+      Notify.create({
+        message: t('error.network_error'),
+        color: 'negative'
+      })
     }
   })
   if (result) {
     commit('setForms', result.data)
-  } else {
+  }/* else {
     commit('setForms', [])
-  }
+  } */
 }
 
 export async function clearForms ({ commit }, payload) {
