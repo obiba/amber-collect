@@ -13,10 +13,9 @@ const LockMixin = {
       triggerLock: 'lock/triggerLock',
       updatePassword: 'lock/updatePassword'
     }),
-    resetLock () {
+    resetLock (userId) {
       this.updatePassword({
-        id: null,
-        password: null
+        id: userId
       })
       this.triggerLock({
         status: false

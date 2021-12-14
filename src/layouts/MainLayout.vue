@@ -179,7 +179,7 @@ export default defineComponent({
       this.$router.push('/lock')
     }
     if (this.user._id !== this.lockId) {
-      this.resetLock()
+      this.resetLock(this.user._id)
     }
   },
 
@@ -220,6 +220,7 @@ export default defineComponent({
     onLogout () {
       this.$store.dispatch('form/clearForms')
       this.$store.dispatch('auth/logout')
+      this.resetLock()
     },
     onLock () {
       this.$router.push('/lock')
