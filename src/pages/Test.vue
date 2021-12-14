@@ -13,7 +13,6 @@
             flat
             dense
             round
-            :title="$t('study.delete_study_form_hint')"
             icon='info'
             @click='onShowFormDescription'>
           </q-btn></span>

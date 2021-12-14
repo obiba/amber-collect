@@ -42,9 +42,12 @@ export default {
         this.$emit('update:modelValue', value)
       }
     },
+    currentLocale () {
+      return this.$root.$i18n.locale
+    },
     schema () {
       if (this.value.items) {
-        return makeBlitzarQuasarSchemaForm(this.modelValue, { locale: 'en' })
+        return makeBlitzarQuasarSchemaForm(this.modelValue, { locale: this.currentLocale })
       }
       return makeBlitzarQuasarSchemaForm({ items: [] }, { locale: 'en' })
     }

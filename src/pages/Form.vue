@@ -4,7 +4,7 @@
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-toolbar-title>
-          Case report
+          {{ $t('form.case_report') }}
         </q-toolbar-title>
         <q-toolbar-title>
           <span class="text-subtitle2 float-right">{{ tr(schema.label) }}
@@ -14,7 +14,6 @@
             flat
             dense
             round
-            :title="$t('study.delete_study_form_hint')"
             icon='info'
             @click='onShowFormDescription'>
           </q-btn></span>
@@ -102,6 +101,9 @@ export default defineComponent({
     ...mapState({
       forms: state => state.form.forms
     }),
+    currentLocale () {
+      return this.$root.$i18n.locale
+    },
     toc () {
       const toc = []
       if (this.schema && this.schema.items) {
@@ -126,7 +128,7 @@ export default defineComponent({
       setVerticalScrollPosition(target, offset, duration)
     },
     tr (key) {
-      return makeSchemaFormTr(this.schema, { locale: 'en' })(key)
+      return makeSchemaFormTr(this.schema, { locale: this.currentLocale })(key)
     },
     md (text) {
       return text ? snarkdown(text) : text

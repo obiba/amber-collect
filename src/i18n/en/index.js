@@ -7,6 +7,10 @@ export default {
     submit: 'Sign in',
     forgot_password: 'Forgot password?'
   },
+  locales: {
+    en: 'English',
+    fr: 'français'
+  },
   main: {
     brand: 'Amber Collect',
     logout: 'Sign out',
@@ -21,6 +25,9 @@ export default {
     chat: 'Chat',
     forum: 'Forum',
     powered_by: 'Powered by'
+  },
+  form: {
+    case_report: 'Case Report'
   },
   loading: {
     title: 'Loading',

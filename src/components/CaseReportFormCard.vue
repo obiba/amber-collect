@@ -23,9 +23,14 @@ import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 export default defineComponent({
   name: 'CaseReportFormCard',
   props: ['form'],
+  computed: {
+    currentLocale () {
+      return this.$root.$i18n.locale
+    }
+  },
   methods: {
     tr (key) {
-      return makeSchemaFormTr(this.form.schema, { locale: 'en' })(key)
+      return makeSchemaFormTr(this.form.schema, { locale: this.currentLocale })(key)
     },
     md (text) {
       return text ? snarkdown(text) : text

@@ -7,6 +7,10 @@ export default {
     submit: 'Connexion',
     forgot_password: 'Mot de passe oublié ?'
   },
+  locales: {
+    en: 'English',
+    fr: 'français'
+  },
   main: {
     brand: 'Amber Collect',
     logout: 'Déconnexion',
@@ -21,6 +25,9 @@ export default {
     chat: 'Chat',
     forum: 'Forum',
     powered_by: 'Propulsé par'
+  },
+  form: {
+    case_report: 'Rapport de cas'
   },
   loading: {
     title: 'Chargement',
