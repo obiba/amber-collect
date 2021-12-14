@@ -41,7 +41,7 @@ const logPlugin = (store) => {
 
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
-    plugins: [authvuex, lsVuex, logPlugin],
+    plugins: [lsVuex, logPlugin, authvuex],
     modules: {
       lock,
       form

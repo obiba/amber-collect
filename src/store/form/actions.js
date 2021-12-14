@@ -6,16 +6,18 @@ export async function getForms ({ commit }, payload) {
   const result = await formService.getForms(payload.filter).catch(err => {
     console.error(err)
     const errorCode = err.code
-    if (errorCode) {
-      Notify.create({
-        message: t('error.get_forms'),
-        color: 'negative'
-      })
-    } else if (!err.status) {
-      Notify.create({
-        message: t('error.network_error'),
-        color: 'negative'
-      })
+    if (!payload.silent) {
+      if (errorCode) {
+        Notify.create({
+          message: t('error.get_forms'),
+          color: 'negative'
+        })
+      } else if (!err.status) {
+        Notify.create({
+          message: t('error.network_error'),
+          color: 'negative'
+        })
+      }
     }
   })
   if (result) {

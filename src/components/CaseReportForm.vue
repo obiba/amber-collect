@@ -1,10 +1,18 @@
 <template>
   <div class="q-pa-md">
-    <div>
-      <BlitzForm :key='remountCounter' :schema='schema' v-model='formData' :columnCount='1' gridGap='32px'/>
-    </div>
-    <div class="bg-black text-white q-mt-lg q-pa-md">
-      <pre>{{ JSON.stringify(formData, null, '  ') }}</pre>
+    <div class="row">
+      <div class="col">
+      </div>
+      <div class="col-md-4 col-sm-8 col-xs-12">
+        <div>
+          <BlitzForm :key='remountCounter' :schema='schema' v-model='formData' :columnCount='1' gridGap='32px'/>
+        </div>
+        <div class="bg-black text-white q-mt-lg q-pa-md">
+          <pre>{{ JSON.stringify(formData, null, '  ') }}</pre>
+        </div>
+      </div>
+      <div class="col">
+      </div>
     </div>
   </div>
 </template>

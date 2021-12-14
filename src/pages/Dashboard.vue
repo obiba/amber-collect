@@ -19,10 +19,8 @@ export default defineComponent({
     CaseReportFormCard
   },
 
-  created () {
-    if (this.forms === undefined || this.forms.length === 0) {
-      this.getForms({})
-    }
+  mounted () {
+    this.getForms({ silent: true })
   },
 
   computed: {
