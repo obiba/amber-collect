@@ -190,7 +190,11 @@ export default defineComponent({
       this.$router.push('/')
     },
     onLogout () {
-      this.resetLock()
+      if (this.user) {
+        this.clearLock(this.user._id)
+      } else {
+        this.triggerLock({ status: false })
+      }
       this.$store.dispatch('auth/logout')
     }
   }

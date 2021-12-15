@@ -2,6 +2,14 @@ export function changeLockStatus (state, payload) {
   state.status = payload.status
 }
 
+export function clearLockPassword (state, payload) {
+  if (payload.id) {
+    state.locks[payload.id] = undefined
+    state.id = ''
+    state.password = ''
+  }
+}
+
 export function setLockPassword (state, payload) {
   state.id = payload.id
   if (payload.password) {

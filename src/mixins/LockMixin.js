@@ -11,10 +11,19 @@ const LockMixin = {
   methods: {
     ...mapActions({
       triggerLock: 'lock/triggerLock',
-      updatePassword: 'lock/updatePassword'
+      updatePassword: 'lock/updatePassword',
+      clearPassword: 'lock/clearPassword'
     }),
     resetLock (userId) {
       this.updatePassword({
+        id: userId
+      })
+      this.triggerLock({
+        status: false
+      })
+    },
+    clearLock (userId) {
+      this.clearPassword({
         id: userId
       })
       this.triggerLock({
