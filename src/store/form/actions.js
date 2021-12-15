@@ -1,15 +1,15 @@
-import formService from '../../services/form'
+import crfsService from '../../services/form'
 import { t } from '../../boot/i18n'
 import { Notify } from 'quasar'
 
-export async function getForms ({ commit }, payload) {
-  const result = await formService.getForms(payload.filter).catch(err => {
+export async function getCaseReportForms ({ commit }, payload) {
+  const result = await crfsService.getCaseReportForms(payload.filter).catch(err => {
     console.error(err)
     const errorCode = err.code
     if (!payload.silent) {
       if (errorCode) {
         Notify.create({
-          message: t('error.get_forms'),
+          message: t('error.get_case_report_forms'),
           color: 'negative'
         })
       } else if (!err.status) {
@@ -21,12 +21,16 @@ export async function getForms ({ commit }, payload) {
     }
   })
   if (result) {
-    commit('setForms', result.data)
+    commit('setCaseReportForms', result.data)
   }/* else {
-    commit('setForms', [])
+    commit('setCaseReportForms', [])
   } */
 }
 
-export async function clearForms ({ commit }, payload) {
-  commit('setForms', [])
+export async function clearCaseReportForms ({ commit }, payload) {
+  commit('setCaseReportForms', [])
+}
+
+export async function setCaseReportFormData ({ commit }, payload) {
+  commit('setCaseReportFormData', payload)
 }

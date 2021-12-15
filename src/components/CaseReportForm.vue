@@ -5,7 +5,13 @@
       </div>
       <div class="col-md-4 col-sm-8 col-xs-12">
         <div>
-          <BlitzForm :key='remountCounter' :schema='schema' v-model='formData' :columnCount='1' gridGap='32px'/>
+          <BlitzForm
+            :key="remountCounter"
+            :schema="schema"
+            v-model="formData"
+            :columnCount="1"
+            gridGap='32px'
+            @update:modelValue="onUpdateFormData" />
         </div>
         <div class="bg-black text-white q-mt-lg q-pa-md">
           <pre>{{ JSON.stringify(formData, null, '  ') }}</pre>
@@ -18,6 +24,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex'
 import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
 import { makeBlitzarQuasarSchemaForm } from '@obiba/quasar-ui-amber'
 
@@ -34,6 +41,9 @@ export default {
   },
 
   computed: {
+    ...mapState({
+      user: state => state.auth.payload ? state.auth.payload.user : undefined
+    }),
     value: {
       get () {
         return this.modelValue
@@ -54,6 +64,17 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      setCaseReportFormData: 'form/setCaseReportFormData'
+    }),
+    onUpdateFormData () {
+      console.log(JSON.stringify(this.formData, null, '  '))
+      this.setCaseReportFormData({
+        user: this.user._id,
+        form: this.modelValue._id,
+        data: this.formData
+      })
+    },
     resetFormData () {
       this.formData = {}
       this.remountCounter++

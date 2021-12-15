@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-pa-md">
     <div class="row">
-      <div v-for="form in forms" :key="form._id" class="col-xs-12 col-sm-6 col-md-3">
+      <div v-for="form in crfs" :key="form._id" class="col-xs-12 col-sm-6 col-md-3">
         <case-report-form-card :form="form"/>
       </div>
     </div>
@@ -20,18 +20,18 @@ export default defineComponent({
   },
 
   mounted () {
-    this.getForms({ silent: true })
+    this.getCaseReportForms({ silent: true })
   },
 
   computed: {
     ...mapState({
-      forms: state => state.form.forms
+      crfs: state => state.form.crfs
     })
   },
 
   methods: {
     ...mapActions({
-      getForms: 'form/getForms'
+      getCaseReportForms: 'form/getCaseReportForms'
     })
   }
 })

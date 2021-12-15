@@ -94,12 +94,12 @@ export default defineComponent({
 
   mounted () {
     const formId = this.$route.params.id
-    this.schema = this.forms ? this.forms.filter(f => f._id === formId).pop().schema : {}
+    this.schema = this.crfs ? this.crfs.filter(f => f._id === formId).pop().schema : {}
   },
 
   computed: {
     ...mapState({
-      forms: state => state.form.forms
+      crfs: state => state.form.crfs
     }),
     currentLocale () {
       return this.$root.$i18n.locale

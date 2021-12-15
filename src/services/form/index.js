@@ -1,3 +1,3 @@
-import * as form from './form.js'
+import * as crfs from './crfs.js'
 
-export default Object.assign({}, form)
+export default Object.assign({}, crfs)

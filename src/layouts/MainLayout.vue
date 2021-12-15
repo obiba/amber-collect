@@ -212,13 +212,13 @@ export default defineComponent({
 
   methods: {
     ...mapActions({
-      getForms: 'form/getForms'
+      getCaseReportForms: 'form/getCaseReportForms'
     }),
     onLocaleSelection (opt) {
       this.locale = opt.value
     },
     onLogout () {
-      this.$store.dispatch('form/clearForms')
+      this.$store.dispatch('form/clearCaseReportForms')
       this.$store.dispatch('auth/logout')
       this.resetLock()
     },
@@ -226,7 +226,7 @@ export default defineComponent({
       this.$router.push('/lock')
     },
     onUpdate () {
-      this.getForms({})
+      this.getCaseReportForms({})
     },
     onUpgrade () {
       window.location.reload()

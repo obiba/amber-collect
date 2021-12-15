@@ -1,6 +1,6 @@
 import { feathersClient } from '../../boot/feathersClient'
 
-export async function getForms (filter) {
+export async function getCaseReportForms (filter) {
   const formData = {
     query: {
       $limit: 100
