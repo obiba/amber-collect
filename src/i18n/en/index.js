@@ -27,7 +27,8 @@ export default {
     powered_by: 'Powered by'
   },
   form: {
-    case_report: 'Case Report'
+    case_report: 'Case Report',
+    start: 'Start'
   },
   loading: {
     title: 'Loading',

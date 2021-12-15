@@ -27,7 +27,8 @@ export default {
     powered_by: 'Propulsé par'
   },
   form: {
-    case_report: 'Rapport de cas'
+    case_report: 'Rapport de cas',
+    start: 'Démarrer'
   },
   loading: {
     title: 'Chargement',
