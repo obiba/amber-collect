@@ -8,18 +8,18 @@ const routes = [
         path: '',
         component: () => import('pages/Dashboard.vue'),
         meta: { requiresAuth: true }
+      },
+      {
+        path: '/case-reports',
+        component: () => import('pages/CaseReports.vue'),
+        meta: { requiresAuth: true }
       }
     ]
   },
   {
-    path: '/form/:id',
-    component: () => import('pages/Form.vue'),
+    path: '/case-report/:id',
+    component: () => import('src/pages/CaseReport.vue'),
     meta: { requiresAuth: true }
-  },
-  {
-    path: '/test',
-    component: () => import('pages/Test.vue'),
-    meta: {}
   },
   {
     path: '/loading',

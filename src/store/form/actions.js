@@ -30,7 +30,3 @@ export async function getCaseReportForms ({ commit }, payload) {
 export async function clearCaseReportForms ({ commit }, payload) {
   commit('setCaseReportForms', [])
 }
-
-export async function setCaseReportFormData ({ commit }, payload) {
-  commit('setCaseReportFormData', payload)
-}

@@ -1,7 +1,8 @@
 <template>
-  <q-page class="q-pa-md">
+  <q-page class="q-pt-md q-pb-md">
+    <div class="text-h6 q-ml-md q-mr-md">{{ $t('main.case_report_forms') }}</div>
     <div class="row">
-      <div v-for="form in crfs" :key="form._id" class="col-xs-12 col-sm-6 col-md-3">
+      <div v-for="form in crfs" :key="form._id" class="col-xs-12 col-sm-6 col-md-4">
         <case-report-form-card :form="form"/>
       </div>
     </div>

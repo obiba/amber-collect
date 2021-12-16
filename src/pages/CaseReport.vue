@@ -4,7 +4,7 @@
     <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-toolbar-title>
-          {{ $t('form.case_report') }}
+          {{ $t('case_report') }}
         </q-toolbar-title>
         <q-toolbar-title>
           <span class="text-subtitle2 float-right">{{ tr(schema.label) }}
@@ -23,7 +23,7 @@
 
     <q-page-container>
       <q-page>
-        <case-report-form v-model="schema"/>
+        <case-report-recorder v-model="schema" :caseReportId="caseReportId"/>
       </q-page>
     </q-page-container>
 
@@ -51,7 +51,7 @@
       <q-space />
 
       <q-separator dark vertical />
-      <q-btn stretch flat title="Pause" icon="pause" to="/"/>
+      <q-btn stretch flat title="Pause" icon="pause" @click="onPause"/>
       </q-toolbar>
     </q-footer>
 
@@ -71,18 +71,18 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import snarkdown from 'snarkdown'
 import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
-import CaseReportForm from 'components/CaseReportForm.vue'
+import CaseReportRecorder from 'src/components/CaseReportRecorder.vue'
 import { scroll } from 'quasar'
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
 export default defineComponent({
-  name: 'Test',
+  name: 'CaseReport',
 
   components: {
-    CaseReportForm
+    CaseReportRecorder
   },
 
   data () {
@@ -93,8 +93,13 @@ export default defineComponent({
   },
 
   mounted () {
-    const formId = this.$route.params.id
-    this.schema = this.crfs ? this.crfs.filter(f => f._id === formId).pop().schema : {}
+    const caseReport = this.getCaseReportById()(this.caseReportId)
+    if (caseReport) {
+      this.schema = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop().schema : {}
+    } else {
+      console.error('No such record with id: ' + this.caseReportId)
+      this.$router.push('/')
+    }
   },
 
   computed: {
@@ -103,6 +108,9 @@ export default defineComponent({
     }),
     currentLocale () {
       return this.$root.$i18n.locale
+    },
+    caseReportId () {
+      return this.$route.params.id
     },
     toc () {
       const toc = []
@@ -117,6 +125,12 @@ export default defineComponent({
   },
 
   methods: {
+    ...mapGetters({
+      getCaseReportById: 'record/getCaseReportById'
+    }),
+    ...mapActions({
+      pauseCaseReport: 'record/pauseCaseReport'
+    }),
     onShowFormDescription () {
       this.showFormDescription = true
     },
@@ -126,6 +140,11 @@ export default defineComponent({
       const offset = ele.offsetTop
       const duration = 200
       setVerticalScrollPosition(target, offset, duration)
+    },
+    onPause () {
+      this.pauseCaseReport({ id: this.caseReportId }).then(() => {
+        this.$router.push('/')
+      })
     },
     tr (key) {
       return makeSchemaFormTr(this.schema, { locale: this.currentLocale })(key)

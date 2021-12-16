@@ -20,15 +20,13 @@ export default {
     upgrade: 'Upgrade',
     upgrade_available: 'New app version available',
     dashboard: 'Dashboard',
+    case_reports: 'Case Reports',
+    case_report_forms: 'Case Report Forms',
     essential_links: 'Essential links',
     docs: 'Docs',
     chat: 'Chat',
     forum: 'Forum',
     powered_by: 'Powered by'
-  },
-  form: {
-    case_report: 'Case Report',
-    start: 'Start'
   },
   loading: {
     title: 'Loading',
@@ -45,7 +43,18 @@ export default {
     get_forms: 'Error when getting case report forms.',
     network_error: 'Network error, please try again later.'
   },
+  id: 'ID',
+  form: 'Form',
+  case_report: 'Case Report',
   email: 'Email',
   password: 'Password',
-  cancel: 'Cancel'
+  cancel: 'Cancel',
+  delete: 'Delete',
+  start: 'Start',
+  resume: 'Resume',
+  action: 'Action',
+  state: 'State',
+  started_at: 'Started',
+  updated_at: 'Updated',
+  close: 'Close'
 }

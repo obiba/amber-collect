@@ -71,6 +71,26 @@
           </q-item-section>
         </q-item>
 
+        <q-separator/>
+
+        <q-item to="/" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="dashboard"/>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{$t('main.dashboard')}}</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <q-item to="/case-reports" active-class="q-item-no-link-highlighting">
+          <q-item-section avatar>
+            <q-icon name="summarize"/>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{$t('main.case_reports')}} <q-badge>{{ caseReportsCount }}</q-badge></q-item-label>
+          </q-item-section>
+        </q-item>
+
         <q-item
           clickable
           @click="onUpdate"
@@ -83,15 +103,6 @@
             <q-item-label caption>
               {{ $t('main.refresh_hint') }}
             </q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item to="/" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="dashboard"/>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{$t('main.dashboard')}}</q-item-label>
           </q-item-section>
         </q-item>
 
@@ -125,7 +136,7 @@
 import { useI18n } from 'vue-i18n'
 import { locales } from '../boot/i18n'
 import { defineComponent, ref } from 'vue'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 
 import LockMixin from '../mixins/LockMixin'
 import EssentialLink from 'components/EssentialLink.vue'
@@ -186,6 +197,9 @@ export default defineComponent({
   computed: {
     ...mapState({
       user: state => state.auth.payload ? state.auth.payload.user : undefined
+    }),
+    ...mapGetters({
+      caseReportsCount: 'record/getCaseReportsCount'
     }),
     localeOptions () {
       return locales.map(loc => {

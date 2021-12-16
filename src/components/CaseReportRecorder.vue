@@ -24,13 +24,13 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
 import { makeBlitzarQuasarSchemaForm } from '@obiba/quasar-ui-amber'
 
 export default {
   components: { BlitzForm },
-  props: ['modelValue'],
+  props: ['modelValue', 'caseReportId'],
   emits: ['update:modelValue'],
   data () {
     const formData = {}
@@ -38,6 +38,10 @@ export default {
       remountCounter: 0,
       formData: formData
     }
+  },
+
+  mounted () {
+    this.initFormData()
   },
 
   computed: {
@@ -64,16 +68,24 @@ export default {
   },
 
   methods: {
+    ...mapGetters({
+      getCaseReportById: 'record/getCaseReportById'
+    }),
     ...mapActions({
-      setCaseReportFormData: 'form/setCaseReportFormData'
+      setCaseReportData: 'record/setCaseReportData'
     }),
     onUpdateFormData () {
-      console.log(JSON.stringify(this.formData, null, '  '))
-      this.setCaseReportFormData({
-        user: this.user._id,
-        form: this.modelValue._id,
+      this.setCaseReportData({
+        id: this.caseReportId,
         data: this.formData
       })
+    },
+    initFormData () {
+      const caseReport = this.getCaseReportById()(this.caseReportId)
+      if (caseReport) {
+        this.formData = caseReport.data
+        this.remountCounter++
+      }
     },
     resetFormData () {
       this.formData = {}

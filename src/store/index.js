@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import lock from './lock'
 import form from './form'
+import record from './record'
 import authvuex from './store.auth'
 import SecureLS from 'secure-ls'
 
@@ -24,7 +25,6 @@ const logPlugin = (store) => {
     // called after every mutation.
     // The mutation comes in the format of `{ type, payload }`.
     if (debug) {
-      console.log('store.logPlugin')
       console.log(mutation)
     }
   })
@@ -44,7 +44,8 @@ export default store(function (/* { ssrContext } */) {
     plugins: [lsVuex, logPlugin, authvuex],
     modules: {
       lock,
-      form
+      form,
+      record
     },
 
     // enable strict mode (adds overhead!)

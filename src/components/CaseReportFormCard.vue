@@ -11,15 +11,22 @@
       <div v-html="md(tr(form.schema.description))"/>
     </q-card-section>
     <q-card-actions align="left">
-      <q-btn :label="$t('form.start')" icon-right="play_arrow" class="text-capitalize q-ma-sm" color="indigo-7" :to="'/form/' + form._id"/>
+      <q-btn
+        :label="$t('start')"
+        icon-right="play_arrow"
+        class="text-capitalize q-ma-sm"
+        color="indigo-7"
+        @click="onStart"/>
     </q-card-actions>
   </q-card>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
+import { mapActions } from 'vuex'
 import snarkdown from 'snarkdown'
 import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
+import { v4 as uuidv4 } from 'uuid'
 
 export default defineComponent({
   name: 'CaseReportFormCard',
@@ -30,11 +37,23 @@ export default defineComponent({
     }
   },
   methods: {
+    ...mapActions({
+      initCaseReport: 'record/initCaseReport'
+    }),
     tr (key) {
       return makeSchemaFormTr(this.form.schema, { locale: this.currentLocale })(key)
     },
     md (text) {
       return text ? snarkdown(text) : text
+    },
+    onStart () {
+      const recordId = uuidv4()
+      this.initCaseReport({
+        id: recordId,
+        crf: this.form
+      }).then(() => {
+        this.$router.push('/case-report/' + recordId)
+      })
     }
   }
 })

@@ -20,15 +20,13 @@ export default {
     upgrade: 'Mise à jour',
     upgrade_available: 'Nouvelle version de l\'app disponible',
     dashboard: 'Tableau de bord',
+    case_reports: 'Rapports de cas',
+    case_report_forms: 'Formulaires de rapport de cas',
     essential_links: 'Liens utiles',
     docs: 'Docs',
     chat: 'Chat',
     forum: 'Forum',
     powered_by: 'Propulsé par'
-  },
-  form: {
-    case_report: 'Rapport de cas',
-    start: 'Démarrer'
   },
   loading: {
     title: 'Chargement',
@@ -45,7 +43,24 @@ export default {
     get_forms: 'Erreur à la récupération des formulaires de rapport de cas.',
     network_error: 'Erreur réseau, veuillez réessayer plus tard.'
   },
+  record: {
+    state: {
+      in_progress: 'En cours',
+      completed: 'Complété'
+    }
+  },
+  id: 'ID',
+  form: 'Formulaire',
+  case_report: 'Rapport de cas',
   email: 'Courriel',
   password: 'Mot de passe',
-  cancel: 'Annuler'
+  cancel: 'Annuler',
+  delete: 'Supprimer',
+  start: 'Démarrer',
+  resume: 'Résumer',
+  action: 'Action',
+  state: 'Etat',
+  started_at: 'Démarré',
+  updated_at: 'Mis à jour',
+  close: 'Fermer'
 }
