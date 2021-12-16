@@ -47,7 +47,8 @@ export default {
     state: {
       in_progress: 'En cours',
       completed: 'Complété'
-    }
+    },
+    delete_record_confirm: 'Veuillez confirmer la suppression de cet enregistrement, toutes les données collectées seront perdues:'
   },
   id: 'ID',
   form: 'Formulaire',

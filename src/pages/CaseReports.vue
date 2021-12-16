@@ -79,6 +79,33 @@
       </q-card>
     </q-dialog>
 
+    <q-dialog v-model='showConfirmDeleteCaseReport' persistent>
+      <q-card>
+        <q-card-section>
+          <div>
+            {{$t('record.delete_record_confirm')}}
+          </div>
+          <div class="text-weight-bold text-center q-mt-md">
+            {{ selectedCaseReport.id }}
+          </div>
+        </q-card-section>
+        <q-card-actions align='right'>
+          <q-btn :label="$t('cancel')" flat v-close-popup />
+          <q-btn
+            @click='deleteCaseReport'
+            :label="$t('delete')"
+            type='submit'
+            color='positive'
+            v-close-popup
+          >
+            <template v-slot:loading>
+              <q-spinner-facebook />
+            </template>
+          </q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
   </q-page>
 </template>
 
@@ -158,7 +185,9 @@ export default defineComponent({
       viewDataStr: '{}',
       viewSchema: {},
       remountCounter: 0,
-      showViewCaseReport: false
+      showViewCaseReport: false,
+      selectedCaseReport: {},
+      showConfirmDeleteCaseReport: false
     }
   },
 
@@ -182,9 +211,6 @@ export default defineComponent({
     canResume (caseReport) {
       return caseReport.state === 'in_progress' && this.getForm(caseReport.crfId)
     },
-    onConfirmDelete (caseReport) {
-
-    },
     onViewCaseReport (caseReport) {
       this.viewData = caseReport.data
       this.viewDataStr = JSON.stringify(caseReport.data, null, '  ')
@@ -192,6 +218,13 @@ export default defineComponent({
       this.viewSchema = makeBlitzarQuasarSchemaForm(crf.schema, { locale: this.currentLocale })
       this.remountCounter++
       this.showViewCaseReport = true
+    },
+    onConfirmDelete (caseReport) {
+      this.selectedCaseReport = caseReport
+      this.showConfirmDeleteCaseReport = true
+    },
+    deleteCaseReport () {
+      this.$store.dispatch('record/deleteCaseReport', { id: this.selectedCaseReport.id })
     }
   }
 })

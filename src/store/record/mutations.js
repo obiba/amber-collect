@@ -13,6 +13,10 @@ export function addCaseReport (state, payload) {
   }
 }
 
+export function deleteCaseReport (state, payload) {
+  state.caseReports = state.caseReports.filter(rec => rec.id !== payload.id)
+}
+
 export function setCaseReportData (state, payload) {
   const record = state.caseReports.filter(rec => rec.id === payload.id).pop()
   if (record) {

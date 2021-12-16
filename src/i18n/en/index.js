@@ -43,6 +43,13 @@ export default {
     get_forms: 'Error when getting case report forms.',
     network_error: 'Network error, please try again later.'
   },
+  record: {
+    state: {
+      in_progress: 'En cours',
+      completed: 'Complété'
+    },
+    delete_record_confirm: 'Please confirm the deletion of the record, all collected data will be lost:'
+  },
   id: 'ID',
   form: 'Form',
   case_report: 'Case Report',

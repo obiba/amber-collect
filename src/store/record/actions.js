@@ -15,6 +15,10 @@ export async function initCaseReport ({ commit }, payload) {
   commit('addCaseReport', record)
 }
 
+export async function deleteCaseReport ({ commit }, payload) {
+  commit('deleteCaseReport', payload)
+}
+
 export async function setCaseReportData ({ commit }, payload) {
   commit('setCaseReportData', payload)
 }
