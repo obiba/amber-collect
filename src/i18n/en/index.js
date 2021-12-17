@@ -45,8 +45,8 @@ export default {
   },
   record: {
     state: {
-      in_progress: 'En cours',
-      completed: 'Complété'
+      in_progress: 'In progress',
+      completed: 'Completed'
     },
     delete_record_confirm: 'Please confirm the deletion of the record, all collected data will be lost:'
   },
