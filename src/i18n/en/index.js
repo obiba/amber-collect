@@ -48,7 +48,8 @@ export default {
       in_progress: 'In progress',
       completed: 'Completed'
     },
-    delete_record_confirm: 'Please confirm the deletion of the record, all collected data will be lost:'
+    delete_record_confirm: 'Please confirm the deletion of the record, all collected data will be lost:',
+    case_report_form_not_found: 'The case report form that was used to collect these data cannot be found.'
   },
   id: 'ID',
   form: 'Form',

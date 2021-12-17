@@ -59,9 +59,12 @@
 
           <q-tab-panels v-model="viewTab">
             <q-tab-panel name="form" class="q-pl-none q-pr-none">
-              <q-scroll-area style="height: 400px" class="q-pt-md">
+              <q-scroll-area v-if="viewSchema" style="height: 400px" class="q-pt-md">
                 <BlitzForm :key='remountCounter' :schema='viewSchema' v-model='viewData' mode="disabled"/>
               </q-scroll-area>
+              <div v-else>
+                {{ $t('record.case_report_form_not_found') }}
+              </div>
             </q-tab-panel>
 
             <q-tab-panel name="data" class="q-pl-none q-pr-none">
@@ -212,11 +215,16 @@ export default defineComponent({
       return caseReport.state === 'in_progress' && this.getForm(caseReport.crfId)
     },
     onViewCaseReport (caseReport) {
+      const crf = this.getForm(caseReport.crfId)
       this.viewData = caseReport.data
       this.viewDataStr = JSON.stringify(caseReport.data, null, '  ')
-      const crf = this.getForm(caseReport.crfId)
-      this.viewSchema = makeBlitzarQuasarSchemaForm(crf.schema, { locale: this.currentLocale })
-      this.remountCounter++
+      if (crf) {
+        this.viewSchema = makeBlitzarQuasarSchemaForm(crf.schema, { locale: this.currentLocale })
+        this.remountCounter++
+      } else {
+        this.viewSchema = null
+      }
+      this.viewTab = 'form'
       this.showViewCaseReport = true
     },
     onConfirmDelete (caseReport) {

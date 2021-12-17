@@ -48,7 +48,8 @@ export default {
       in_progress: 'En cours',
       completed: 'Complété'
     },
-    delete_record_confirm: 'Veuillez confirmer la suppression de cet enregistrement, toutes les données collectées seront perdues:'
+    delete_record_confirm: 'Veuillez confirmer la suppression de cet enregistrement, toutes les données collectées seront perdues:',
+    case_report_form_not_found: 'Le formulaire de rapport de cas ayant été utilisé pour collecter ces données est manquant.'
   },
   id: 'ID',
   form: 'Formulaire',
