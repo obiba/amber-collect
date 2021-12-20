@@ -36,8 +36,8 @@ export default boot(async ({ router, store }) => {
             LocalStorage.remove('feathers-jwt')
             router.push('/login')
           } else {
-            // network cannot be reached, go to lock screen
-            router.push('/lock')
+            // network cannot be reached, go to login screen
+            router.push('/login')
           }
         })
       } else if (to.path !== '/login') {

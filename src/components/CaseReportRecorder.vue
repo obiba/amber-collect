@@ -7,7 +7,7 @@
         <div>
           <BlitzForm
             :key="remountCounter"
-            :schema="schema"
+            :schema="value"
             v-model="formData"
             :columnCount="1"
             gridGap='32px'
@@ -25,8 +25,7 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
-import { makeBlitzarQuasarSchemaForm } from '@obiba/quasar-ui-amber'
+import { BlitzForm } from '@blitzar/form'
 
 export default {
   components: { BlitzForm },
@@ -58,12 +57,6 @@ export default {
     },
     currentLocale () {
       return this.$root.$i18n.locale
-    },
-    schema () {
-      if (this.value.items) {
-        return makeBlitzarQuasarSchemaForm(this.modelValue, { locale: this.currentLocale })
-      }
-      return makeBlitzarQuasarSchemaForm({ items: [] }, { locale: 'en' })
     }
   },
 
@@ -90,10 +83,6 @@ export default {
     resetFormData () {
       this.formData = {}
       this.remountCounter++
-    },
-    validateFormData () {
-      const result = validateFormPerSchema(this.formData, this.schema)
-      console.log('validateFormPerSchema(this.formData, this.schema) → \n', result)
     },
     submitFormData () {
 

@@ -22,16 +22,16 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/lock',
+    component: () => import('pages/LockScreen.vue')
+  },
+  {
     path: '/loading',
     component: () => import('pages/Loading.vue')
   },
   {
     path: '/login',
     component: () => import('pages/Login.vue')
-  },
-  {
-    path: '/lock',
-    component: () => import('pages/LockScreen.vue')
   },
 
   // Always leave this as last one,

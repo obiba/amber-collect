@@ -64,5 +64,9 @@ export default {
   state: 'Etat',
   started_at: 'Démarré',
   updated_at: 'Mis à jour',
-  close: 'Fermer'
+  close: 'Fermer',
+  go_to: 'Aller à...',
+  pause: 'Pause',
+  validate_save: 'Valider et sauvegarder',
+  validation_errors: 'Erreurs de validation: corriger ou mettre en pause.'
 }

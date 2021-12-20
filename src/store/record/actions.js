@@ -29,3 +29,10 @@ export async function pauseCaseReport ({ commit }, payload) {
     action: { timestamp: Date.now(), type: 'pause' }
   })
 }
+
+export async function completeCaseReport ({ commit }, payload) {
+  commit('addCaseReportAction', {
+    id: payload.id,
+    action: { timestamp: Date.now(), type: 'complete' }
+  })
+}

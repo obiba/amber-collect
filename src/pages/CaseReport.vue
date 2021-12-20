@@ -34,7 +34,7 @@
         stretch
         flat
         icon="toc"
-        title="Go to">
+        :title="$t('go_to')">
         <q-list>
           <q-item-label
             v-for="entry in toc"
@@ -51,7 +51,9 @@
       <q-space />
 
       <q-separator dark vertical />
-      <q-btn stretch flat title="Pause" icon="pause" @click="onPause"/>
+      <q-btn stretch flat :title="$t('validate_save')" icon="check" @click="onComplete"/>
+      <q-separator dark vertical />
+      <q-btn stretch flat :title="$t('pause')" icon="pause" @click="onPause"/>
       </q-toolbar>
     </q-footer>
 
@@ -70,12 +72,14 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import snarkdown from 'snarkdown'
-import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
+import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import CaseReportRecorder from 'src/components/CaseReportRecorder.vue'
-import { scroll } from 'quasar'
+import { Notify, scroll } from 'quasar'
+import { validateFormPerSchema } from '@blitzar/form'
+
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
 export default defineComponent({
@@ -85,9 +89,17 @@ export default defineComponent({
     CaseReportRecorder
   },
 
+  setup () {
+    return {
+      remountCounter: 0,
+      errorsRemain: ref(false),
+      errors: ref({})
+    }
+  },
+
   data () {
     return {
-      schema: {},
+      schema: [],
       showFormDescription: false
     }
   },
@@ -95,7 +107,10 @@ export default defineComponent({
   mounted () {
     const caseReport = this.getCaseReportById()(this.caseReportId)
     if (caseReport) {
-      this.schema = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop().schema : {}
+      let crfSchema = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop().schema : { items: [] }
+      crfSchema = crfSchema && crfSchema.items ? crfSchema : { items: [] }
+      console.log(crfSchema)
+      this.schema = makeBlitzarQuasarSchemaForm(crfSchema, { locale: this.currentLocale })
     } else {
       console.error('No such record with id: ' + this.caseReportId)
       this.$router.push('/')
@@ -120,7 +135,7 @@ export default defineComponent({
           label: this.tr(item.label)
         }))
       }
-      return toc
+      return toc.filter(entry => entry.label)
     }
   },
 
@@ -129,7 +144,8 @@ export default defineComponent({
       getCaseReportById: 'record/getCaseReportById'
     }),
     ...mapActions({
-      pauseCaseReport: 'record/pauseCaseReport'
+      pauseCaseReport: 'record/pauseCaseReport',
+      completeCaseReport: 'record/completeCaseReport'
     }),
     onShowFormDescription () {
       this.showFormDescription = true
@@ -140,6 +156,35 @@ export default defineComponent({
       const offset = ele.offsetTop
       const duration = 200
       setVerticalScrollPosition(target, offset, duration)
+    },
+    onValidate () {
+      this.errorsRemain = false
+      this.errors = {}
+      const caseReport = this.getCaseReportById()(this.caseReportId)
+      if (caseReport) {
+        const result = validateFormPerSchema(caseReport.data, this.schema)
+        this.errors = Object.keys(result)
+          .filter(key => result[key] !== null)
+          .reduce((obj, key) => {
+            obj[key] = result[key]
+            return obj
+          }, {})
+        this.errorsRemain = this.errors && Object.keys(this.errors).length > 0
+      }
+    },
+    onComplete () {
+      this.onValidate()
+      if (this.errorsRemain) {
+        console.log(this.errors)
+        Notify.create({
+          message: this.$t('validation_errors'),
+          color: 'negative'
+        })
+      } else {
+        this.completeCaseReport({ id: this.caseReportId }).then(() => {
+          this.$router.push('/')
+        })
+      }
     },
     onPause () {
       this.pauseCaseReport({ id: this.caseReportId }).then(() => {

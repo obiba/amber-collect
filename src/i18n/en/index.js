@@ -64,5 +64,9 @@ export default {
   state: 'State',
   started_at: 'Started',
   updated_at: 'Updated',
-  close: 'Close'
+  close: 'Close',
+  go_to: 'Go to...',
+  pause: 'Pause',
+  validate_save: 'Validate and save',
+  validation_errors: 'Validation errors: correct or pause.'
 }
