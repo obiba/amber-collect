@@ -21,6 +21,7 @@ export default {
     upgrade_available: 'Nouvelle version de l\'app disponible',
     dashboard: 'Tableau de bord',
     case_reports: 'Rapports de cas',
+    recent_case_reports: 'Rapports de cas récents',
     case_report_forms: 'Formulaires de rapport de cas',
     essential_links: 'Liens utiles',
     docs: 'Docs',

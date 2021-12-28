@@ -21,6 +21,7 @@ export default {
     upgrade_available: 'New app version available',
     dashboard: 'Dashboard',
     case_reports: 'Case Reports',
+    recent_case_reports: 'Recent Case Reports',
     case_report_forms: 'Case Report Forms',
     essential_links: 'Essential links',
     docs: 'Docs',
