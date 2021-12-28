@@ -60,7 +60,7 @@ export default {
   cancel: 'Annuler',
   delete: 'Supprimer',
   start: 'Démarrer',
-  resume: 'Résumer',
+  resume: 'Reprendre',
   action: 'Action',
   state: 'Etat',
   started_at: 'Démarré',

@@ -11,7 +11,7 @@
           </div>
         </div>
 
-        <div class="text-h6 q-ma-md">{{ $t('main.recent_case_reports') }}</div>
+        <div v-if="inProgressCaseReports.length" class="text-h6 q-ma-md">{{ $t('main.recent_case_reports') }}</div>
 
         <q-list separator class="q-mt-md">
 
@@ -19,10 +19,7 @@
 
             <q-item-section>
               <q-item-label>{{ cr.id }}</q-item-label>
-              <q-item-label>{{ getFormLabel(cr.crfId) }}</q-item-label>
-              <q-item-label caption>
-                {{ $t('record.state.' + cr.state) }}
-              </q-item-label>
+              <q-item-label caption>{{ getFormLabel(cr.crfId) }}</q-item-label>
             </q-item-section>
 
             <q-item-section side top>

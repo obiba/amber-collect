@@ -7,9 +7,9 @@
           {{ $t('case_report') }}
         </q-toolbar-title>
         <q-toolbar-title>
-          <span class="text-subtitle2 float-right">{{ tr(schema.label) }}
+          <span class="text-subtitle2 float-right">{{ tr(crfSchema.label) }}
           <q-btn
-            v-if="schema.description"
+            v-if="crfSchema.description"
             size="12px"
             flat
             dense
@@ -21,11 +21,28 @@
       </q-toolbar>
     </q-header>
 
-    <q-page-container>
-      <q-page>
-        <case-report-recorder v-model="schema" :caseReportId="caseReportId"/>
-      </q-page>
-    </q-page-container>
+    <div class="q-pa-md">
+      <div class="row">
+        <div class="col">
+        </div>
+        <div class="col-md-4 col-sm-8 col-xs-12">
+          <div>
+            <BlitzForm
+              :key="remountCounter"
+              :schema="schema"
+              v-model="formData"
+              :columnCount="1"
+              gridGap='32px'
+              @update:modelValue="onUpdateFormData" />
+          </div>
+          <div class="bg-black text-white q-mt-lg q-pa-md">
+            <pre>{{ JSON.stringify(formData, null, '  ') }}</pre>
+          </div>
+        </div>
+        <div class="col">
+        </div>
+      </div>
+    </div>
 
     <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar>
@@ -60,7 +77,7 @@
     <q-dialog v-model="showFormDescription">
       <q-card>
         <q-card-section>
-          <div v-html="md(tr(schema.description))"/>
+          <div v-html="md(tr(crfSchema.description))"/>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="OK" color="primary" v-close-popup />
@@ -76,9 +93,8 @@ import { defineComponent, ref } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import snarkdown from 'snarkdown'
 import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
-import CaseReportRecorder from 'src/components/CaseReportRecorder.vue'
 import { Notify, scroll } from 'quasar'
-import { validateFormPerSchema } from '@blitzar/form'
+import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
 
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
@@ -86,20 +102,23 @@ export default defineComponent({
   name: 'CaseReport',
 
   components: {
-    CaseReportRecorder
+    BlitzForm
   },
 
   setup () {
     return {
-      remountCounter: 0,
       errorsRemain: ref(false),
       errors: ref({})
     }
   },
 
   data () {
+    const formData = {}
     return {
+      remountCounter: 0,
+      formData: formData,
       schema: [],
+      crfSchema: {},
       showFormDescription: false
     }
   },
@@ -107,10 +126,12 @@ export default defineComponent({
   mounted () {
     const caseReport = this.getCaseReportById()(this.caseReportId)
     if (caseReport) {
-      let crfSchema = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop().schema : { items: [] }
-      crfSchema = crfSchema && crfSchema.items ? crfSchema : { items: [] }
-      console.log(crfSchema)
-      this.schema = makeBlitzarQuasarSchemaForm(crfSchema, { locale: this.currentLocale })
+      const crfSch = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop().schema : { items: [] }
+      this.crfSchema = crfSch && crfSch.items ? crfSch : { items: [] }
+      console.log(this.crfSchema)
+      this.schema = makeBlitzarQuasarSchemaForm(this.crfSchema, { locale: this.currentLocale })
+      this.formData = caseReport.data
+      this.remountCounter++
     } else {
       console.error('No such record with id: ' + this.caseReportId)
       this.$router.push('/')
@@ -129,8 +150,8 @@ export default defineComponent({
     },
     toc () {
       const toc = []
-      if (this.schema && this.schema.items) {
-        this.schema.items.filter(item => ['group', 'section'].includes(item.type)).forEach(item => toc.push({
+      if (this.crfSchema && this.crfSchema.items) {
+        this.crfSchema.items.filter(item => ['group', 'section'].includes(item.type)).forEach(item => toc.push({
           id: item.name.replaceAll('.', '_').toLowerCase(),
           label: this.tr(item.label)
         }))
@@ -145,7 +166,8 @@ export default defineComponent({
     }),
     ...mapActions({
       pauseCaseReport: 'record/pauseCaseReport',
-      completeCaseReport: 'record/completeCaseReport'
+      completeCaseReport: 'record/completeCaseReport',
+      setCaseReportData: 'record/setCaseReportData'
     }),
     onShowFormDescription () {
       this.showFormDescription = true
@@ -157,20 +179,23 @@ export default defineComponent({
       const duration = 200
       setVerticalScrollPosition(target, offset, duration)
     },
+    onUpdateFormData () {
+      this.setCaseReportData({
+        id: this.caseReportId,
+        data: this.formData
+      })
+    },
     onValidate () {
       this.errorsRemain = false
       this.errors = {}
-      const caseReport = this.getCaseReportById()(this.caseReportId)
-      if (caseReport) {
-        const result = validateFormPerSchema(caseReport.data, this.schema)
-        this.errors = Object.keys(result)
-          .filter(key => result[key] !== null)
-          .reduce((obj, key) => {
-            obj[key] = result[key]
-            return obj
-          }, {})
-        this.errorsRemain = this.errors && Object.keys(this.errors).length > 0
-      }
+      const result = validateFormPerSchema(this.formData, this.schema)
+      this.errors = Object.keys(result)
+        .filter(key => result[key] !== null)
+        .reduce((obj, key) => {
+          obj[key] = result[key]
+          return obj
+        }, {})
+      this.errorsRemain = this.errors && Object.keys(this.errors).length > 0
     },
     onComplete () {
       this.onValidate()
@@ -192,7 +217,7 @@ export default defineComponent({
       })
     },
     tr (key) {
-      return makeSchemaFormTr(this.schema, { locale: this.currentLocale })(key)
+      return makeSchemaFormTr(this.crfSchema, { locale: this.currentLocale })(key)
     },
     md (text) {
       return text ? snarkdown(text) : text

@@ -33,6 +33,9 @@ export function addCaseReportAction (state, payload) {
       record.actions = []
     }
     record.actions.push(payload.action)
+    if (payload.action.type === 'complete') {
+      record.state = 'completed'
+    }
   } else {
     console.error('Record could not be found: ' + payload.id)
   }
