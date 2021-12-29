@@ -18,12 +18,12 @@
           <q-item v-for="cr in inProgressCaseReports" :key="cr.id">
 
             <q-item-section>
-              <q-item-label>{{ cr.id }}</q-item-label>
+              <q-item-label>{{ getCaseReportId(cr) }}</q-item-label>
               <q-item-label caption>{{ getFormLabel(cr.crfId) }}</q-item-label>
             </q-item-section>
 
             <q-item-section side top>
-              <q-item-label :title="getLastUpdate(cr)">{{ getLastUpdateAgo(cr) }}</q-item-label>
+              <q-item-label :title="getCaseReportLastUpdate(cr)">{{ getCaseReportLastUpdateAgo(cr) }}</q-item-label>
               <q-btn
                 :label="$t('resume')"
                 icon-right="play_arrow"
@@ -90,11 +90,14 @@ export default defineComponent({
       const form = this.getForm(crfId)
       return form ? this.tr(form.schema, form.schema.label) : '?'
     },
-    getLastUpdate (cr) {
+    getCaseReportId (cr) {
+      return (cr.data && cr.data._id) ? cr.data._id : cr.id
+    },
+    getCaseReportLastUpdate (cr) {
       const action = cr.actions[cr.actions.length - 1]
       return new Intl.DateTimeFormat(this.currentLocale, { dateStyle: 'full', timeStyle: 'short' }).format(action.timestamp)
     },
-    getLastUpdateAgo (cr) {
+    getCaseReportLastUpdateAgo (cr) {
       const action = cr.actions[cr.actions.length - 1]
       const rtf = new Intl.RelativeTimeFormat(this.currentLocale, { style: 'long' })
       const minutes = Math.ceil((action.timestamp - Date.now()) / 60000)

@@ -1,18 +1,19 @@
-// import { t } from '../../boot/i18n'
-// import { Notify } from 'quasar'
+import { v4 as uuidv4 } from 'uuid'
 
 export async function initCaseReport ({ commit }, payload) {
+  const recordId = uuidv4()
   const record = {
-    id: payload.id,
+    id: recordId,
     crfId: payload.crf._id,
     state: 'in_progress',
-    data: {},
+    data: payload.data ? payload.data : {},
     actions: [{
       timestamp: Date.now(),
       type: 'init'
     }]
   }
   commit('addCaseReport', record)
+  return recordId
 }
 
 export async function deleteCaseReport ({ commit }, payload) {

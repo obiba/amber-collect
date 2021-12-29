@@ -19,6 +19,9 @@
           </q-btn></span>
         </q-toolbar-title>
       </q-toolbar>
+      <q-toolbar class="bg-secondary" style="min-height: 20px">
+        <div>{{ formData._id }}</div>
+      </q-toolbar>
     </q-header>
 
     <q-page-container>
@@ -117,10 +120,9 @@ export default defineComponent({
   },
 
   data () {
-    const formData = {}
     return {
       remountCounter: 0,
-      formData: formData,
+      formData: {},
       schema: [],
       crfSchema: {},
       showFormDescription: false

@@ -9,7 +9,7 @@
     >
       <template v-slot:body-cell-id='props'>
         <q-td :props='props'>
-          <a href="javascript:void(0)" :title="props.row.id" @click="onViewCaseReport(props.row)">{{ props.row.id.substring(0, 6) + '...' }}</a>
+          <a href="javascript:void(0)" :title="props.row.id" @click="onViewCaseReport(props.row)">{{ props.row.data._id }}</a>
         </q-td>
       </template>
       <template v-slot:body-cell-action='props'>
@@ -129,7 +129,7 @@ export default defineComponent({
         required: true,
         label: this.$t('id'),
         align: 'left',
-        field: row => row.id,
+        field: row => (row.data && row.data._id) ? row.data._id : row.id,
         sortable: true
       },
       {
