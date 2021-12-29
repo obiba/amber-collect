@@ -53,7 +53,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import snarkdown from 'snarkdown'
 import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
@@ -75,6 +75,9 @@ export default defineComponent({
   },
 
   computed: {
+    ...mapState({
+      user: state => state.auth.payload ? state.auth.payload.user : undefined
+    }),
     currentLocale () {
       return this.$root.$i18n.locale
     }
@@ -121,7 +124,8 @@ export default defineComponent({
       if (Object.keys(errors).length === 0) {
         this.initCaseReport({
           crf: this.form,
-          data: this.formData
+          data: this.formData,
+          user: this.user.email
         }).then((recordId) => {
           this.$router.push('/case-report/' + recordId)
         })

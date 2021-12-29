@@ -26,6 +26,17 @@
             :to="'/case-report/' + props.row.id">
           </q-btn>
           <q-btn
+            v-if="canSave(props.row)"
+            class="text-grey-8"
+            size="12px"
+            flat
+            dense
+            round
+            :title="$t('save')"
+            icon="cloud_upload"
+            @click="onSave(props.row)">
+          </q-btn>
+          <q-btn
             class="text-grey-8"
             size="12px"
             flat
@@ -89,7 +100,7 @@
             {{$t('record.delete_record_confirm')}}
           </div>
           <div class="text-weight-bold text-center q-mt-md">
-            {{ selectedCaseReport.id }}
+            {{ selectedCaseReport.data._id }}
           </div>
         </q-card-section>
         <q-card-actions align='right'>
@@ -214,6 +225,9 @@ export default defineComponent({
     canResume (caseReport) {
       return caseReport.state === 'in_progress' && this.getForm(caseReport.crfId)
     },
+    canSave (caseReport) {
+      return caseReport.state === 'completed' && this.getForm(caseReport.crfId)
+    },
     onViewCaseReport (caseReport) {
       const crf = this.getForm(caseReport.crfId)
       this.viewData = caseReport.data
@@ -226,6 +240,8 @@ export default defineComponent({
       }
       this.viewTab = 'form'
       this.showViewCaseReport = true
+    },
+    onSave (caseReport) {
     },
     onConfirmDelete (caseReport) {
       this.selectedCaseReport = caseReport

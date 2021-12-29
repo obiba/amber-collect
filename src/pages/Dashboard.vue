@@ -11,7 +11,7 @@
           </div>
         </div>
 
-        <div v-if="inProgressCaseReports.length" class="text-h6 q-ma-md">{{ $t('main.recent_case_reports') }}</div>
+        <div v-if="inProgressCaseReports.length" class="text-h6 q-ma-md">{{ $t('main.case_reports_in_progress') }}</div>
 
         <q-list separator class="q-mt-md">
 

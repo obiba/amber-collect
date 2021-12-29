@@ -9,6 +9,7 @@ export async function initCaseReport ({ commit }, payload) {
     data: payload.data ? payload.data : {},
     actions: [{
       timestamp: Date.now(),
+      user: payload.user,
       type: 'init'
     }]
   }
@@ -27,13 +28,21 @@ export async function setCaseReportData ({ commit }, payload) {
 export async function pauseCaseReport ({ commit }, payload) {
   commit('addCaseReportAction', {
     id: payload.id,
-    action: { timestamp: Date.now(), type: 'pause' }
+    action: {
+      timestamp: Date.now(),
+      user: payload.user,
+      type: 'pause'
+    }
   })
 }
 
 export async function completeCaseReport ({ commit }, payload) {
   commit('addCaseReportAction', {
     id: payload.id,
-    action: { timestamp: Date.now(), type: 'complete' }
+    action: {
+      timestamp: Date.now(),
+      user: payload.user,
+      type: 'complete'
+    }
   })
 }

@@ -20,7 +20,7 @@
         </q-toolbar-title>
       </q-toolbar>
       <q-toolbar class="bg-secondary" style="min-height: 20px">
-        <div>{{ formData._id }}</div>
+        <div>{{ idLabel }}: {{ formData._id }}</div>
       </q-toolbar>
     </q-header>
 
@@ -146,7 +146,8 @@ export default defineComponent({
 
   computed: {
     ...mapState({
-      crfs: state => state.form.crfs
+      crfs: state => state.form.crfs,
+      user: state => state.auth.payload ? state.auth.payload.user : undefined
     }),
     currentLocale () {
       return this.$root.$i18n.locale
@@ -163,6 +164,9 @@ export default defineComponent({
         }))
       }
       return toc.filter(entry => entry.label)
+    },
+    idLabel () {
+      return this.crfSchema.idLabel ? this.tr(this.crfSchema.idLabel) : 'ID'
     }
   },
 
@@ -212,13 +216,19 @@ export default defineComponent({
           color: 'negative'
         })
       } else {
-        this.completeCaseReport({ id: this.caseReportId }).then(() => {
+        this.completeCaseReport({
+          id: this.caseReportId,
+          user: this.user.email
+        }).then(() => {
           this.$router.push('/')
         })
       }
     },
     onPause () {
-      this.pauseCaseReport({ id: this.caseReportId }).then(() => {
+      this.pauseCaseReport({
+        id: this.caseReportId,
+        user: this.user.email
+      }).then(() => {
         this.$router.push('/')
       })
     },
