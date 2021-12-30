@@ -9,7 +9,7 @@
     >
       <template v-slot:body-cell-id='props'>
         <q-td :props='props'>
-          <a href="javascript:void(0)" :title="props.row.id" @click="onViewCaseReport(props.row)">{{ props.row.data._id }}</a>
+          <a href="javascript:void(0)" @click="onViewCaseReport(props.row)">{{ props.row.id }}</a>
         </q-td>
       </template>
       <template v-slot:body-cell-action='props'>
@@ -35,6 +35,16 @@
             :title="$t('save')"
             icon="cloud_upload"
             @click="onSave(props.row)">
+          </q-btn>
+          <q-btn
+            class="text-grey-8"
+            size="12px"
+            flat
+            dense
+            round
+            :title="$t('view')"
+            icon="visibility"
+            @click='onViewCaseReport(props.row)'>
           </q-btn>
           <q-btn
             class="text-grey-8"
@@ -99,8 +109,9 @@
           <div>
             {{$t('record.delete_record_confirm')}}
           </div>
-          <div class="text-weight-bold text-center q-mt-md">
-            {{ selectedCaseReport.data._id }}
+          <div class="text-center q-mt-md">
+            <span class="text-grey q-mr-sm">#{{ selectedCaseReport.id }}</span>
+            <span class="text-bold">{{ selectedCaseReport.data._id ? selectedCaseReport.data._id : '' }}</span>
           </div>
         </q-card-section>
         <q-card-actions align='right'>
@@ -138,9 +149,17 @@ export default defineComponent({
       {
         name: 'id',
         required: true,
+        label: '#',
+        align: 'left',
+        field: row => row.id,
+        sortable: true
+      },
+      {
+        name: '_id',
+        required: true,
         label: this.$t('id'),
         align: 'left',
-        field: row => (row.data && row.data._id) ? row.data._id : row.id,
+        field: row => (row.data && row.data._id) ? row.data._id : '',
         sortable: true
       },
       {

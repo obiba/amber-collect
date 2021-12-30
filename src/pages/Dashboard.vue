@@ -18,7 +18,10 @@
           <q-item v-for="cr in inProgressCaseReports" :key="cr.id">
 
             <q-item-section>
-              <q-item-label>{{ getCaseReportId(cr) }}</q-item-label>
+              <q-item-label>
+                <span class="text-grey q-mr-sm">#{{ cr.id }}</span>
+                <span class="text-bold">{{ getCaseReportId(cr) }}</span>
+              </q-item-label>
               <q-item-label caption>{{ getFormLabel(cr.crfId) }}</q-item-label>
             </q-item-section>
 
@@ -91,7 +94,7 @@ export default defineComponent({
       return form ? this.tr(form.schema, form.schema.label) : '?'
     },
     getCaseReportId (cr) {
-      return (cr.data && cr.data._id) ? cr.data._id : cr.id
+      return (cr.data && cr.data._id) ? cr.data._id : ''
     },
     getCaseReportLastUpdate (cr) {
       const action = cr.actions[cr.actions.length - 1]

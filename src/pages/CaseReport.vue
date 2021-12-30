@@ -7,9 +7,9 @@
           {{ $t('case_report') }}
         </q-toolbar-title>
         <q-toolbar-title>
-          <span class="text-subtitle2 float-right">{{ tr(crfSchema.label) }}
+          <span class="text-subtitle2 float-right">{{ tr(crf.schema.label) }}
           <q-btn
-            v-if="crfSchema.description"
+            v-if="crf.schema.description"
             size="12px"
             flat
             dense
@@ -19,7 +19,7 @@
           </q-btn></span>
         </q-toolbar-title>
       </q-toolbar>
-      <q-toolbar class="bg-secondary" style="min-height: 20px">
+      <q-toolbar v-if="hasIdLabel()" class="bg-secondary q-pt-sm q-pb-sm" style="min-height: 20px">
         <div>{{ idLabel }}: {{ formData._id }}</div>
       </q-toolbar>
     </q-header>
@@ -84,7 +84,7 @@
     <q-dialog v-model="showFormDescription">
       <q-card>
         <q-card-section>
-          <div v-html="md(tr(crfSchema.description))"/>
+          <div v-html="md(tr(crf.schema.description))"/>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="OK" color="primary" v-close-popup />
@@ -124,7 +124,7 @@ export default defineComponent({
       remountCounter: 0,
       formData: {},
       schema: [],
-      crfSchema: {},
+      crf: { schema: { items: [] } },
       showFormDescription: false
     }
   },
@@ -132,10 +132,8 @@ export default defineComponent({
   mounted () {
     const caseReport = this.getCaseReportById()(this.caseReportId)
     if (caseReport) {
-      const crfSch = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop().schema : { items: [] }
-      this.crfSchema = crfSch && crfSch.items ? crfSch : { items: [] }
-      console.log(this.crfSchema)
-      this.schema = makeBlitzarQuasarSchemaForm(this.crfSchema, { locale: this.currentLocale })
+      this.crf = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop() : { schema: { items: [] } }
+      this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale })
       this.formData = caseReport.data
       this.remountCounter++
     } else {
@@ -157,8 +155,8 @@ export default defineComponent({
     },
     toc () {
       const toc = []
-      if (this.crfSchema && this.crfSchema.items) {
-        this.crfSchema.items.filter(item => ['group', 'section'].includes(item.type)).forEach(item => toc.push({
+      if (this.crf.schema && this.crf.schema.items) {
+        this.crf.schema.items.filter(item => ['group', 'section'].includes(item.type)).forEach(item => toc.push({
           id: item.name.replaceAll('.', '_').toLowerCase(),
           label: this.tr(item.label)
         }))
@@ -166,7 +164,7 @@ export default defineComponent({
       return toc.filter(entry => entry.label)
     },
     idLabel () {
-      return this.crfSchema.idLabel ? this.tr(this.crfSchema.idLabel) : 'ID'
+      return this.crf.schema.idLabel ? this.tr(this.crf.schema.idLabel) : 'ID'
     }
   },
 
@@ -179,6 +177,9 @@ export default defineComponent({
       completeCaseReport: 'record/completeCaseReport',
       setCaseReportData: 'record/setCaseReportData'
     }),
+    hasIdLabel () {
+      return this.crf.schema.idLabel
+    },
     onShowFormDescription () {
       this.showFormDescription = true
     },
@@ -218,7 +219,8 @@ export default defineComponent({
       } else {
         this.completeCaseReport({
           id: this.caseReportId,
-          user: this.user.email
+          user: this.user.email,
+          revision: this.crf.revision
         }).then(() => {
           this.$router.push('/')
         })
@@ -233,7 +235,7 @@ export default defineComponent({
       })
     },
     tr (key) {
-      return makeSchemaFormTr(this.crfSchema, { locale: this.currentLocale })(key)
+      return makeSchemaFormTr(this.crf.schema, { locale: this.currentLocale })(key)
     },
     md (text) {
       return text ? snarkdown(text) : text

@@ -1,7 +1,5 @@
-import { v4 as uuidv4 } from 'uuid'
-
-export async function initCaseReport ({ commit }, payload) {
-  const recordId = uuidv4()
+export async function initCaseReport ({ commit, state }, payload) {
+  const recordId = state.caseReports.map(cr => cr.id).reduce((a, b) => Math.max(a, b), 0) + 1 + ''
   const record = {
     id: recordId,
     crfId: payload.crf._id,
@@ -39,6 +37,7 @@ export async function pauseCaseReport ({ commit }, payload) {
 export async function completeCaseReport ({ commit }, payload) {
   commit('addCaseReportAction', {
     id: payload.id,
+    revision: payload.revision,
     action: {
       timestamp: Date.now(),
       user: payload.user,

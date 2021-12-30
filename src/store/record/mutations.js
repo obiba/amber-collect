@@ -36,6 +36,9 @@ export function addCaseReportAction (state, payload) {
     if (payload.action.type === 'complete') {
       record.state = 'completed'
     }
+    if (payload.revision) {
+      record.revision = payload.revision
+    }
   } else {
     console.error('Record could not be found: ' + payload.id)
   }
