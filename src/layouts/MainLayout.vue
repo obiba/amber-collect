@@ -17,6 +17,9 @@
 
         <q-space/>
         <div class="q-gutter-sm row items-center no-wrap">
+          <q-btn round dense flat icon="lock"
+                 @click="onLock">
+          </q-btn>
           <q-btn round dense flat :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
                  @click="$q.fullscreen.toggle()">
           </q-btn>
