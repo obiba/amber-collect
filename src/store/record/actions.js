@@ -55,10 +55,10 @@ export async function saveCaseReport ({ commit, state }, payload) {
   const result = await caseReportService
     .saveCaseReport(caseReport)
     .catch(err => {
-      console.error(err)
       const errorCode = err.code
       if (!payload.silent) {
         if (errorCode) {
+          console.error(err)
           Notify.create({
             message: t('error.save_case_report'),
             color: 'negative'

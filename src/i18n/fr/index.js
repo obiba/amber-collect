@@ -65,6 +65,7 @@ export default {
   delete: 'Supprimer',
   start: 'Démarrer',
   resume: 'Reprendre',
+  view: 'Voir',
   save: 'Sauvegarder',
   action: 'Action',
   state: 'Etat',

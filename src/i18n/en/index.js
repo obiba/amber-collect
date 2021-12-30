@@ -65,6 +65,7 @@ export default {
   delete: 'Delete',
   start: 'Start',
   resume: 'Resume',
+  view: 'View',
   save: 'Save',
   action: 'Action',
   state: 'State',
