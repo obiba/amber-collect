@@ -1,3 +1,7 @@
+import caseReportService from '../../services/record'
+import { t } from '../../boot/i18n'
+import { Notify } from 'quasar'
+
 export async function initCaseReport ({ commit, state }, payload) {
   const recordId = state.caseReports.map(cr => cr.id).reduce((a, b) => Math.max(a, b), 0) + 1 + ''
   const record = {
@@ -44,4 +48,35 @@ export async function completeCaseReport ({ commit }, payload) {
       type: 'complete'
     }
   })
+}
+
+export async function saveCaseReport ({ commit, state }, payload) {
+  const caseReport = state.caseReports.filter(rec => rec.id === payload.id).pop()
+  const result = await caseReportService
+    .saveCaseReport(caseReport)
+    .catch(err => {
+      console.error(err)
+      const errorCode = err.code
+      if (!payload.silent) {
+        if (errorCode) {
+          Notify.create({
+            message: t('error.save_case_report'),
+            color: 'negative'
+          })
+        } else if (!err.status) {
+          Notify.create({
+            message: t('error.network_error'),
+            color: 'negative'
+          })
+        }
+      }
+    })
+  if (result) {
+    commit('deleteCaseReport', payload)
+    Notify.create({
+      message: t('success.save_case_report'),
+      color: 'positive',
+      icon: 'fas fa-check'
+    })
+  }
 }

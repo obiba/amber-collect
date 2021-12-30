@@ -41,8 +41,12 @@ export default {
     incorrect_unclock: 'Le code de déverrouillage est incorrect.'
   },
   error: {
-    get_forms: 'Erreur à la récupération des formulaires de rapport de cas.',
+    get_case_report_forms: 'Erreur à la récupération des formulaires de rapport de cas.',
+    save_case_report: 'La sauvegarde du rapport de cas a échoué.',
     network_error: 'Erreur réseau, veuillez réessayer plus tard.'
+  },
+  success: {
+    save_case_report: 'Rapport de cas sauvegardé.'
   },
   record: {
     state: {

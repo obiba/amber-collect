@@ -261,6 +261,7 @@ export default defineComponent({
       this.showViewCaseReport = true
     },
     onSave (caseReport) {
+      this.$store.dispatch('record/saveCaseReport', { id: caseReport.id })
     },
     onConfirmDelete (caseReport) {
       this.selectedCaseReport = caseReport

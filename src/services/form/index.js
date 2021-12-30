@@ -1,3 +1,3 @@
-import * as crfs from './crfs.js'
+import * as crfs from './crfs'
 
 export default Object.assign({}, crfs)

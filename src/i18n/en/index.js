@@ -41,8 +41,12 @@ export default {
     incorrect_unclock: 'Unlock code is incorrect.'
   },
   error: {
-    get_forms: 'Error when getting case report forms.',
+    get_case_report_forms: 'Error when getting case report forms.',
+    save_case_report: 'Saving case report failed.',
     network_error: 'Network error, please try again later.'
+  },
+  success: {
+    save_case_report: 'Case report saved.'
   },
   record: {
     state: {
