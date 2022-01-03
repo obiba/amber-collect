@@ -15,6 +15,15 @@ export function addCaseReport (state, payload) {
 
 export function deleteCaseReport (state, payload) {
   state.caseReports = state.caseReports.filter(rec => rec.id !== payload.id)
+  delete state.caseReportsInProcess[payload.id]
+}
+
+export function lockCaseReport (state, payload) {
+  if (payload.lock) {
+    state.caseReportsInProcess[payload.id] = true
+  } else {
+    delete state.caseReportsInProcess[payload.id]
+  }
 }
 
 export function setCaseReportData (state, payload) {
@@ -35,6 +44,9 @@ export function addCaseReportAction (state, payload) {
     record.actions.push(payload.action)
     if (payload.action.type === 'complete') {
       record.state = 'completed'
+    } else if (payload.action.type === 'save') {
+      record.state = 'saved'
+      record.data = { _id: record.data._id }
     }
     if (payload.revision) {
       record.revision = payload.revision

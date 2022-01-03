@@ -175,6 +175,7 @@ export default defineComponent({
     ...mapActions({
       pauseCaseReport: 'record/pauseCaseReport',
       completeCaseReport: 'record/completeCaseReport',
+      saveCaseReport: 'record/saveCaseReport',
       setCaseReportData: 'record/setCaseReportData'
     }),
     hasIdLabel () {
@@ -217,10 +218,17 @@ export default defineComponent({
           color: 'negative'
         })
       } else {
+        console.log('completing')
         this.completeCaseReport({
           id: this.caseReportId,
           user: this.user.email,
           revision: this.crf.revision
+        }).then(() => {
+          console.log('completed')
+          this.saveCaseReport({
+            id: this.caseReportId,
+            user: this.user.email
+          })
         }).then(() => {
           this.$router.push('/')
         })

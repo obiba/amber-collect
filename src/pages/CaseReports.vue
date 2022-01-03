@@ -37,6 +37,7 @@
             @click="onSave(props.row)">
           </q-btn>
           <q-btn
+            v-if="canView(props.row)"
             class="text-grey-8"
             size="12px"
             flat
@@ -72,8 +73,8 @@
             align="justify"
             narrow-indicator
           >
-            <q-tab name="form" label="form" />
-            <q-tab name="data" label="data" />
+            <q-tab name="form" :label="$t('form')" />
+            <q-tab name="data" :label="$t('data')" />
           </q-tabs>
 
           <q-separator/>
@@ -106,12 +107,15 @@
     <q-dialog v-model='showConfirmDeleteCaseReport' persistent>
       <q-card>
         <q-card-section>
-          <div>
+          <div v-if="selectedCaseReport.state === 'saved'">
+            {{$t('record.delete_saved_record_confirm')}}
+          </div>
+          <div v-else>
             {{$t('record.delete_record_confirm')}}
           </div>
           <div class="text-center q-mt-md">
             <span class="text-grey q-mr-sm">#{{ selectedCaseReport.id }}</span>
-            <span class="text-bold">{{ selectedCaseReport.data._id ? selectedCaseReport.data._id : '' }}</span>
+            <span class="text-bold">{{ selectedCaseReport.data && selectedCaseReport.data._id ? selectedCaseReport.data._id : '' }}</span>
           </div>
         </q-card-section>
         <q-card-actions align='right'>
@@ -246,6 +250,9 @@ export default defineComponent({
     },
     canSave (caseReport) {
       return caseReport.state === 'completed' && this.getForm(caseReport.crfId)
+    },
+    canView (caseReport) {
+      return caseReport.state !== 'saved' && this.getForm(caseReport.crfId)
     },
     onViewCaseReport (caseReport) {
       const crf = this.getForm(caseReport.crfId)

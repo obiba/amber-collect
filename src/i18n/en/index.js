@@ -51,13 +51,16 @@ export default {
   record: {
     state: {
       in_progress: 'In progress',
-      completed: 'Completed'
+      completed: 'Completed',
+      saved: 'Saved'
     },
     delete_record_confirm: 'Please confirm the deletion of the record, all collected data will be lost:',
+    delete_saved_record_confirm: 'Please confirm the deletion of the record, all collected data were saved and will not be affected:',
     case_report_form_not_found: 'The case report form that was used to collect these data cannot be found.'
   },
   id: 'ID',
   form: 'Form',
+  data: 'Data',
   case_report: 'Case Report',
   email: 'Email',
   password: 'Password',

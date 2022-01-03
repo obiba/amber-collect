@@ -51,13 +51,16 @@ export default {
   record: {
     state: {
       in_progress: 'En cours',
-      completed: 'Complété'
+      completed: 'Complété',
+      saved: 'Sauvegardé'
     },
     delete_record_confirm: 'Veuillez confirmer la suppression de cet enregistrement, toutes les données collectées seront perdues:',
+    delete_saved_record_confirm: 'Veuillez confirmer la suppression de cet enregistrement, toutes les données collectées ont été sauvegardées et ne seront pas affectées:',
     case_report_form_not_found: 'Le formulaire de rapport de cas ayant été utilisé pour collecter ces données est manquant.'
   },
   id: 'ID',
   form: 'Formulaire',
+  data: 'Données',
   case_report: 'Rapport de cas',
   email: 'Courriel',
   password: 'Mot de passe',

@@ -21,8 +21,7 @@ export default defineComponent({
     const { locale } = useI18n({ useScope: 'global' })
     return {
       locale,
-      intervalId: null,
-      caseReportsInProcess: {}
+      intervalId: null
     }
   },
   mounted () {
@@ -35,7 +34,7 @@ export default defineComponent({
           })
         }
       }
-    }, 2000)
+    }, 60000) // every minute
   },
   beforeUnmount () {
     if (this.intervalId) {
@@ -52,16 +51,11 @@ export default defineComponent({
   },
   methods: {
     saveCaseReport (caseReport) {
-      if (this.caseReportsInProcess[caseReport.id]) {
-        // console.log(`CR #${caseReport.id} is already being processed`)
-        return
-      }
-      this.caseReportsInProcess[caseReport.id] = true
-      this.$store.dispatch('record/saveCaseReport', { id: caseReport.id, silent: true })
-        .then(() => {
-          delete this.caseReportsInProcess[caseReport.id]
-          // console.log(`CR #${caseReport.id} processing done`)
-        })
+      this.$store.dispatch('record/saveCaseReport', {
+        id: caseReport.id,
+        user: this.currentUser.email,
+        silent: true
+      })
     }
   }
 })

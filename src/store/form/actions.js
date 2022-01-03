@@ -4,10 +4,10 @@ import { Notify } from 'quasar'
 
 export async function getCaseReportForms ({ commit }, payload) {
   const result = await crfsService.getCaseReportForms(payload.filter).catch(err => {
-    console.error(err)
     const errorCode = err.code
     if (!payload.silent) {
       if (errorCode) {
+        console.error(err)
         Notify.create({
           message: t('error.get_case_report_forms'),
           color: 'negative'

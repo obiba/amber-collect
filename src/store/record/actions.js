@@ -51,6 +51,15 @@ export async function completeCaseReport ({ commit }, payload) {
 }
 
 export async function saveCaseReport ({ commit, state }, payload) {
+  if (state.caseReportsInProcess[payload.id]) {
+    console.log(`CR #${payload.id} is already being processed`)
+    return
+  }
+  commit('lockCaseReport', {
+    id: payload.id,
+    lock: true
+  })
+
   const caseReport = state.caseReports.filter(rec => rec.id === payload.id).pop()
   const result = await caseReportService
     .saveCaseReport(caseReport)
@@ -70,13 +79,33 @@ export async function saveCaseReport ({ commit, state }, payload) {
           })
         }
       }
+      commit('lockCaseReport', {
+        id: payload.id,
+        lock: false
+      })
     })
   if (result) {
-    commit('deleteCaseReport', payload)
-    Notify.create({
-      message: t('success.save_case_report'),
-      color: 'positive',
-      icon: 'fas fa-check'
+    commit('lockCaseReport', {
+      id: payload.id,
+      lock: false
     })
+    // console.log(`CR #${payload.id} processing done`)
+    // commit('deleteCaseReport', payload)
+    commit('addCaseReportAction', {
+      id: payload.id,
+      revision: payload.revision,
+      action: {
+        timestamp: Date.now(),
+        user: payload.user,
+        type: 'save'
+      }
+    })
+    if (payload.silent !== true) {
+      Notify.create({
+        message: t('success.save_case_report'),
+        color: 'positive',
+        icon: 'fas fa-check'
+      })
+    }
   }
 }
