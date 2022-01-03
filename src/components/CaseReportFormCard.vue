@@ -1,24 +1,23 @@
 <template>
-  <q-card class="q-ma-md">
-    <q-card-section>
-      <span class="text-h6 text-grey-8">
-        {{ tr(form.schema.label) }}
-      </span>
-      <span class="text-grey-6 text-smaller q-mt-sm float-right">{{ 'v' + form.revision }}</span>
-    </q-card-section>
-    <q-separator/>
-    <q-card-section>
+
+  <q-item-section>
+    <q-item-label>
+      <span class="text-bold">{{ tr(form.schema.label) }}</span>
+    </q-item-label>
+    <q-item-label caption>
       <div v-html="md(tr(form.schema.description))"/>
-    </q-card-section>
-    <q-card-actions align="left">
-      <q-btn
+    </q-item-label>
+  </q-item-section>
+
+  <q-item-section side top>
+    <q-item-label caption>{{ 'v' + form.revision }}</q-item-label>
+    <q-btn
         :label="$t('start')"
         icon-right="play_arrow"
-        class="text-capitalize q-ma-sm"
-        color="indigo-7"
+        class="text-capitalize q-mt-sm q-mb-sm"
+        color="primary"
         @click="onStart"/>
-    </q-card-actions>
-  </q-card>
+  </q-item-section>
 
   <q-dialog v-model='showCreateCaseReportRecord' persistent>
     <q-card>

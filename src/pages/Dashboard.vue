@@ -1,42 +1,59 @@
 <template>
-  <q-page class="q-pb-md">
+  <q-page>
     <div class="row">
       <div class="col">
       </div>
-      <div class="col-md-8 col-sm-8 col-xs-12">
-        <div class="text-h6 q-ma-md">{{ $t('main.case_report_forms') }}</div>
-        <div class="row">
-          <div v-for="form in crfs" :key="form._id" class="col-xs-12 col-sm-6 col-md-4">
-            <case-report-form-card :form="form"/>
-          </div>
-        </div>
+      <div class="col-md-6 col-sm-8 col-xs-12">
+        <div class="text-bold text-center text-uppercase q-ma-md">{{ $t('main.case_report_forms') }}</div>
 
-        <div v-if="inProgressCaseReports.length" class="text-h6 q-ma-md">{{ $t('main.case_reports_in_progress') }}</div>
+        <q-card flat bordered class="q-ma-md">
+          <q-card-section>
+            <q-list separator>
+              <q-item v-for="form in crfs" :key="form._id" class="col-xs-12 col-sm-6 col-md-4">
+                <case-report-form-card :form="form"/>
+              </q-item>
+            </q-list>
+          </q-card-section>
+        </q-card>
+      </div>
+      <div class="col">
+      </div>
+    </div>
+    <div v-if="inProgressCaseReports.length" class="row bg-grey-3 q-pt-md q-pb-md">
+      <div class="col">
+      </div>
+      <div class="col-md-6 col-sm-8 col-xs-12">
+        <div class="text-bold text-center text-uppercase">{{ $t('main.case_reports_in_progress') }}</div>
 
-        <q-list separator class="q-mt-md">
+        <q-card flat bordered class="q-ma-md">
+          <q-card-section>
+            <q-list separator>
 
-          <q-item v-for="cr in inProgressCaseReports" :key="cr.id">
+              <q-item v-for="cr in inProgressCaseReports" :key="cr.id">
 
-            <q-item-section>
-              <q-item-label>
-                <span class="text-grey q-mr-sm">#{{ cr.id }}</span>
-                <span class="text-bold">{{ getCaseReportId(cr) }}</span>
-              </q-item-label>
-              <q-item-label caption>{{ getFormLabel(cr.crfId) }}</q-item-label>
-            </q-item-section>
+                <q-item-section>
+                  <q-item-label>
+                    <span class="text-grey q-mr-sm">#{{ cr.id }}</span>
+                    <span class="text-bold">{{ getCaseReportId(cr) }}</span>
+                  </q-item-label>
+                  <q-item-label caption>{{ getFormLabel(cr.crfId) }}</q-item-label>
+                </q-item-section>
 
-            <q-item-section side top>
-              <q-item-label :title="getCaseReportLastUpdate(cr)">{{ getCaseReportLastUpdateAgo(cr) }}</q-item-label>
-              <q-btn
-                :label="$t('resume')"
-                icon-right="play_arrow"
-                class="text-capitalize q-ma-sm"
-                :to="'/case-report/' + cr.id"/>
-            </q-item-section>
+                <q-item-section side top>
+                  <q-item-label :title="getCaseReportLastUpdate(cr)">{{ getCaseReportLastUpdateAgo(cr) }}</q-item-label>
+                  <q-btn
+                    :label="$t('resume')"
+                    icon-right="play_arrow"
+                    class="text-capitalize q-mt-sm q-mb-sm"
+                    color="secondary"
+                    :to="'/case-report/' + cr.id"/>
+                </q-item-section>
 
-          </q-item>
+              </q-item>
 
-        </q-list>
+            </q-list>
+          </q-card-section>
+        </q-card>
       </div>
       <div class="col">
       </div>
