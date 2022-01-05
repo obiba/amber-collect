@@ -71,12 +71,14 @@ export default {
   view: 'Voir',
   save: 'Sauvegarder',
   action: 'Action',
-  state: 'Etat',
+  state: 'État',
   started_at: 'Démarré',
   updated_at: 'Mis à jour',
   close: 'Fermer',
   go_to: 'Aller à...',
   pause: 'Pause',
   validate_save: 'Valider et sauvegarder',
-  validation_errors: 'Erreurs de validation: corriger ou mettre en pause.'
+  validation_errors: 'Erreurs de validation: corriger ou mettre en pause.',
+  single_page: 'Une seule page',
+  multi_steps: 'Étapes multiples'
 }

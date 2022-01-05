@@ -27,6 +27,10 @@ export async function setCaseReportData ({ commit }, payload) {
   commit('setCaseReportData', payload)
 }
 
+export async function mergeCaseReportData ({ commit }, payload) {
+  commit('mergeCaseReportData', payload)
+}
+
 export async function pauseCaseReport ({ commit }, payload) {
   commit('addCaseReportAction', {
     id: payload.id,

@@ -78,5 +78,7 @@ export default {
   go_to: 'Go to...',
   pause: 'Pause',
   validate_save: 'Validate and save',
-  validation_errors: 'Validation errors: correct or pause.'
+  validation_errors: 'Validation errors: correct or pause.',
+  single_page: 'Single page',
+  multi_steps: 'Multiple steps'
 }

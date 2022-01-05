@@ -35,6 +35,21 @@ export function setCaseReportData (state, payload) {
   }
 }
 
+export function mergeCaseReportData (state, payload) {
+  const record = state.caseReports.filter(rec => rec.id === payload.id).pop()
+  if (record) {
+    if (record.data) {
+      for (const key in payload.data) {
+        record.data[key] = payload.data[key]
+      }
+    } else {
+      record.data = payload.data
+    }
+  } else {
+    console.error('Record could not be found: ' + payload.id)
+  }
+}
+
 export function addCaseReportAction (state, payload) {
   const record = state.caseReports.filter(rec => rec.id === payload.id).pop()
   if (record) {

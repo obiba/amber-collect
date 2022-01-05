@@ -27,11 +27,20 @@
     <q-page-container>
       <q-page>
         <div class="q-pa-md">
+          <div v-if="mode === 'multi'">
+            <q-linear-progress :value="progress" animation-speed="100" />
+          </div>
           <div class="row">
             <div class="col">
             </div>
             <div class="col-md-4 col-sm-8 col-xs-12 q-mt-sm q-mb-sm">
-              <div>
+              <div v-if="isFinalStep">
+                <div class="text-h6 q-mt-md q-mb-md">
+                  This is the end of the form, congratulations!
+                </div>
+                <q-btn :label="$t('save')" icon="check" @click="onComplete"/>
+              </div>
+              <div v-else>
                 <BlitzForm
                   :key="remountCounter"
                   :schema="schema"
@@ -53,31 +62,47 @@
 
     <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar>
-      <q-btn-dropdown
-        v-if="toc.length > 0"
-        stretch
-        flat
-        icon="toc"
-        :title="$t('go_to')">
-        <q-list>
-          <q-item-label
-            v-for="entry in toc"
-            :key="entry.id"
-            header
-            clickable
-            v-close-popup
-            @click="onScroll(entry.id)">
-            {{ entry.label }}
-          </q-item-label>
-        </q-list>
-      </q-btn-dropdown>
+        <q-select
+          dark
+          emit-value
+          v-model="mode"
+          :options="modeOptions">
+          <template v-slot:selected>
+            <q-icon
+              :name="mode === 'single' ? 'grading' : 'dynamic_feed'"
+              size="sm"
+              />
+          </template>
+        </q-select>
+        <q-space />
 
-      <q-space />
-
-      <q-separator dark vertical />
-      <q-btn stretch flat :title="$t('validate_save')" icon="check" @click="onComplete"/>
-      <q-separator dark vertical />
-      <q-btn stretch flat :title="$t('pause')" icon="pause" @click="onPause"/>
+        <q-separator dark vertical v-if="mode === 'multi'" />
+        <q-btn v-if="mode === 'multi'" stretch flat icon="chevron_left" @click="previousStep" :disabled="formData.__step === 0"/>
+        <q-separator dark vertical v-if="mode === 'multi'" />
+        <q-btn v-if="mode === 'multi'" stretch flat icon="chevron_right" @click="nextStep" :disabled="formData.__step === crf.schema.items.length"/>
+        <q-separator dark vertical v-if="mode === 'single'" />
+        <q-btn-dropdown
+          v-if="mode === 'single' && toc.length > 0"
+          stretch
+          flat
+          icon="toc"
+          :title="$t('go_to')">
+          <q-list>
+            <q-item-label
+              v-for="entry in toc"
+              :key="entry.id"
+              header
+              clickable
+              v-close-popup
+              @click="onScroll(entry.id)">
+              {{ entry.label }}
+            </q-item-label>
+          </q-list>
+        </q-btn-dropdown>
+        <q-separator dark vertical v-if="mode === 'single'" />
+        <q-btn v-if="mode === 'single'" flat :title="$t('validate_save')" icon="check" @click="onComplete"/>
+        <q-separator dark vertical />
+        <q-btn stretch flat :title="$t('pause')" icon="pause" @click="onPause"/>
       </q-toolbar>
     </q-footer>
 
@@ -102,6 +127,7 @@ import snarkdown from 'snarkdown'
 import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import { Notify, scroll } from 'quasar'
 import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
+import { t } from '../boot/i18n'
 
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
@@ -122,10 +148,12 @@ export default defineComponent({
   data () {
     return {
       remountCounter: 0,
+      progress: 0,
       formData: {},
       schema: [],
       crf: { schema: { items: [] } },
-      showFormDescription: false
+      showFormDescription: false,
+      mode: 'multi'
     }
   },
 
@@ -133,12 +161,31 @@ export default defineComponent({
     const caseReport = this.getCaseReportById()(this.caseReportId)
     if (caseReport) {
       this.crf = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop() : { schema: { items: [] } }
-      this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale })
+      this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, stepId: '__step' })
+      if (!caseReport.data || !caseReport.data.__step) {
+        this.mergeCaseReportData({
+          id: this.caseReportId,
+          data: { __step: 0 }
+        })
+      }
       this.formData = caseReport.data
+      this.updateProgress()
       this.remountCounter++
     } else {
       console.error('No such record with id: ' + this.caseReportId)
       this.$router.push('/')
+    }
+  },
+
+  watch: {
+    mode (newValue, oldValue) {
+      if (newValue === 'single') {
+        this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale })
+      } else {
+        this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, stepId: '__step' })
+      }
+      this.updateProgress()
+      this.remountCounter++
     }
   },
 
@@ -165,6 +212,21 @@ export default defineComponent({
     },
     idLabel () {
       return this.crf.schema.idLabel ? this.tr(this.crf.schema.idLabel) : 'ID'
+    },
+    isFinalStep () {
+      return this.mode === 'multi' && this.formData.__step === this.crf.schema.items.length
+    },
+    modeOptions () {
+      return [
+        {
+          value: 'single',
+          label: t('single_page')
+        },
+        {
+          value: 'multi',
+          label: t('multi_steps')
+        }
+      ]
     }
   },
 
@@ -176,7 +238,8 @@ export default defineComponent({
       pauseCaseReport: 'record/pauseCaseReport',
       completeCaseReport: 'record/completeCaseReport',
       saveCaseReport: 'record/saveCaseReport',
-      setCaseReportData: 'record/setCaseReportData'
+      setCaseReportData: 'record/setCaseReportData',
+      mergeCaseReportData: 'record/mergeCaseReportData'
     }),
     hasIdLabel () {
       return this.crf.schema.idLabel
@@ -186,10 +249,45 @@ export default defineComponent({
     },
     onScroll (id) {
       const ele = document.getElementById(id)
-      const target = getScrollTarget(ele)
-      const offset = ele.offsetTop
-      const duration = 200
-      setVerticalScrollPosition(target, offset, duration)
+      if (ele) {
+        const target = getScrollTarget(ele)
+        const offset = ele.offsetTop
+        const duration = 200
+        setVerticalScrollPosition(target, offset, duration)
+      }
+    },
+    updateProgress () {
+      this.progress = this.formData.__step / this.crf.schema.items.length
+    },
+    previousStep () {
+      this.mergeCaseReportData({
+        id: this.caseReportId,
+        data: { __step: this.formData.__step - 1 }
+      })
+      this.updateProgress()
+      this.remountCounter++
+      this.errorsRemain = false
+      this.errors = undefined
+      window.scrollTo(0, 0)
+    },
+    nextStep () {
+      this.onValidate()
+      // if no error in the step, continue
+      if (this.errorsRemain) {
+        console.log(this.errors)
+        Notify.create({
+          message: this.$t('validation_errors'),
+          color: 'negative'
+        })
+      } else {
+        this.mergeCaseReportData({
+          id: this.caseReportId,
+          data: { __step: this.formData.__step + 1 }
+        })
+        this.updateProgress()
+        this.remountCounter++
+        window.scrollTo(0, 0)
+      }
     },
     onUpdateFormData () {
       this.setCaseReportData({
