@@ -80,5 +80,6 @@ export default {
   validate_save: 'Valider et sauvegarder',
   validation_errors: 'Erreurs de validation: corriger ou mettre en pause.',
   single_page: 'Une seule page',
-  multi_steps: 'Étapes multiples'
+  multi_steps: 'Étapes multiples',
+  final_step_label: 'Félicitations, le formulaire est complet !'
 }

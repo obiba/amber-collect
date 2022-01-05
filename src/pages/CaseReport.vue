@@ -35,10 +35,10 @@
             </div>
             <div class="col-md-4 col-sm-8 col-xs-12 q-mt-sm q-mb-sm">
               <div v-if="isFinalStep">
-                <div class="text-h6 q-mt-md q-mb-md">
-                  This is the end of the form, congratulations!
+                <div class="text-subtitle1 q-mt-md q-mb-md">
+                  {{ $t('final_step_label') }}
                 </div>
-                <q-btn :label="$t('save')" icon="check" @click="onComplete"/>
+                <q-btn :label="$t('save')" icon="check" color="primary" @click="onComplete"/>
               </div>
               <div v-else>
                 <BlitzForm
