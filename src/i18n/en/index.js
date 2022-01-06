@@ -77,6 +77,8 @@ export default {
   close: 'Close',
   go_to: 'Go to...',
   pause: 'Pause',
+  previous: 'Previous',
+  next: 'Next',
   validate_save: 'Validate and save',
   validation_errors: 'Validation errors: correct or pause.',
   single_page: 'Single page',

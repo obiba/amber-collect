@@ -25,11 +25,11 @@
     </q-header>
 
     <q-page-container>
-      <q-page>
+      <q-page v-touch-swipe.mouse.left.right="handleSwipe">
+        <div v-if="mode === 'multi'">
+          <q-linear-progress :value="progress" animation-speed="100" />
+        </div>
         <div class="q-pa-md">
-          <div v-if="mode === 'multi'">
-            <q-linear-progress :value="progress" animation-speed="100" />
-          </div>
           <div class="row">
             <div class="col">
             </div>
@@ -77,16 +77,30 @@
         <q-space />
 
         <q-separator dark vertical v-if="mode === 'multi'" />
-        <q-btn v-if="mode === 'multi'" stretch flat icon="chevron_left" @click="previousStep" :disabled="formData.__step === 0"/>
+        <q-btn
+          v-if="mode === 'multi'"
+          stretch
+          flat
+          icon="chevron_left"
+          @click="previousStep"
+          :label="$q.screen.lt.sm ? '' : $t('previous')"
+          :disabled="formData.__step === 0"/>
         <q-separator dark vertical v-if="mode === 'multi'" />
-        <q-btn v-if="mode === 'multi'" stretch flat icon="chevron_right" @click="nextStep" :disabled="formData.__step === crf.schema.items.length"/>
+        <q-btn
+          v-if="mode === 'multi'"
+          stretch
+          flat
+          icon="chevron_right"
+          @click="nextStep"
+          :label="$q.screen.lt.sm ? '' : $t('next')"
+          :disabled="formData.__step === crf.schema.items.length"/>
         <q-separator dark vertical v-if="mode === 'single'" />
         <q-btn-dropdown
           v-if="mode === 'single' && toc.length > 0"
           stretch
           flat
           icon="toc"
-          :title="$t('go_to')">
+          :label="$q.screen.lt.sm ? '' : $t('go_to')">
           <q-list>
             <q-item-label
               v-for="entry in toc"
@@ -100,9 +114,20 @@
           </q-list>
         </q-btn-dropdown>
         <q-separator dark vertical v-if="mode === 'single'" />
-        <q-btn v-if="mode === 'single'" flat :title="$t('validate_save')" icon="check" @click="onComplete"/>
+        <q-btn
+          v-if="mode === 'single'"
+          flat
+          :title="$t('validate_save')"
+          :label="$q.screen.lt.sm ? '' : $t('save')"
+          icon="check"
+          @click="onComplete"/>
         <q-separator dark vertical />
-        <q-btn stretch flat :title="$t('pause')" icon="pause" @click="onPause"/>
+        <q-btn
+          stretch
+          flat
+          :label="$q.screen.lt.sm ? '' : $t('pause')"
+          icon="pause"
+          @click="onPause"/>
       </q-toolbar>
     </q-footer>
 
@@ -258,6 +283,16 @@ export default defineComponent({
     },
     updateProgress () {
       this.progress = this.formData.__step / this.crf.schema.items.length
+    },
+    handleSwipe ({ evt, ...newInfo }) {
+      console.log(newInfo)
+      if (this.mode === 'multi') {
+        if (newInfo.direction === 'left') {
+          this.nextStep()
+        } else if (newInfo.direction === 'right') {
+          this.previousStep()
+        }
+      }
     },
     previousStep () {
       this.mergeCaseReportData({
