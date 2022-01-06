@@ -9,7 +9,8 @@
     >
       <template v-slot:body-cell-id='props'>
         <q-td :props='props'>
-          <a href="javascript:void(0)" @click="onViewCaseReport(props.row)">{{ props.row.id }}</a>
+          <a v-if="canView(props.row)" href="javascript:void(0)" @click="onViewCaseReport(props.row)">{{ props.row.id }}</a>
+          <span v-else>{{ props.row.id }}</span>
         </q-td>
       </template>
       <template v-slot:body-cell-action='props'>
