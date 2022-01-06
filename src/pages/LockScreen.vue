@@ -120,10 +120,14 @@ export default defineComponent({
   },
 
   created () {
-    if (!this.isNewPwd) {
-      this.triggerLock({
-        status: true
-      })
+    if (this.user) {
+      if (!this.isNewPwd) {
+        this.triggerLock({
+          status: true
+        })
+      }
+    } else {
+      this.$router.push('/')
     }
   },
 
@@ -192,10 +196,11 @@ export default defineComponent({
     onLogout () {
       if (this.user) {
         this.clearLock(this.user._id)
+        this.$store.dispatch('auth/logout')
       } else {
         this.triggerLock({ status: false })
+        this.$router.push('/login')
       }
-      this.$store.dispatch('auth/logout')
     }
   }
 
