@@ -149,7 +149,7 @@
 import { defineComponent, ref } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
 import snarkdown from 'snarkdown'
-import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
+import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr, getBlitzarErrors } from '@obiba/quasar-ui-amber'
 import { Notify, scroll } from 'quasar'
 import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
 import { t } from '../boot/i18n'
@@ -166,7 +166,7 @@ export default defineComponent({
   setup () {
     return {
       errorsRemain: ref(false),
-      errors: ref({})
+      errors: ref([])
     }
   },
 
@@ -294,6 +294,15 @@ export default defineComponent({
         }
       }
     },
+    formatErrorMessages () {
+      console.log(this.errors)
+      const errorMessages = this.errors.map(err => {
+        let errMessage = err.message === 'Field is required' ? t('required_field') : err.message
+        errMessage = errMessage.charAt(0).toLowerCase() + errMessage.slice(1)
+        return `<li>${err.label}: ${errMessage}</li>`
+      }).join('')
+      return `<ul>${errorMessages}</ul>`
+    },
     previousStep () {
       this.mergeCaseReportData({
         id: this.caseReportId,
@@ -309,9 +318,9 @@ export default defineComponent({
       this.onValidate()
       // if no error in the step, continue
       if (this.errorsRemain) {
-        console.log(this.errors)
         Notify.create({
-          message: this.$t('validation_errors'),
+          message: this.$t('validation_errors', { errors: this.formatErrorMessages() }),
+          html: true,
           color: 'negative'
         })
       } else {
@@ -331,23 +340,15 @@ export default defineComponent({
       })
     },
     onValidate () {
-      this.errorsRemain = false
-      this.errors = {}
-      const result = validateFormPerSchema(this.formData, this.schema)
-      this.errors = Object.keys(result)
-        .filter(key => result[key] !== null)
-        .reduce((obj, key) => {
-          obj[key] = result[key]
-          return obj
-        }, {})
-      this.errorsRemain = this.errors && Object.keys(this.errors).length > 0
+      this.errors = getBlitzarErrors(this.schema, validateFormPerSchema(this.formData, this.schema))
+      this.errorsRemain = this.errors.length > 0
     },
     onComplete () {
       this.onValidate()
       if (this.errorsRemain) {
-        console.log(this.errors)
         Notify.create({
-          message: this.$t('validation_errors'),
+          message: this.$t('validation_errors', { errors: this.formatErrorMessages() }),
+          html: true,
           color: 'negative'
         })
       } else {
