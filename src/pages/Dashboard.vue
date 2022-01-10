@@ -66,7 +66,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import CaseReportFormCard from 'components/CaseReportFormCard.vue'
 
@@ -83,8 +83,11 @@ export default defineComponent({
   computed: {
     ...mapState({
       crfs: state => state.form.crfs,
-      caseReports: state => state.record.caseReports
+      user: state => state.auth.payload ? state.auth.payload.user : undefined
     }),
+    caseReports () {
+      return this.getCaseReports()(this.user)
+    },
     inProgressCaseReports () {
       return this.caseReports
         .filter(cr => cr.state === 'in_progress' && this.getForm(cr.crfId))
@@ -102,6 +105,9 @@ export default defineComponent({
   methods: {
     ...mapActions({
       getCaseReportForms: 'form/getCaseReportForms'
+    }),
+    ...mapGetters({
+      getCaseReports: 'record/getCaseReports'
     }),
     tr (schema, key) {
       return schema ? makeSchemaFormTr(schema, { locale: this.currentLocale })(key) : '-'

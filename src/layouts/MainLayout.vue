@@ -201,9 +201,9 @@ export default defineComponent({
     ...mapState({
       user: state => state.auth.payload ? state.auth.payload.user : undefined
     }),
-    ...mapGetters({
-      caseReportsCount: 'record/getCaseReportsCount'
-    }),
+    caseReportsCount () {
+      return this.getCaseReportsCount()(this.user)
+    },
     localeOptions () {
       return locales.map(loc => {
         return {
@@ -230,6 +230,9 @@ export default defineComponent({
   methods: {
     ...mapActions({
       getCaseReportForms: 'form/getCaseReportForms'
+    }),
+    ...mapGetters({
+      getCaseReportsCount: 'record/getCaseReportsCount'
     }),
     onLocaleSelection (opt) {
       this.locale = opt.value

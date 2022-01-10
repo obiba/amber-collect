@@ -183,7 +183,7 @@ export default defineComponent({
   },
 
   mounted () {
-    const caseReport = this.getCaseReportById()(this.caseReportId)
+    const caseReport = this.getCaseReportById()(this.user, this.caseReportId)
     if (caseReport) {
       this.crf = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop() : { schema: { items: [] } }
       this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, stepId: '__step' })

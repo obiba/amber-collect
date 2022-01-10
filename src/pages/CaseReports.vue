@@ -141,7 +141,7 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { date } from 'quasar'
 import { BlitzForm } from '@blitzar/form'
 import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
@@ -232,14 +232,20 @@ export default defineComponent({
   computed: {
     ...mapState({
       crfs: state => state.form.crfs,
-      caseReports: state => state.record.caseReports
+      user: state => state.auth.payload ? state.auth.payload.user : undefined
     }),
+    caseReports () {
+      return this.getCaseReports()(this.user)
+    },
     currentLocale () {
       return this.$root.$i18n.locale
     }
   },
 
   methods: {
+    ...mapGetters({
+      getCaseReports: 'record/getCaseReports'
+    }),
     getForm (crfId) {
       return this.crfs.filter(f => f._id === crfId).pop()
     },
