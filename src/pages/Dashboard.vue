@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page v-cloak>
     <div class="row">
       <div class="col">
       </div>
@@ -8,11 +8,14 @@
 
         <q-card flat bordered class="q-ma-md">
           <q-card-section>
-            <q-list separator>
+            <q-list v-if="crfs.length>0" separator>
               <q-item v-for="form in crfs" :key="form._id" class="col-xs-12 col-sm-6 col-md-4">
                 <case-report-form-card :form="form"/>
               </q-item>
             </q-list>
+            <div v-else class="text-grey">
+              {{ $t('main.no_case_report_forms') }}
+            </div>
           </q-card-section>
         </q-card>
       </div>

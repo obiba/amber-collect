@@ -23,6 +23,7 @@ export default {
     case_reports: 'Case Reports',
     case_reports_in_progress: 'Case Reports in Progress',
     case_report_forms: 'Case Report Forms',
+    no_case_report_forms: 'No form could be found for reporting cases.',
     essential_links: 'Essential links',
     docs: 'Docs',
     chat: 'Chat',

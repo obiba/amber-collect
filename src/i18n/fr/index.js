@@ -23,6 +23,7 @@ export default {
     case_reports: 'Rapports de cas',
     case_reports_in_progress: 'Rapports de cas en cours',
     case_report_forms: 'Formulaires de rapport de cas',
+    no_case_report_forms: 'Aucun formulaire n\'a été trouvé.',
     essential_links: 'Liens utiles',
     docs: 'Docs',
     chat: 'Chat',
