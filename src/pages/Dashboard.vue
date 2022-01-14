@@ -1,27 +1,29 @@
 <template>
   <q-page v-cloak>
-    <div class="row">
-      <div class="col">
-      </div>
-      <div class="col-md-6 col-sm-8 col-xs-12">
-        <div class="text-bold text-center text-uppercase q-ma-md">{{ $t('main.case_report_forms') }}</div>
+    <q-pull-to-refresh @refresh="onRefresh">
+      <div class="row">
+        <div class="col">
+        </div>
+        <div class="col-md-6 col-sm-8 col-xs-12">
+          <div class="text-bold text-center text-uppercase q-ma-md">{{ $t('main.case_report_forms') }}</div>
 
-        <q-card flat bordered class="q-ma-md">
-          <q-card-section>
-            <q-list v-if="crfs.length>0" separator>
-              <q-item v-for="form in crfs" :key="form._id" class="col-xs-12 col-sm-6 col-md-4">
-                <case-report-form-card :form="form"/>
-              </q-item>
-            </q-list>
-            <div v-else class="text-grey">
-              {{ $t('main.no_case_report_forms') }}
-            </div>
-          </q-card-section>
-        </q-card>
+          <q-card flat bordered class="q-ma-md">
+            <q-card-section>
+              <q-list v-if="crfs.length>0" separator>
+                <q-item v-for="form in crfs" :key="form._id" class="col-xs-12 col-sm-6 col-md-4">
+                  <case-report-form-card :form="form"/>
+                </q-item>
+              </q-list>
+              <div v-else class="text-grey">
+                {{ $t('main.no_case_report_forms') }}
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+        <div class="col">
+        </div>
       </div>
-      <div class="col">
-      </div>
-    </div>
+    </q-pull-to-refresh>
     <div v-if="inProgressCaseReports.length" class="row bg-grey-3 q-pt-md q-pb-md">
       <div class="col">
       </div>
@@ -137,6 +139,9 @@ export default defineComponent({
         return rtf.format(Math.ceil(minutes / 60), 'hour')
       }
       return rtf.format(minutes, 'minute')
+    },
+    onRefresh (done) {
+      this.getCaseReportForms({}).then(() => done())
     }
   }
 })
