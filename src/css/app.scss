@@ -6,6 +6,10 @@ a {
     background-color: transparent;
 }
 
+.blitz-form .q-field__messages div[role=alert] {
+    display: none;
+ }
+ 
 .blitz-field {
     padding: 10px;
     margin-bottom: 20px;
