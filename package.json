@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
-    "@obiba/quasar-app-extension-amber": "^0.7.1",
+    "@obiba/quasar-app-extension-amber": "^0.8.0",
     "@quasar/app": "^3.0.0",
     "eslint": "^7.14.0",
     "eslint-config-standard": "^16.0.2",
