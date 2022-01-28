@@ -147,13 +147,7 @@ module.exports = configure(function (ctx) {
       workboxOptions: {
         cleanupOutdatedCaches: true,
         skipWaiting: true,
-        clientsClaim: true,
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\//,
-            handler: 'StaleWhileRevalidate'
-          }
-        ]
+        clientsClaim: true
       },
 
       // for the custom service worker ONLY (/src-pwa/custom-service-worker.[js|ts])
