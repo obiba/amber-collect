@@ -81,7 +81,7 @@ export default {
   previous: 'Previous',
   next: 'Next',
   validate_save: 'Validate and save',
-  validation_errors: 'Validation errors: correct or pause.<br>{errors}',
+  validation_errors: 'Validation errors: {errors}',
   single_page: 'Single page',
   multi_steps: 'Multiple steps',
   final_step_label: 'This is the end of the form, congratulations!',

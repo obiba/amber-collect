@@ -46,8 +46,7 @@
                   :schema="schema"
                   v-model="formData"
                   :columnCount="1"
-                  gridGap='32px'
-                  @update:modelValue="onUpdateFormData" />
+                  gridGap='32px'/>
               </div>
               <!--div class="bg-black text-white q-mt-lg q-pa-md">
                 <pre>{{ JSON.stringify(formData, null, '  ') }}</pre>
@@ -172,6 +171,7 @@ export default defineComponent({
 
   data () {
     return {
+      debug: false,
       remountCounter: 0,
       progress: 0,
       formData: {},
@@ -186,7 +186,7 @@ export default defineComponent({
     const caseReport = this.getCaseReportById()(this.user, this.caseReportId)
     if (caseReport) {
       this.crf = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop() : { schema: { items: [] } }
-      this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, stepId: '__step' })
+      this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, stepId: '__step', debug: this.debug })
       if (!caseReport.data || !caseReport.data.__step) {
         this.mergeCaseReportData({
           id: this.caseReportId,
@@ -205,9 +205,9 @@ export default defineComponent({
   watch: {
     mode (newValue, oldValue) {
       if (newValue === 'single') {
-        this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale })
+        this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, debug: this.debug })
       } else {
-        this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, stepId: '__step' })
+        this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, stepId: '__step', debug: this.debug })
       }
       this.updateProgress()
       this.remountCounter++
@@ -304,6 +304,7 @@ export default defineComponent({
       return `<ul>${errorMessages}</ul>`
     },
     previousStep () {
+      this.onUpdateFormData()
       this.mergeCaseReportData({
         id: this.caseReportId,
         data: { __step: this.formData.__step - 1 }
@@ -315,6 +316,7 @@ export default defineComponent({
       window.scrollTo(0, 0)
     },
     nextStep () {
+      this.onUpdateFormData()
       this.onValidate()
       // if no error in the step, continue
       if (this.errorsRemain) {
@@ -344,6 +346,7 @@ export default defineComponent({
       this.errorsRemain = this.errors.length > 0
     },
     onComplete () {
+      this.onUpdateFormData()
       this.onValidate()
       if (this.errorsRemain) {
         Notify.create({

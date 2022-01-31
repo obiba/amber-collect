@@ -81,7 +81,7 @@ export default {
   previous: 'Précédent',
   next: 'Suivant',
   validate_save: 'Valider et sauvegarder',
-  validation_errors: 'Erreurs de validation: corriger ou mettre en pause.<br>{errors}',
+  validation_errors: 'Erreurs de validation: {errors}',
   single_page: 'Une seule page',
   multi_steps: 'Étapes multiples',
   final_step_label: 'Félicitations, le formulaire est complet !',
