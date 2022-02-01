@@ -204,6 +204,7 @@ export default defineComponent({
 
   watch: {
     mode (newValue, oldValue) {
+      this.updateFormData()
       if (newValue === 'single') {
         this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, debug: this.debug })
       } else {
@@ -295,7 +296,6 @@ export default defineComponent({
       }
     },
     formatErrorMessages () {
-      console.log(this.errors)
       const errorMessages = this.errors.map(err => {
         let errMessage = err.message === 'Field is required' ? t('required_field') : err.message
         errMessage = errMessage.charAt(0).toLowerCase() + errMessage.slice(1)
@@ -304,7 +304,7 @@ export default defineComponent({
       return `<ul>${errorMessages}</ul>`
     },
     previousStep () {
-      this.onUpdateFormData()
+      this.updateFormData()
       this.mergeCaseReportData({
         id: this.caseReportId,
         data: { __step: this.formData.__step - 1 }
@@ -316,7 +316,7 @@ export default defineComponent({
       window.scrollTo(0, 0)
     },
     nextStep () {
-      this.onUpdateFormData()
+      this.updateFormData()
       this.onValidate()
       // if no error in the step, continue
       if (this.errorsRemain) {
@@ -335,7 +335,7 @@ export default defineComponent({
         window.scrollTo(0, 0)
       }
     },
-    onUpdateFormData () {
+    updateFormData () {
       this.setCaseReportData({
         id: this.caseReportId,
         data: this.formData
@@ -346,7 +346,7 @@ export default defineComponent({
       this.errorsRemain = this.errors.length > 0
     },
     onComplete () {
-      this.onUpdateFormData()
+      this.updateFormData()
       this.onValidate()
       if (this.errorsRemain) {
         Notify.create({
@@ -372,6 +372,7 @@ export default defineComponent({
       }
     },
     onPause () {
+      this.updateFormData()
       this.pauseCaseReport({
         id: this.caseReportId,
         user: this.user.email
