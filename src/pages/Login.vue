@@ -7,6 +7,9 @@
             <div class="text-center text-h4 q-pb-lg">
               {{$t('main.brand')}}
             </div>
+            <div v-if="$t('main.brand_caption')" class="text-center q-pb-lg">
+              {{$t('main.brand_caption')}}
+            </div>
           </div>
           <div class="col">
             <q-card flat color="white" class="bg-blue-7">

@@ -13,10 +13,15 @@ export default {
   },
   main: {
     brand: 'Amber Collect',
+    brand_caption: 'Case reporting system',
     logout: 'Sign out',
     lock: 'Lock',
     refresh: 'Refresh',
     refresh_hint: 'Refresh forms',
+    info: 'Info',
+    info_hint: 'App information',
+    source_code: 'Source code',
+    contributors: 'Contributors',
     upgrade: 'Upgrade',
     upgrade_available: 'New app version available',
     dashboard: 'Dashboard',
@@ -26,7 +31,6 @@ export default {
     no_case_report_forms: 'No form could be found for reporting cases.',
     essential_links: 'Essential links',
     docs: 'Docs',
-    chat: 'Chat',
     forum: 'Forum',
     powered_by: 'Powered by'
   },

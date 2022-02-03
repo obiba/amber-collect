@@ -9,6 +9,10 @@
 /* eslint-env node */
 const ESLintPlugin = require('eslint-webpack-plugin')
 const { configure } = require('quasar/wrappers')
+const fs = require('fs')
+const packageJson = fs.readFileSync('./package.json')
+const version = JSON.parse(packageJson).version || 0
+const settingsJson = fs.readFileSync('./settings.json', 'utf8')
 
 module.exports = configure(function (ctx) {
   return {
@@ -26,7 +30,8 @@ module.exports = configure(function (ctx) {
       'axios',
       'feathersClient',
       'i18n',
-      'vuelidate'
+      'vuelidate',
+      'settings'
     ],
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -54,6 +59,8 @@ module.exports = configure(function (ctx) {
 
       env: {
         API: ctx.dev ? 'http://localhost:3030' : process.env.AMBER_URL,
+        SETTINGS: ctx.dev ? settingsJson : (process.env.SETTINGS ? process.env.SETTINGS : settingsJson),
+        VERSION: version,
         LOCALES: ctx.dev ? 'en,fr' : (process.env.LOCALES ? process.env.LOCALES : 'en,fr')
       },
 

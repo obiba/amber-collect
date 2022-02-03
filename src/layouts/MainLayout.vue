@@ -111,6 +111,21 @@
           </q-item-section>
         </q-item>
 
+        <q-item
+          clickable
+          @click="onShowAppInfo"
+        >
+          <q-item-section avatar>
+            <q-icon name="info" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{$t('main.info')}}</q-item-label>
+            <q-item-label caption>
+              {{ $t('main.info_hint') }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+
         <q-item-label
           header
         >
@@ -118,7 +133,7 @@
         </q-item-label>
 
         <EssentialLink
-          v-for="link in essentialLinks"
+          v-for="link in settings.links"
           :key="link.title"
           v-bind="link"
         />
@@ -131,6 +146,44 @@
       </q-list>
     </q-drawer>
 
+    <q-dialog v-model="showAppInfo">
+      <q-card :style="$q.screen.lt.sm ? 'min-width: 200px' : 'min-width: 400px'">
+        <q-card-section>
+          <q-list>
+            <q-item-label header class="text-uppercase">
+              {{ $t("main.source_code") }}
+            </q-item-label>
+            <q-item>
+              <q-item-section>
+                <q-item-label>
+                  <a href="https://github.com/obiba/amber-collect" target="_blank">OBiBa Amber Collect</a>
+                </q-item-label>
+                <q-item-label caption>
+                  v{{ settings.version }}
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+            <q-item-label header class="text-uppercase">
+              {{ $t("main.contributors") }}
+            </q-item-label>
+            <q-item v-for="contrib in settings.contributors" :key="contrib.name">
+              <q-item-section>
+                <q-item-label v-if="contrib.link">
+                  <a :href="contrib.link" target="_blank">{{ contrib.name }}</a>
+                </q-item-label>
+                <q-item-label v-else>
+                  {{ contrib.name }}
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn flat label="OK" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -140,32 +193,12 @@
 <script>
 import { useI18n } from 'vue-i18n'
 import { locales } from '../boot/i18n'
+import { settings } from '../boot/settings'
 import { defineComponent, ref } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
 
 import LockMixin from '../mixins/LockMixin'
 import EssentialLink from 'components/EssentialLink.vue'
-
-const linksList = [
-  {
-    title: 'main.docs',
-    caption: 'amberdoc.obiba.org',
-    icon: 'school',
-    link: 'https://amberdoc.obiba.org'
-  },
-  {
-    title: 'main.chat',
-    caption: 'chat.obiba.org',
-    icon: 'chat',
-    link: 'https://chat.obiba.org'
-  },
-  {
-    title: 'main.forum',
-    caption: 'forum.obiba.org',
-    icon: 'record_voice_over',
-    link: 'https://forum.obiba.org'
-  }
-]
 
 export default defineComponent({
   name: 'MainLayout',
@@ -180,13 +213,21 @@ export default defineComponent({
     const { locale } = useI18n({ useScope: 'global' })
     const leftDrawerOpen = ref(false)
 
+    console.log(settings)
+
     return {
-      essentialLinks: linksList,
+      settings: settings,
       locale,
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
+    }
+  },
+
+  data () {
+    return {
+      showAppInfo: false
     }
   },
 
@@ -236,6 +277,9 @@ export default defineComponent({
     ...mapGetters({
       getCaseReportsCount: 'record/getCaseReportsCount'
     }),
+    onShowAppInfo () {
+      this.showAppInfo = true
+    },
     onLocaleSelection (opt) {
       this.locale = opt.value
     },
