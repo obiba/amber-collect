@@ -13,6 +13,7 @@ const fs = require('fs')
 const packageJson = fs.readFileSync('./package.json')
 const version = JSON.parse(packageJson).version || 0
 const settingsJson = fs.readFileSync('./settings.json', 'utf8')
+const path = require('path')
 
 module.exports = configure(function (ctx) {
   return {
@@ -86,6 +87,8 @@ module.exports = configure(function (ctx) {
       chainWebpack (chain) {
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
+        chain.resolve.alias
+          .set('vue', path.resolve(__dirname, './node_modules/vue'))
       }
     },
 
@@ -139,6 +142,8 @@ module.exports = configure(function (ctx) {
       chainWebpackWebserver (chain) {
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js'] }])
+        chain.resolve.alias
+          .set('vue', path.resolve(__dirname, './node_modules/vue'))
       },
 
       middlewares: [
@@ -162,6 +167,8 @@ module.exports = configure(function (ctx) {
       chainWebpackCustomSW (chain) {
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js'] }])
+        chain.resolve.alias
+          .set('vue', path.resolve(__dirname, './node_modules/vue'))
       },
 
       manifest: {
@@ -239,12 +246,16 @@ module.exports = configure(function (ctx) {
       chainWebpackMain (chain) {
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js'] }])
+        chain.resolve.alias
+          .set('vue', path.resolve(__dirname, './node_modules/vue'))
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpackPreload (chain) {
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js'] }])
+        chain.resolve.alias
+          .set('vue', path.resolve(__dirname, './node_modules/vue'))
       }
     }
   }
