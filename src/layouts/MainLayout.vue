@@ -213,8 +213,6 @@ export default defineComponent({
     const { locale } = useI18n({ useScope: 'global' })
     const leftDrawerOpen = ref(false)
 
-    console.log(settings)
-
     return {
       settings: settings,
       locale,

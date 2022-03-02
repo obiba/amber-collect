@@ -1,7 +1,7 @@
 <template>
   <q-layout v-cloak view="hHh lpR fFf">
 
-    <q-header elevated class="bg-primary text-white">
+    <q-header elevated class="bg-primary text-white" v-touch-swipe.mouse.left.right="handleSwipe">
       <q-toolbar>
         <q-toolbar-title>
           {{ $t('case_report') }}
@@ -25,7 +25,7 @@
     </q-header>
 
     <q-page-container>
-      <q-page v-touch-swipe.mouse.left.right="handleSwipe">
+      <q-page>
         <div v-if="mode === 'multi'">
           <q-linear-progress :value="progress" animation-speed="100" />
         </div>
@@ -59,7 +59,7 @@
       </q-page>
     </q-page-container>
 
-    <q-footer elevated class="bg-grey-8 text-white">
+    <q-footer elevated class="bg-grey-8 text-white" v-touch-swipe.mouse.left.right="handleSwipe">
       <q-toolbar>
         <q-select
           dark
@@ -286,11 +286,10 @@ export default defineComponent({
       this.progress = this.formData.__step / this.crf.schema.items.length
     },
     handleSwipe ({ evt, ...newInfo }) {
-      console.log(newInfo)
       if (this.mode === 'multi') {
-        if (newInfo.direction === 'left') {
+        if (newInfo.direction === 'left' && this.formData.__step < this.crf.schema.items.length) {
           this.nextStep()
-        } else if (newInfo.direction === 'right') {
+        } else if (newInfo.direction === 'right' && this.formData.__step > 0) {
           this.previousStep()
         }
       }
@@ -355,13 +354,11 @@ export default defineComponent({
           color: 'negative'
         })
       } else {
-        console.log('completing')
         this.completeCaseReport({
           id: this.caseReportId,
           user: this.user.email,
           revision: this.crf.revision
         }).then(() => {
-          console.log('completed')
           this.saveCaseReport({
             id: this.caseReportId,
             user: this.user.email

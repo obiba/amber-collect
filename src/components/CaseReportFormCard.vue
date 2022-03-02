@@ -106,7 +106,6 @@ export default defineComponent({
         }],
         i18n: this.form.schema.i18n
       }
-      console.log(idSchema)
       this.schema = makeBlitzarQuasarSchemaForm(idSchema, { locale: this.currentLocale })
       this.formData = {}
       this.remountCounter++
