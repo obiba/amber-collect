@@ -26,12 +26,18 @@
 
     <q-page-container>
       <q-page>
-        <div v-if="mode === 'multi'">
+        <div v-if="isMulti()">
           <q-linear-progress :value="progress" animation-speed="100" />
         </div>
         <div class="q-pa-md">
           <div class="row">
-            <div class="col">
+            <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2" :class="(canPrevious() && isMulti()) ? 'text-grey-3 text-center flex flex-center cursor-pointer' : ''" @click="previousStep">
+              <q-icon
+                v-if="canPrevious()"
+                name="arrow_back"
+                size="xl"
+                class=""
+                />
             </div>
             <div class="col-md-4 col-sm-8 col-xs-12 q-mt-sm q-mb-sm">
               <div v-if="isFinalStep">
@@ -52,7 +58,12 @@
                 <pre>{{ JSON.stringify(formData, null, '  ') }}</pre>
               </div-->
             </div>
-            <div class="col">
+            <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2" :class="(canNext() && isMulti()) ? 'text-grey-3 text-center flex flex-center cursor-pointer' : ''" @click="nextStep">
+              <q-icon
+                v-if="canNext()"
+                name="arrow_forward"
+                size="xl"
+                />
             </div>
           </div>
         </div>
@@ -75,24 +86,24 @@
         </q-select>
         <q-space />
 
-        <q-separator dark vertical v-if="mode === 'multi'" />
+        <q-separator dark vertical v-if="isMulti()" />
         <q-btn
-          v-if="mode === 'multi'"
+          v-if="isMulti()"
           stretch
           flat
           icon="chevron_left"
           @click="previousStep"
           :label="$q.screen.lt.sm ? '' : $t('previous')"
-          :disabled="formData.__step === 0"/>
-        <q-separator dark vertical v-if="mode === 'multi'" />
+          :disabled="!canPrevious()"/>
+        <q-separator dark vertical v-if="isMulti()" />
         <q-btn
-          v-if="mode === 'multi'"
+          v-if="isMulti()"
           stretch
           flat
           icon="chevron_right"
           @click="nextStep"
           :label="$q.screen.lt.sm ? '' : $t('next')"
-          :disabled="formData.__step === crf.schema.items.length"/>
+          :disabled="!canNext()"/>
         <q-separator dark vertical v-if="mode === 'single'" />
         <q-btn-dropdown
           v-if="mode === 'single' && toc.length > 0"
@@ -240,7 +251,7 @@ export default defineComponent({
       return this.crf.schema.idLabel ? this.tr(this.crf.schema.idLabel) : 'ID'
     },
     isFinalStep () {
-      return this.mode === 'multi' && this.formData.__step === this.crf.schema.items.length
+      return this.isMulti() && this.formData.__step === this.crf.schema.items.length
     },
     modeOptions () {
       return [
@@ -285,11 +296,14 @@ export default defineComponent({
     updateProgress () {
       this.progress = this.formData.__step / this.crf.schema.items.length
     },
+    isMulti () {
+      return this.mode === 'multi'
+    },
     handleSwipe ({ evt, ...newInfo }) {
-      if (this.mode === 'multi') {
-        if (newInfo.direction === 'left' && this.formData.__step < this.crf.schema.items.length) {
+      if (this.isMulti()) {
+        if (newInfo.direction === 'left') {
           this.nextStep()
-        } else if (newInfo.direction === 'right' && this.formData.__step > 0) {
+        } else if (newInfo.direction === 'right') {
           this.previousStep()
         }
       }
@@ -302,7 +316,12 @@ export default defineComponent({
       }).join('')
       return `<ul>${errorMessages}</ul>`
     },
+    canPrevious () {
+      return this.isMulti() && this.formData.__step > 0
+    },
     previousStep () {
+      if (!this.canPrevious()) return
+
       this.updateFormData()
       this.mergeCaseReportData({
         id: this.caseReportId,
@@ -314,7 +333,12 @@ export default defineComponent({
       this.errors = undefined
       window.scrollTo(0, 0)
     },
+    canNext () {
+      return this.isMulti() && this.formData.__step < this.crf.schema.items.length
+    },
     nextStep () {
+      if (!this.canNext()) return
+
       this.updateFormData()
       this.onValidate()
       // if no error in the step, continue
