@@ -166,7 +166,7 @@
             <q-item-label header class="text-uppercase">
               {{ $t("main.contributors") }}
             </q-item-label>
-            <q-item v-for="contrib in settings.contributors" :key="contrib.name">
+            <q-item v-for="contrib in contributors" :key="contrib.name">
               <q-item-section>
                 <q-item-label v-if="contrib.link">
                   <a :href="contrib.link" target="_blank">{{ contrib.name }}</a>
@@ -200,6 +200,17 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 import LockMixin from '../mixins/LockMixin'
 import EssentialLink from 'components/EssentialLink.vue'
 
+const contributors = [
+  {
+    name: 'MUHC Centre for Global Surgery',
+    link: 'https://www.cglobalsurgery.com/'
+  },
+  {
+    name: 'Epigeny',
+    link: 'https://www.epigeny.io/'
+  }
+]
+
 export default defineComponent({
   name: 'MainLayout',
 
@@ -214,6 +225,7 @@ export default defineComponent({
     const leftDrawerOpen = ref(false)
 
     return {
+      contributors: contributors,
       settings: settings,
       locale,
       leftDrawerOpen,
