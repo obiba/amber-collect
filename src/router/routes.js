@@ -22,6 +22,10 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/forgot-password',
+    component: () => import('pages/ForgotPassword.vue')
+  },
+  {
     path: '/lock',
     component: () => import('pages/LockScreen.vue')
   },

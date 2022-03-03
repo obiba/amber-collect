@@ -39,6 +39,12 @@ export default {
     title: 'Chargement',
     caption: 'Veuillez patienter...'
   },
+  forgot_password: {
+    title: 'Réinitialiser le mot de passe',
+    hint: 'Entrer le courriel du compte pour réinitialiser le mot de passe.',
+    submit: 'Réinitialiser',
+    login: 'Connexion'
+  },
   lock: {
     code_placeholder: 'Code de déverrouillage',
     new_code_placeholder: 'Nouveau code de déverrouillage',
@@ -52,6 +58,7 @@ export default {
     network_error: 'Erreur réseau, veuillez réessayer plus tard.'
   },
   success: {
+    send_reset_password: 'Demande de réinitialisation de mot de passe envoyée.',
     save_case_report: 'Rapport de cas sauvegardé.'
   },
   record: {
@@ -63,6 +70,10 @@ export default {
     delete_record_confirm: 'Veuillez confirmer la suppression de cet enregistrement, toutes les données collectées seront perdues:',
     delete_saved_record_confirm: 'Veuillez confirmer la suppression de cet enregistrement, toutes les données collectées ont été sauvegardées et ne seront pas affectées:',
     case_report_form_not_found: 'Le formulaire de rapport de cas ayant été utilisé pour collecter ces données est manquant.'
+  },
+  validations: {
+    required: 'Une valeur est requise',
+    email: 'Adresse courriel non valide'
   },
   id: 'ID',
   form: 'Formulaire',

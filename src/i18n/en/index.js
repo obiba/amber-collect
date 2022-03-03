@@ -38,6 +38,12 @@ export default {
     title: 'Loading',
     caption: 'Please wait...'
   },
+  forgot_password: {
+    title: 'Reset password',
+    hint: 'Enter account\'s email to reset password.',
+    submit: 'Reset',
+    login: 'Sign in'
+  },
   lock: {
     code_placeholder: 'Enter unlock code',
     new_code_placeholder: 'Enter new unlock code',
@@ -51,6 +57,7 @@ export default {
     network_error: 'Network error, please try again later.'
   },
   success: {
+    send_reset_password: 'Password reset sent.',
     save_case_report: 'Case report saved.'
   },
   record: {
@@ -62,6 +69,10 @@ export default {
     delete_record_confirm: 'Please confirm the deletion of the record, all collected data will be lost:',
     delete_saved_record_confirm: 'Please confirm the deletion of the record, all collected data were saved and will not be affected:',
     case_report_form_not_found: 'The case report form that was used to collect these data cannot be found.'
+  },
+  validations: {
+    required: 'Value is required',
+    email: 'Value is not a valid email address'
   },
   id: 'ID',
   form: 'Form',

@@ -1,6 +1,7 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
+import account from './account'
 import lock from './lock'
 import form from './form'
 import record from './record'
@@ -44,6 +45,7 @@ export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     plugins: [lsVuex, logPlugin, authvuex],
     modules: {
+      account,
       lock,
       form,
       record
