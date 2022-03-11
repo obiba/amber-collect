@@ -45,7 +45,7 @@
                     <q-btn
                       :label="$t('forgot_password.submit')"
                       type="submit"
-                      color="primary"/>
+                      color="dark"/>
                     <q-btn
                       :label="$t('forgot_password.login')"
                       flat
