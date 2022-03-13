@@ -78,8 +78,8 @@ export async function saveCaseReport ({ commit, state }, payload) {
           })
         } else if (!err.status) {
           Notify.create({
-            message: t('error.network_error'),
-            color: 'negative'
+            message: t('error.save_case_report_error'),
+            color: 'warning'
           })
         }
       }

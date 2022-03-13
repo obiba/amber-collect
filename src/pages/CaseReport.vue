@@ -44,7 +44,11 @@
                 <div class="text-subtitle1 q-mt-md q-mb-md">
                   {{ $t('final_step_label') }}
                 </div>
-                <q-btn :label="$t('save')" icon="check" color="primary" @click="onComplete"/>
+                <q-btn
+                  :label="$t('save')"
+                  icon="cloud_upload"
+                  color="primary"
+                  @click="onComplete"/>
               </div>
               <div v-else>
                 <BlitzForm
@@ -129,7 +133,7 @@
           flat
           :title="$t('validate_save')"
           :label="$q.screen.lt.sm ? '' : $t('save')"
-          icon="check"
+          icon="cloud_upload"
           @click="onComplete"/>
         <q-separator dark vertical />
         <q-btn

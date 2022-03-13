@@ -12,9 +12,9 @@
         />
 
         <q-toolbar-title>
-          <q-btn flat to="/" no-caps size="lg">
+          <span>
             {{$t('main.brand')}}
-          </q-btn>
+          </span>
         </q-toolbar-title>
 
         <q-space/>

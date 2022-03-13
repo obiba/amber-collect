@@ -54,6 +54,7 @@ export default {
   error: {
     get_case_report_forms: 'Error when getting case report forms.',
     save_case_report: 'Saving case report failed.',
+    save_case_report_error: 'Save error, the case report will be put onhold until the connection is restablished.',
     network_error: 'Network error, please try again later.'
   },
   success: {

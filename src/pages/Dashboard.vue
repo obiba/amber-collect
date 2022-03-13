@@ -24,7 +24,7 @@
         </div>
       </div>
     </q-pull-to-refresh>
-    <div v-if="inProgressCaseReports.length" class="row bg-grey-3 q-pt-md q-pb-md">
+    <div v-if="notSavedCaseReports.length" class="row bg-grey-3 q-pt-md q-pb-md">
       <div class="col">
       </div>
       <div class="col-md-6 col-sm-8 col-xs-12">
@@ -34,7 +34,7 @@
           <q-card-section>
             <q-list separator>
 
-              <q-item v-for="cr in inProgressCaseReports" :key="cr.id">
+              <q-item v-for="cr in notSavedCaseReports" :key="cr.id">
 
                 <q-item-section>
                   <q-item-label>
@@ -47,11 +47,19 @@
                 <q-item-section side top>
                   <q-item-label :title="getCaseReportLastUpdate(cr)">{{ getCaseReportLastUpdateAgo(cr) }}</q-item-label>
                   <q-btn
+                    v-if="cr.state === 'in_progress'"
                     :label="$t('resume')"
                     icon-right="play_arrow"
                     class="text-capitalize q-mt-sm q-mb-sm"
                     color="secondary"
                     :to="'/case-report/' + cr.id"/>
+                  <q-btn
+                    v-if="cr.state === 'completed'"
+                    :label="$t('save')"
+                    icon-right="cloud_upload"
+                    class="text-capitalize q-mt-sm q-mb-sm"
+                    color="primary"
+                    @click="onSave(cr)"/>
                 </q-item-section>
 
               </q-item>
@@ -90,9 +98,9 @@ export default defineComponent({
     caseReports () {
       return this.getCaseReports()(this.user)
     },
-    inProgressCaseReports () {
+    notSavedCaseReports () {
       return this.caseReports
-        .filter(cr => cr.state === 'in_progress' && this.getForm(cr.crfId))
+        .filter(cr => ['in_progress', 'completed'].includes(cr.state) && this.getForm(cr.crfId))
         .sort((cr1, cr2) => {
           const action1 = cr1.actions[cr1.actions.length - 1]
           const action2 = cr2.actions[cr2.actions.length - 1]
@@ -142,6 +150,9 @@ export default defineComponent({
     },
     onRefresh (done) {
       this.getCaseReportForms({}).then(() => done())
+    },
+    onSave (caseReport) {
+      this.$store.dispatch('record/saveCaseReport', { id: caseReport.id })
     }
   }
 })
