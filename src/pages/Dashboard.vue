@@ -66,6 +66,9 @@
 
             </q-list>
           </q-card-section>
+          <q-card-section class="text-center">
+            <router-link to="/case-reports">{{$t('main.show_all_case_reports')}}</router-link>
+          </q-card-section>
         </q-card>
       </div>
       <div class="col">

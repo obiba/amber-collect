@@ -32,7 +32,8 @@ export default {
     essential_links: 'Essential links',
     docs: 'Docs',
     forum: 'Forum',
-    powered_by: 'Powered by'
+    powered_by: 'Powered by',
+    show_all_case_reports: 'Show all case reports'
   },
   loading: {
     title: 'Loading',

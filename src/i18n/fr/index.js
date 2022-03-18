@@ -33,7 +33,8 @@ export default {
     docs: 'Docs',
     chat: 'Chat',
     forum: 'Forum',
-    powered_by: 'Propulsé par'
+    powered_by: 'Propulsé par',
+    show_all_case_reports: 'Voir tous les rapports de cas'
   },
   loading: {
     title: 'Chargement',
