@@ -12,19 +12,18 @@
         />
 
         <q-toolbar-title>
-          <span>
+          <span :style="$q.screen.lt.sm?{'font-size': 'smaller'}:{}">
             {{$t('main.brand')}}
           </span>
         </q-toolbar-title>
 
-        <q-space/>
         <div class="q-gutter-sm row items-center no-wrap">
           <q-btn round dense flat icon="lock"
                  @click="onLock">
           </q-btn>
-          <q-btn round dense flat :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
+          <!--q-btn round dense flat :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
                  @click="$q.fullscreen.toggle()">
-          </q-btn>
+          </q-btn-->
           <q-btn-dropdown
             v-show="hasLocales"
             flat

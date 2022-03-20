@@ -37,7 +37,8 @@ module.exports = configure(function (ctx) {
 
     // https://quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: [
-      'app.scss'
+      'app.scss',
+      'custom.scss'
     ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
@@ -177,7 +178,7 @@ module.exports = configure(function (ctx) {
         description: 'Electronic Data Collection Tool',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#ffffff',
+        background_color: '#191b84',
         theme_color: '#027be3',
         icons: [
           {

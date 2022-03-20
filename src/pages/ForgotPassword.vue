@@ -1,18 +1,13 @@
 <template>
   <q-layout>
     <q-page-container>
-      <q-page class="bg-blue text-white flex flex-center">
+      <q-page class="flex flex-center" :class="settings.theme.front.bg">
         <div class="column" v-bind:style="$q.screen.lt.sm?{'width': '80%'}:$q.screen.lt.md?{'width':'50%'}:{'width':'30%'}">
           <div class="col">
-            <div class="text-center text-h4 q-pb-lg">
-              {{$t('main.brand')}}
-            </div>
-            <div v-if="$t('main.brand_caption')" class="text-center q-pb-lg">
-              {{$t('main.brand_caption')}}
-            </div>
+            <banner/>
           </div>
           <div class="col">
-            <q-card flat color="white" class="bg-blue-7">
+            <q-card color="white" :class="settings.theme.front.card">
               <q-card-section>
                 <div class="text-center q-pt-sm">
                   <div class="col text-subtitle">
@@ -67,8 +62,17 @@
 import { mapState } from 'vuex'
 import { required, email } from '../boot/vuelidate'
 import useVuelidate from '@vuelidate/core'
+import { settings } from '../boot/settings'
+
+import Banner from 'components/Banner'
 
 export default {
+  components: { Banner },
+  setup () {
+    return {
+      settings: settings
+    }
+  },
   data () {
     return {
       v$: useVuelidate(),

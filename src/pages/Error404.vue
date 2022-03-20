@@ -1,5 +1,5 @@
 <template>
-  <div class="fullscreen bg-blue text-white text-center q-pa-md flex flex-center">
+  <div :class="settings.theme.front.bg" class="fullscreen text-center q-pa-md flex flex-center">
     <div>
       <div style="font-size: 30vh">
         404
@@ -24,8 +24,14 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { settings } from '../boot/settings'
 
 export default defineComponent({
-  name: 'Error404'
+  name: 'Error404',
+  setup () {
+    return {
+      settings: settings
+    }
+  }
 })
 </script>

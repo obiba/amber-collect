@@ -1,5 +1,5 @@
 <template>
-  <q-layout class="bg-blue text-white" v-cloak>
+  <q-layout :class="settings.theme.front.bg" v-cloak>
     <q-page-container>
       <q-page class="flex flex-center">
         <q-card class="bg-transparent no-border no-shadow">
@@ -90,6 +90,7 @@
 import { defineComponent, ref } from 'vue'
 import { mapState } from 'vuex'
 import { Notify } from 'quasar'
+import { settings } from '../boot/settings'
 
 import LockMixin from '../mixins/LockMixin'
 import LockPad from '../components/LockPad.vue'
@@ -107,7 +108,8 @@ export default defineComponent({
 
   setup () {
     return {
-      isPwd: ref('password')
+      isPwd: ref('password'),
+      settings: settings
     }
   },
 
