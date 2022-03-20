@@ -1,7 +1,7 @@
 <template>
   <q-layout v-cloak view="hHh lpR fFf">
 
-    <q-header elevated class="bg-primary text-white" v-touch-swipe.mouse.left.right="handleSwipe">
+    <q-header elevated :class="settings.theme.header" v-touch-swipe.mouse.left.right="handleSwipe">
       <q-toolbar>
         <q-toolbar-title>
           {{ $t('case_report') }}
@@ -74,7 +74,7 @@
       </q-page>
     </q-page-container>
 
-    <q-footer elevated class="bg-grey-8 text-white" v-touch-swipe.mouse.left.right="handleSwipe">
+    <q-footer elevated :class="settings.theme.footer" v-touch-swipe.mouse.left.right="handleSwipe">
       <q-toolbar>
         <q-select
           dark
@@ -167,6 +167,7 @@ import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr, getBlitzarErrors } from 
 import { Notify, scroll } from 'quasar'
 import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
 import { t } from '../boot/i18n'
+import { settings } from '../boot/settings'
 
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
@@ -180,7 +181,8 @@ export default defineComponent({
   setup () {
     return {
       errorsRemain: ref(false),
-      errors: ref([])
+      errors: ref([]),
+      settings: settings
     }
   },
 

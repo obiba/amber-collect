@@ -103,5 +103,7 @@ export default {
   single_page: 'Une seule page',
   multi_steps: 'Étapes multiples',
   final_step_label: 'Félicitations, le formulaire est complet !',
-  required_field: 'Le champ est requis'
+  required_field: 'Le champ est requis',
+  go_home: 'Retour à l\'accueil',
+  nothing_here: 'Il n\'y a rien ici...'
 }
