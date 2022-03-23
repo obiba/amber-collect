@@ -20,5 +20,11 @@
       "icon": "record_voice_over",
       "link": "https://forum.obiba.org"
     }
-  ]
+  ],
+  "i18n": {
+    "en": {
+    },
+    "fr": {
+    }
+  }
 }

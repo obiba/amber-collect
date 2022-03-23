@@ -62,8 +62,7 @@ module.exports = configure(function (ctx) {
       env: {
         API: ctx.dev ? 'http://localhost:3030' : process.env.AMBER_URL,
         SETTINGS: ctx.dev ? settingsJson : (process.env.SETTINGS ? process.env.SETTINGS : settingsJson),
-        VERSION: version,
-        LOCALES: ctx.dev ? 'en,fr' : (process.env.LOCALES ? process.env.LOCALES : 'en,fr')
+        VERSION: version
       },
 
       // transpile: false,
