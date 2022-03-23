@@ -9,7 +9,7 @@ import authvuex from './store.auth'
 import SecureLS from 'secure-ls'
 
 const ls = new SecureLS({ isCompression: false })
-const debug = true
+const debug = false
 const encrypted = true
 const lsVuex = !encrypted ? createPersistedState()
   : createPersistedState({
