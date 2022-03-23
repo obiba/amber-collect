@@ -14,7 +14,6 @@ COPY . .
 # build stage
 FROM develop-stage as build-stage
 ARG AMBER_URL
-ARG LOCALES
 RUN yarn
 RUN quasar build --mode pwa
 
