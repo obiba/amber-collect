@@ -33,8 +33,11 @@ Environment variable for building the app in production:
 
 ### Customize the configuration
 
-See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+* Modify the `settings.json` file for theming and translations.
+* Override the `src/components/Banner.vue` to apply your own banner in front pages (login and forgot password pages).
+
+See also [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
 
 ## License
 
-[GPLv3](https://opensource.org/licenses/GPL-3.0)
+[MIT](https://mit-license.org/)
