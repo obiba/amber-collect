@@ -157,6 +157,7 @@ module.exports = configure(function (ctx) {
       workboxPluginMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
       // workboxOptions: {}, // only for GenerateSW
       workboxOptions: {
+        maximumFileSizeToCacheInBytes: 5000000,
         cleanupOutdatedCaches: true,
         skipWaiting: true,
         clientsClaim: true
