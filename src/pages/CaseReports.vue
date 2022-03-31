@@ -62,8 +62,8 @@
       </template>
     </q-table>
 
-    <q-dialog v-model='showViewCaseReport' persistent>
-      <q-card :style="$q.screen.lt.sm ? 'min-width: 200px' : 'min-width: 400px'">
+    <q-dialog v-model='showViewCaseReport' persistent full-width>
+      <q-card :style="$q.screen.lt.sm ? 'min-width: 300px' : 'min-width: 400px'">
         <q-card-section>
           <q-tabs
             v-model="viewTab"

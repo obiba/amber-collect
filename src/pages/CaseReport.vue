@@ -9,7 +9,7 @@
         <q-toolbar-title>
           <span class="text-subtitle2 float-right">{{ tr(crf.schema.label) }}
           <q-btn
-            v-if="crf.schema.description"
+            v-if="crf.schema.description || crf.schema.copyright || crf.schema.license"
             size="12px"
             flat
             dense
@@ -146,13 +146,13 @@
     </q-footer>
 
     <q-dialog v-model="showFormDescription">
-      <q-card>
+      <q-card style="min-width: 300px">
         <q-card-section>
-          <div v-html="md(tr(crf.schema.description))"/>
+          <div v-if="crf.schema.description" v-html="md(tr(crf.schema.description))"/>
         </q-card-section>
         <q-card-section>
           <div v-if="crf.schema.copyright" v-html="'&#169; ' + md(tr(crf.schema.copyright))"/>
-          <div class="q-mt-sm" v-html="md($t(caseReportLicense))"/>
+          <div v-if="caseReportLicense" class="q-mt-sm" v-html="md($t(caseReportLicense))"/>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="OK" color="primary" v-close-popup />
