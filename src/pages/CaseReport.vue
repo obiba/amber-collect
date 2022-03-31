@@ -238,6 +238,9 @@ export default defineComponent({
     const caseReport = this.getCaseReportById()(this.user, this.caseReportId)
     if (caseReport) {
       this.crf = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop() : { schema: { items: [] } }
+      if (this.crf.schema.layout) {
+        this.mode = this.crf.schema.layout
+      }
       this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, stepId: '__step', debug: this.debug })
       if (!caseReport.data || !caseReport.data.__step) {
         this.mergeCaseReportData({
