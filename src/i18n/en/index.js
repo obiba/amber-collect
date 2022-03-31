@@ -76,6 +76,15 @@ export default {
     required: 'Value is required',
     email: 'Value is not a valid email address'
   },
+  license: {
+    cc_by_40: '[Creative Commons BY 4.0](https://creativecommons.org/licenses/by/4.0/)',
+    cc_by_sa_40: '[Creative Commons BY SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)',
+    cc_by_nc_40: '[Creative Commons BY NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/)',
+    cc_by_nc_sa_40: '[Creative Commons BY NC SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)',
+    cc_by_nd_40: '[Creative Commons BY ND 4.0](https://creativecommons.org/licenses/by-nd/4.0/)',
+    cc_by_nc_nd_40: '[Creative Commons BY NC ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/)',
+    cc_cc0_10: '[Creative Commons CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)'
+  },
   id: 'ID',
   form: 'Form',
   data: 'Data',

@@ -88,6 +88,25 @@
               />
           </template>
         </q-select>
+        <q-separator dark vertical v-if="mode === 'single'" />
+        <q-btn-dropdown
+          v-if="mode === 'single' && toc.length > 0"
+          stretch
+          flat
+          icon="toc"
+          :label="$q.screen.lt.sm ? '' : $t('go_to')">
+          <q-list>
+            <q-item-label
+              v-for="entry in toc"
+              :key="entry.id"
+              header
+              clickable
+              v-close-popup
+              @click="onScroll(entry.id)">
+              {{ entry.label }}
+            </q-item-label>
+          </q-list>
+        </q-btn-dropdown>
         <q-space />
 
         <q-separator dark vertical v-if="isMulti()" />
@@ -108,25 +127,6 @@
           @click="nextStep"
           :label="$q.screen.lt.sm ? '' : $t('next')"
           :disabled="!canNext()"/>
-        <q-separator dark vertical v-if="mode === 'single'" />
-        <q-btn-dropdown
-          v-if="mode === 'single' && toc.length > 0"
-          stretch
-          flat
-          icon="toc"
-          :label="$q.screen.lt.sm ? '' : $t('go_to')">
-          <q-list>
-            <q-item-label
-              v-for="entry in toc"
-              :key="entry.id"
-              header
-              clickable
-              v-close-popup
-              @click="onScroll(entry.id)">
-              {{ entry.label }}
-            </q-item-label>
-          </q-list>
-        </q-btn-dropdown>
         <q-separator dark vertical v-if="mode === 'single'" />
         <q-btn
           v-if="mode === 'single'"
@@ -149,6 +149,10 @@
       <q-card>
         <q-card-section>
           <div v-html="md(tr(crf.schema.description))"/>
+        </q-card-section>
+        <q-card-section>
+          <div v-if="crf.schema.copyright" v-html="'&#169; ' + md(tr(crf.schema.copyright))"/>
+          <div class="q-mt-sm" v-html="md($t(caseReportLicense))"/>
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="OK" color="primary" v-close-popup />
@@ -179,10 +183,41 @@ export default defineComponent({
   },
 
   setup () {
+    const ccLicenses = [
+      {
+        value: 'cc-by-40',
+        label: 'license.cc_by_40'
+      },
+      {
+        value: 'cc-by-sa-40',
+        label: 'license.cc_by_sa_40'
+      },
+      {
+        value: 'cc-by-nc-40',
+        label: 'license.cc_by_nc_40'
+      },
+      {
+        value: 'cc-by-nc-sa-40',
+        label: 'license.cc_by_nc_sa_40'
+      },
+      {
+        value: 'cc-by_nd-40',
+        label: 'license.cc_by_nd_40'
+      },
+      {
+        value: 'cc-by-nc-nd-40',
+        label: 'license.cc_by_nc_nd_40'
+      },
+      {
+        value: 'cc-cc0-10',
+        label: 'license.cc_cc0_10'
+      }
+    ]
     return {
       errorsRemain: ref(false),
       errors: ref([]),
-      settings: settings
+      settings: settings,
+      ccLicenses: ccLicenses
     }
   },
 
@@ -242,6 +277,17 @@ export default defineComponent({
     },
     caseReportId () {
       return this.$route.params.id
+    },
+    caseReportLicense () {
+      const license = this.crf.schema.license
+      let found = this.ccLicenses.filter(lic => lic.value === license).pop()
+      if (!found && settings.licenses) {
+        found = settings.licenses.filter(lic => lic.value === license).pop()
+      }
+      if (found) {
+        return found.label ? found.label : found.value
+      }
+      return license
     },
     toc () {
       const toc = []
