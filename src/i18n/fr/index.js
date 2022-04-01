@@ -5,7 +5,36 @@ export default {
   login: {
     title: 'Identifiez vous pour commencer une session',
     submit: 'Connexion',
-    forgot_password: 'Mot de passe oublié ?'
+    forgot_password: 'Mot de passe oublié ?',
+    register: 'Enregistrement'
+  },
+  register: {
+    title: 'Créer un compte',
+    submit: 'S\'enregister',
+    login: 'Connexion',
+    success: 'Enregistrement effectué ! Veuillez vérifier votre corriel pour confirmer l\'enregistrement.',
+    google_policy: 'Ce site est protégé par reCAPTCHA et <a class="text-white" href="https://policies.google.com/privacy">la politique de confidentialité</a> et <a class="text-white" href="https://policies.google.com/terms">les conditions d\'utilisation</a> de Google s\'appliquent.'
+  },
+  forgot_password: {
+    title: 'Réinitialiser le mot de passe',
+    hint: 'Entrer le courriel du compte pour réinitialiser le mot de passe.',
+    submit: 'Réinitialiser',
+    login: 'Connexion'
+  },
+  reset: {
+    title: 'Réinitialisation du mot de passe',
+    submit: 'Réinitialiser',
+    bad_link: 'Ce lien de réinitialisation n\'est pas valide. Veuillez vérifier votre courriel et essayer de nouveau.',
+    failure: 'Le changement de mot a échoué. Veuillez contacter le support.',
+    success: 'Mot de passe changé avec succés.'
+  },
+  verify: {
+    title: 'Vérification du courriel',
+    login: 'Connexion',
+    bad_link: 'Ce lien de vérification n\'est pas valide. Veuillez vérifier ce lien et essayer de nouveau.',
+    failure: 'La vérification du courriel a échoué. Veuillez contacter le support.',
+    success: 'Merci, votre adresse courriel est vérifiée.',
+    pending: 'Vérification en cours... merci de patienter...'
   },
   locales: {
     en: 'English',
@@ -40,12 +69,6 @@ export default {
     title: 'Chargement',
     caption: 'Veuillez patienter...'
   },
-  forgot_password: {
-    title: 'Réinitialiser le mot de passe',
-    hint: 'Entrer le courriel du compte pour réinitialiser le mot de passe.',
-    submit: 'Réinitialiser',
-    login: 'Connexion'
-  },
   lock: {
     code_placeholder: 'Code de déverrouillage',
     new_code_placeholder: 'Nouveau code de déverrouillage',
@@ -54,13 +77,23 @@ export default {
     incorrect_unclock: 'Le code de déverrouillage est incorrect.'
   },
   error: {
+    account_already_exists: 'Ce compte existe déjà. Essayez de réinitialiser votre mot de passe ou contactez le support.',
+    create_account_invalid: 'Les informations du compte ne sont pas valides.',
+    create_account: 'Erreur à la creation du compte. Si ce problème persiste, contacter le support.',
+    update_account: 'Erreur à la mise à jour du compte. Si ce problème persiste, contacter le support.',
     get_case_report_forms: 'Erreur à la récupération des formulaires de rapport de cas.',
     save_case_report: 'La sauvegarde du rapport de cas a échoué.',
     save_case_report_error: 'La sauvegarde du rapport de cas a échoué. Une nouvelle tentative sera effectuée au rétablissement de la connexion.',
     network_error: 'Erreur réseau, veuillez réessayer plus tard.'
   },
   success: {
+    create_account: 'Compte créé avec succès. Un courriel de vérification d\'adresse a été envoyé.',
+    update_account: 'Compte mise à jour avec succès.',
     send_reset_password: 'Demande de réinitialisation de mot de passe envoyée.',
+    reset_password: 'Mot de passe réinitialisé avec succès.',
+    update_password: 'Mot de passe mis à jour avec succès.',
+    send_verify_email: 'Courriel de vérification pour la nouvelle adresse envoyé.',
+    resend_verify_email: 'Courriel de vérification envoyé.',
     save_case_report: 'Rapport de cas sauvegardé.'
   },
   record: {
@@ -91,7 +124,13 @@ export default {
   data: 'Données',
   case_report: 'Rapport de cas',
   email: 'Courriel',
+  email_hint: 'Adresse courriel vérifiable.',
   password: 'Mot de passe',
+  password_hint: 'Créer un mot de passe de 8 character au minimum avec majuscule et minuscule, chiffre et caractère spécial.',
+  firstname: 'Prénom',
+  lastname: 'Nom de famille',
+  preferred_language: 'Langue préférée',
+  required: 'Requis',
   cancel: 'Annuler',
   delete: 'Supprimer',
   start: 'Démarrer',

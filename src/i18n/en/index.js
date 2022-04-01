@@ -5,7 +5,36 @@ export default {
   login: {
     title: 'Sign in to start your session',
     submit: 'Sign in',
-    forgot_password: 'Forgot password?'
+    forgot_password: 'Forgot password?',
+    register: 'Sign up'
+  },
+  register: {
+    title: 'Register new membership',
+    submit: 'Sign up',
+    login: 'Sign in',
+    success: 'Registration complete! Please check your email to confirm your registration.',
+    google_policy: 'This site is protected by reCAPTCHA and the Google <a class="text-white" href="https://policies.google.com/privacy">Privacy Policy</a> and <a class="text-white" href="https://policies.google.com/terms">Terms of Service</a> apply.'
+  },
+  forgot_password: {
+    title: 'Reset password',
+    hint: 'Enter account\'s email to reset password.',
+    submit: 'Reset',
+    login: 'Sign in'
+  },
+  reset: {
+    title: 'Reset password',
+    submit: 'Reset',
+    bad_link: 'Not a valid password reset link. Please check your email for the password reset link and try again.',
+    failure: 'Unable to reset password. Please contact support.',
+    success: 'Password successfully changed.'
+  },
+  verify: {
+    title: 'Verify email',
+    login: 'Sign in',
+    bad_link: 'Not a valid email verification link. Please check your email for the verification link and try again.',
+    failure: 'Unable to verify email. Please contact support.',
+    success: 'Thanks, your email address is verified.',
+    pending: 'Verifying account... please wait...'
   },
   locales: {
     en: 'English',
@@ -39,12 +68,6 @@ export default {
     title: 'Loading',
     caption: 'Please wait...'
   },
-  forgot_password: {
-    title: 'Reset password',
-    hint: 'Enter account\'s email to reset password.',
-    submit: 'Reset',
-    login: 'Sign in'
-  },
   lock: {
     code_placeholder: 'Enter unlock code',
     new_code_placeholder: 'Enter new unlock code',
@@ -53,13 +76,23 @@ export default {
     incorrect_unclock: 'Unlock code is incorrect.'
   },
   error: {
+    account_already_exists: 'This account already exists. Try resetting your password or contact support.',
+    create_account_invalid: 'The account information are not valid.',
+    create_account: 'There was an error while creating your account. If this issue persists, contact support.',
+    update_account: 'There was an error while updating your profile. If this persists, contact support.',
     get_case_report_forms: 'Error when getting case report forms.',
     save_case_report: 'Saving case report failed.',
     save_case_report_error: 'Save error, the case report will be put onhold until the connection is restablished.',
     network_error: 'Network error, please try again later.'
   },
   success: {
+    create_account: 'Account successfully created. Please check your email to verify your account.',
+    update_account: 'Account successfully updated.',
     send_reset_password: 'Password reset sent.',
+    reset_password: 'Password reset successful.',
+    update_password: 'Password update successful.',
+    send_verify_email: 'Email verification sent. Verify new email to update your email address.',
+    resend_verify_email: 'Email verification resent.',
     save_case_report: 'Case report saved.'
   },
   record: {
@@ -90,7 +123,13 @@ export default {
   data: 'Data',
   case_report: 'Case Report',
   email: 'Email',
+  email_hint: 'Verifiable email address.',
   password: 'Password',
+  password_hint: 'Create a password. 8 character minimum with lower and upper case, digit and special character.',
+  firstname: 'First Name',
+  lastname: 'Last Name',
+  preferred_language: 'Preferred Language',
+  required: 'Required',
   cancel: 'Cancel',
   delete: 'Delete',
   start: 'Start',

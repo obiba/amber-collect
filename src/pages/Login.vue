@@ -46,6 +46,12 @@
                       type="submit"
                       color="dark"
                       :disable="disableSubmit"/>
+                    <q-btn
+                      :label="$t('login.register')"
+                      flat
+                      to="/register"
+                      stretch
+                      class="text-bold q-ml-md"/>
                   </div>
                 </q-form>
               </q-card-section>

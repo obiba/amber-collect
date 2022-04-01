@@ -36,7 +36,7 @@
                       </div>
                     </template>
                   </q-input>
-                  <div class="q-mt-lg">
+                  <div class="q-pt-md">
                     <q-btn
                       :label="$t('forgot_password.submit')"
                       type="submit"

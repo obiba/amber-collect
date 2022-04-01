@@ -26,6 +26,10 @@ const routes = [
     component: () => import('pages/ForgotPassword.vue')
   },
   {
+    path: '/reset-password',
+    component: () => import('pages/ResetPassword.vue')
+  },
+  {
     path: '/lock',
     component: () => import('pages/LockScreen.vue')
   },
@@ -36,6 +40,14 @@ const routes = [
   {
     path: '/login',
     component: () => import('pages/Login.vue')
+  },
+  {
+    path: '/register',
+    component: () => import('pages/Register.vue')
+  },
+  {
+    path: '/verify',
+    component: () => import('pages/Verify.vue')
   },
 
   // Always leave this as last one,

@@ -32,6 +32,8 @@ module.exports = configure(function (ctx) {
       'feathersClient',
       'i18n',
       'vuelidate',
+      'recaptcha',
+      'errors',
       'settings'
     ],
 
@@ -61,6 +63,7 @@ module.exports = configure(function (ctx) {
 
       env: {
         API: ctx.dev ? 'http://localhost:3030' : process.env.AMBER_URL,
+        RECAPTCHA_SITE_KEY: ctx.dev ? '6Lc3D34cAAAAANwhMFOH-yEB147CqspT-eBwF5-u' : process.env.RECAPTCHA_SITE_KEY,
         SETTINGS: ctx.dev ? settingsJson : (process.env.SETTINGS ? process.env.SETTINGS : settingsJson),
         VERSION: version
       },
