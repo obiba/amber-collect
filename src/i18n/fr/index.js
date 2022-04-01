@@ -108,7 +108,10 @@ export default {
   },
   validations: {
     required: 'Une valeur est requise',
-    email: 'Adresse courriel non valide'
+    minLength: 'Ce champ doit faire au moins {min} charactères',
+    maxLength: 'Ce champ peut faire au maximum {max} charactères',
+    email: 'Adresse courriel non valide',
+    strongPassword: 'Le mot de passe de passe doit avoir au moins un caractère pour chaque type : minuscule, majuscule, chiffre, caractère spécial.'
   },
   license: {
     cc_by_40: '[Creative Commons BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.fr)',
@@ -126,7 +129,7 @@ export default {
   email: 'Courriel',
   email_hint: 'Adresse courriel vérifiable.',
   password: 'Mot de passe',
-  password_hint: 'Créer un mot de passe de 8 character au minimum avec majuscule et minuscule, chiffre et caractère spécial.',
+  password_hint: 'Créer un mot de passe de 8 caractères au minimum avec majuscule et minuscule, chiffre et caractère spécial.',
   firstname: 'Prénom',
   lastname: 'Nom de famille',
   preferred_language: 'Langue préférée',

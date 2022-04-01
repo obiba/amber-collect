@@ -107,7 +107,10 @@ export default {
   },
   validations: {
     required: 'Value is required',
-    email: 'Value is not a valid email address'
+    minLength: 'The minimum length required is {min}',
+    maxLength: 'The maximum length allowed is {max}',
+    email: 'Value is not a valid email address',
+    strongPassword: 'Password must contain at least one of each: lower case letter, upper case letter, digit, special character.'
   },
   license: {
     cc_by_40: '[Creative Commons BY 4.0](https://creativecommons.org/licenses/by/4.0/)',

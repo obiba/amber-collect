@@ -152,7 +152,7 @@ import { defineComponent } from 'vue'
 import { mapState } from 'vuex'
 import useVuelidate from '@vuelidate/core'
 import { useReCaptcha } from 'vue-recaptcha-v3'
-import { required, minLength, email } from '../boot/vuelidate'
+import { required, minLength, maxLength, email, strongPassword } from '../boot/vuelidate'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
 
@@ -209,7 +209,9 @@ export default defineComponent({
       },
       password: {
         required,
-        minLength: minLength(8)
+        minLength: minLength(8),
+        maxLength: maxLength(64),
+        strongPassword
       }
     }
   },
