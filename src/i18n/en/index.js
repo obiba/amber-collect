@@ -6,7 +6,12 @@ export default {
     title: 'Sign in to start your session',
     submit: 'Sign in',
     forgot_password: 'Forgot password?',
-    register: 'Sign up'
+    register: 'Sign up',
+    validate: 'Validate',
+    token: '6-digits token',
+    totp: 'Scan this QR code with a multifactor authentication app (Microsoft authenticator is recommended), and then enter the temporary token.',
+    failed: 'Incorrect email/password combination.',
+    failed_token: 'Incorrect token.'
   },
   register: {
     title: 'Register new membership',
