@@ -79,6 +79,7 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { settings } from '../boot/settings'
 
 export default defineComponent({
   name: 'LockPad',
@@ -86,7 +87,7 @@ export default defineComponent({
   props: ['modelValue'],
   emits: ['update:modelValue'],
 
-  data () {
+  setup () {
     function shuffleArray (arr) {
       for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -95,13 +96,15 @@ export default defineComponent({
       return arr
     }
 
-    const nums = shuffleArray([1, 2, 3, 4, 5, 6, 7, 8, 9, 0])
+    const numArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]
+    const nums = settings.lock && settings.lock.shuffle ? shuffleArray(numArray) : numArray
 
     return {
       nums1: nums.slice(0, 3),
       nums2: nums.slice(3, 6),
       nums3: nums.slice(6, 9),
       nums4: nums.slice(9, 10)
+
     }
   },
 

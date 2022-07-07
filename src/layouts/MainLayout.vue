@@ -18,7 +18,7 @@
         </q-toolbar-title>
 
         <div class="q-gutter-sm row items-center no-wrap">
-          <q-btn round dense flat icon="lock"
+          <q-btn v-if="settings.lock.enabled" round dense flat icon="lock"
                  @click="onLock">
           </q-btn>
           <!--q-btn round dense flat :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
@@ -66,6 +66,7 @@
         <q-item
           clickable
           @click="onLock"
+           v-if="settings.lock.enabled"
         >
           <q-item-section avatar>
             <q-icon name="lock" />
@@ -230,22 +231,19 @@ export default defineComponent({
       leftDrawerOpen,
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  },
-
-  data () {
-    return {
-      showAppInfo: false
+      },
+      showAppInfo: ref(false)
     }
   },
 
   created () {
-    if (this.lockStatus) {
-      this.$router.push('/lock')
-    }
-    if (this.user._id !== this.lockId) {
-      this.resetLock(this.user._id)
+    if (settings.lock.enabled) {
+      if (this.lockStatus) {
+        this.$router.push('/lock')
+      }
+      if (this.user._id !== this.lockId) {
+        this.resetLock(this.user._id)
+      }
     }
   },
 

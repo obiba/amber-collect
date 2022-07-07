@@ -7,6 +7,10 @@
     "header": "bg-primary text-white",
     "footer": "bg-grey-8 text-white"
   },
+  "lock": {
+    "enabled": true,
+    "shuffle": false
+  },
   "links": [
     {
       "title": "main.docs",

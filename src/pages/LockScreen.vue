@@ -11,10 +11,13 @@
             <q-input
               readonly
               dark
-              v-model="password1"
+              v-model.number="password1"
               color="white"
-              :type="isPwd ? 'password' : 'text'"
-              :hint="$t('lock.new_code_placeholder')">
+              :type="isPwd ? 'password' : 'number'"
+              mask="####"
+              autocomplete="off"
+              :hint="$t('lock.new_code_placeholder')"
+              class="no-spinner">
               <template v-slot:append>
                 <q-icon
                   :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -30,10 +33,13 @@
             <q-input
               readonly
               dark
-              v-model="password2"
+              v-model.number="password2"
               color="white"
-              :type="isPwd ? 'password' : 'text'"
-              :hint="$t('lock.repeat_code_placeholder')">
+              :type="isPwd ? 'password' : 'number'"
+              mask="####"
+              autocomplete="off"
+              :hint="$t('lock.repeat_code_placeholder')"
+              class="no-spinner">
               <template v-slot:append>
                 <q-icon
                   :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -57,10 +63,13 @@
             <q-input
               readonly
               dark
-              v-model="password"
+              v-model.number="password"
               color="white"
-              :type="isPwd ? 'password' : 'text'"
-              :placeholder="$t('lock.code_placeholder')">
+              :type="isPwd ? 'password' : 'number'"
+              mask="####"
+              autocomplete="off"
+              :placeholder="$t('lock.code_placeholder')"
+              class="no-spinner">
               <template v-slot:append>
                 <q-icon
                   :name="isPwd ? 'visibility_off' : 'visibility'"
@@ -109,15 +118,10 @@ export default defineComponent({
   setup () {
     return {
       isPwd: ref('password'),
-      settings: settings
-    }
-  },
-
-  data () {
-    return {
-      password1: '',
-      password2: '',
-      password: ''
+      settings: settings,
+      password1: ref(''),
+      password2: ref(''),
+      password: ref('')
     }
   },
 
@@ -134,12 +138,13 @@ export default defineComponent({
   },
 
   watch: {
-    password2 (newValue, oldValue) {
-      if (newValue.length === passwordLength) {
-        if (newValue === this.password1) {
+    password2 (newValue) {
+      const newStr = newValue + ''
+      if (newStr.length === passwordLength) {
+        if (newStr === (this.password1 + '')) {
           this.updatePassword({
             id: this.user._id,
-            password: this.password1
+            password: newStr
           })
           this.triggerLock({
             status: true
@@ -155,8 +160,9 @@ export default defineComponent({
 
     password (newValue, oldValue) {
       // verify code and remove lock wall
-      if (newValue.length === passwordLength) {
-        if (newValue === this.lockPassword) {
+      const newStr = newValue + ''
+      if (newStr.length === passwordLength) {
+        if (newStr === this.lockPassword) {
           this.triggerLock({
             status: false
           })
@@ -187,7 +193,8 @@ export default defineComponent({
       return this.lockPassword.length === 0
     },
     isFirstPwd () {
-      return this.password1.length < 4
+      console.log('$ ' + this.password1)
+      return ('' + this.password1).length < 4
     }
   },
 
