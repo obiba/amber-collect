@@ -72,7 +72,8 @@
                     color="white"
                     v-model="token"
                     :label="$t('login.token')"
-                    lazy-rules>
+                    lazy-rules
+                    class="no-spinner">
                     <template v-slot:prepend>
                     <q-icon name="fas fa-mobile" size="xs" />
                   </template>
