@@ -148,7 +148,7 @@ export default defineComponent({
       token: ref(''),
       secret: ref(''),
       qr: ref(''),
-      withToken: false
+      withToken: ref(false)
     }
   },
   watch: {
