@@ -273,7 +273,7 @@ export default defineComponent({
   computed: {
     ...mapState({
       crfs: state => state.form.crfs,
-      user: state => state.auth.payload ? state.auth.payload.user : undefined
+      user: state => state.auth.user
     }),
     currentLocale () {
       return this.$root.$i18n.locale

@@ -6,7 +6,7 @@ export default boot(async ({ router, store }) => {
   router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth) {
       // if requires admin
-      const user = store.state.auth.payload && store.state.auth.payload.user ? store.state.auth.payload.user : undefined
+      const user = store.state.auth.user
       if (user) {
         if (to.meta.requiresAdmin) {
           if (user.role && user.role === 'administrator') {
@@ -31,6 +31,7 @@ export default boot(async ({ router, store }) => {
           store.dispatch('auth/responseHandler', response)
           router.push(to.path)
         }).catch((err) => {
+          console.log(err)
           if (err.response) {
             // remove expired/unusable token
             LocalStorage.remove('feathers-jwt')

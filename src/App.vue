@@ -13,7 +13,7 @@ export default defineComponent({
       if (newUser === null) {
         this.$router.push('/login')
       } else {
-        this.locale = this.$store.state.auth.payload.user.language
+        this.locale = this.$store.state.auth.user.language
       }
     }
   },

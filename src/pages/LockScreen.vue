@@ -179,7 +179,7 @@ export default defineComponent({
 
   computed: {
     ...mapState({
-      user: state => state.auth.payload ? state.auth.payload.user : undefined
+      user: state => state.auth.user
     }),
     userName () {
       if (this.user) {

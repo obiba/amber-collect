@@ -249,7 +249,7 @@ export default defineComponent({
 
   computed: {
     ...mapState({
-      user: state => state.auth.payload ? state.auth.payload.user : undefined
+      user: state => state.auth.user
     }),
     caseReportsCount () {
       return this.getCaseReportsCount()(this.user)
@@ -266,11 +266,11 @@ export default defineComponent({
       return locales.length > 1
     },
     userName () {
-      const fullname = this.user === undefined ? '' : this.user.firstname + ' ' + this.user.lastname
+      const fullname = this.user ? this.user.firstname + ' ' + this.user.lastname : ''
       return fullname.trim().length === 0 ? this.userEmail : fullname
     },
     userEmail () {
-      if (this.user !== undefined) {
+      if (this.user) {
         return this.user.email
       }
       return ''

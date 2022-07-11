@@ -128,7 +128,7 @@
 
 <script>
 import { useI18n } from 'vue-i18n'
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { mapState } from 'vuex'
 import { Notify } from 'quasar'
 import { locales } from '../boot/i18n'
@@ -142,16 +142,12 @@ export default defineComponent({
     const { locale } = useI18n({ useScope: 'global' })
     return {
       locale: locale,
-      settings: settings
-    }
-  },
-  data () {
-    return {
-      email: '',
-      password: '',
-      token: '',
-      secret: '',
-      qr: '',
+      settings: settings,
+      email: ref(''),
+      password: ref(''),
+      token: ref(''),
+      secret: ref(''),
+      qr: ref(''),
       withToken: false
     }
   },
@@ -164,7 +160,7 @@ export default defineComponent({
   },
   computed: {
     ...mapState({
-      user: state => state.auth.payload ? state.auth.payload.user : null,
+      user: state => state.auth.user,
       submitting: state => state.auth.isAuthenticatePending
     }),
     disableSubmit () {

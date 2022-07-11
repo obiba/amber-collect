@@ -232,7 +232,7 @@ export default defineComponent({
   computed: {
     ...mapState({
       crfs: state => state.form.crfs,
-      user: state => state.auth.payload ? state.auth.payload.user : undefined
+      user: state => state.auth.user
     }),
     caseReports () {
       return this.getCaseReports()(this.user)
