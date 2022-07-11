@@ -10,7 +10,7 @@ import SecureLS from 'secure-ls'
 
 const ls = new SecureLS({ isCompression: false })
 const debug = false
-const encrypted = false
+const encrypted = true
 const lsVuex = !encrypted ? createPersistedState()
   : createPersistedState({
     key: 'astore',

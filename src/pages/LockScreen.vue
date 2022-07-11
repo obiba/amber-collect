@@ -179,7 +179,7 @@ export default defineComponent({
 
   computed: {
     ...mapState({
-      user: state => state.auth.user
+      user: state => state.record.user
     }),
     userName () {
       if (this.user) {

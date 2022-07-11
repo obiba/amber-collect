@@ -2,6 +2,10 @@ import caseReportService from '../../services/record'
 import { t } from '../../boot/i18n'
 import { Notify } from 'quasar'
 
+export async function initUser ({ commit, state }, payload) {
+  commit('setUser', payload)
+}
+
 export async function initCaseReport ({ commit, state }, payload) {
   const recordId = state.caseReports.map(cr => cr.id).reduce((a, b) => Math.max(a, b), 0) + 1 + ''
   const record = {
@@ -72,10 +76,14 @@ export async function saveCaseReport ({ commit, state }, payload) {
       if (!payload.silent) {
         if (errorCode) {
           console.error(err)
-          Notify.create({
-            message: t('error.save_case_report'),
-            color: 'negative'
-          })
+          if (errorCode === 401) {
+            this.$router.push('/login')
+          } else {
+            Notify.create({
+              message: t('error.save_case_report'),
+              color: 'negative'
+            })
+          }
         } else if (!err.status) {
           Notify.create({
             message: t('error.save_case_report_error'),

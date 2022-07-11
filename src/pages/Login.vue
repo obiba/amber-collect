@@ -129,7 +129,7 @@
 <script>
 import { useI18n } from 'vue-i18n'
 import { defineComponent, ref } from 'vue'
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import { Notify } from 'quasar'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
@@ -182,6 +182,9 @@ export default defineComponent({
     }
   },
   methods: {
+    ...mapActions({
+      initUser: 'record/initUser'
+    }),
     onLocaleSelection (opt) {
       this.locale = opt.value
     },
@@ -208,6 +211,8 @@ export default defineComponent({
             this.qr = response.data.qr
             this.secret = response.data.secret
             this.withToken = true
+          } else {
+            this.initUser(this.user)
           }
         })
         // Just use the returned error instead of mapping it from the store.

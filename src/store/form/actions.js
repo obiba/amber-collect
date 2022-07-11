@@ -8,10 +8,14 @@ export async function getCaseReportForms ({ commit }, payload) {
     if (!payload.silent) {
       if (errorCode) {
         console.error(err)
-        Notify.create({
-          message: t('error.get_case_report_forms'),
-          color: 'negative'
-        })
+        if (errorCode === 401) {
+          this.$router.push('/login')
+        } else {
+          Notify.create({
+            message: t('error.get_case_report_forms'),
+            color: 'negative'
+          })
+        }
       } else if (!err.status) {
         Notify.create({
           message: t('error.network_error'),

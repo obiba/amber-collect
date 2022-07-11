@@ -6,7 +6,7 @@ export default boot(async ({ router, store }) => {
   router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth) {
       // if requires admin
-      const user = store.state.auth.user
+      const user = store.state.auth.user ? store.state.auth.user : store.state.record.user
       if (user) {
         if (to.meta.requiresAdmin) {
           if (user.role && user.role === 'administrator') {

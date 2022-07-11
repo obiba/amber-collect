@@ -1,3 +1,7 @@
+export function setUser (state, payload) {
+  state.user = payload
+}
+
 // register a case report
 export function addCaseReport (state, payload) {
   // add case report if not already done

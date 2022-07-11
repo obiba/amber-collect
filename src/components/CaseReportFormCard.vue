@@ -75,7 +75,7 @@ export default defineComponent({
 
   computed: {
     ...mapState({
-      user: state => state.auth.user
+      user: state => state.record.user
     }),
     currentLocale () {
       return this.$root.$i18n.locale

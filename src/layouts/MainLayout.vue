@@ -249,7 +249,7 @@ export default defineComponent({
 
   computed: {
     ...mapState({
-      user: state => state.auth.user
+      user: state => state.record.user
     }),
     caseReportsCount () {
       return this.getCaseReportsCount()(this.user)
@@ -293,6 +293,9 @@ export default defineComponent({
     onLogout () {
       this.$store.dispatch('form/clearCaseReportForms')
       this.$store.dispatch('auth/logout')
+        .then(() => {
+          this.$router.push('/login')
+        })
       this.resetLock()
     },
     onLock () {
