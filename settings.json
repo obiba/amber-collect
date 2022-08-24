@@ -1,7 +1,7 @@
 {
   "theme": {
     "front": {
-      "bg": "bg-blue-7 text-white",
+      "bg": "bg-primary text-white",
       "card": "bg-primary no-shadow"
     },
     "header": "bg-primary text-white",
