@@ -31,7 +31,10 @@
             <q-list>
               <q-item clickable v-close-popup @click="onLocaleSelection(localeOpt)" v-for="localeOpt in localeOptions" :key="localeOpt.value">
                 <q-item-section>
-                  <q-item-label>{{$t('locales.' + localeOpt.value)}}</q-item-label>
+                  <q-item-label>{{localeOpt.label}}</q-item-label>
+                </q-item-section>
+                <q-item-section avatar v-if="locale === localeOpt.value">
+                  <q-icon color="primary" name="check" />
                 </q-item-section>
               </q-item>
             </q-list>
