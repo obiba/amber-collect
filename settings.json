@@ -41,6 +41,11 @@
       "license": {
         "mit": "[Licence MIT](https://mit-license.org/)"
       }
+    },
+    "ar": {
+      "license": {
+        "mit": "رخصة معهد ماساتشوستس للتكنولوجيا"
+      }
     }
   }
 }

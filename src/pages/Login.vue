@@ -107,12 +107,12 @@
                 <q-btn-dropdown
                   v-show="hasLocales"
                   flat
-                  :label="locale"
+                  :label="$t('locales.' + locale)"
                   class="float-right">
                 <q-list>
                   <q-item clickable v-close-popup @click="onLocaleSelection(localeOpt)" v-for="localeOpt in localeOptions" :key="localeOpt.value">
                     <q-item-section>
-                      <q-item-label class="text-uppercase">{{localeOpt.value}}</q-item-label>
+                      <q-item-label>{{$t('locales.' + localeOpt.value)}}</q-item-label>
                     </q-item-section>
                   </q-item>
                 </q-list>
@@ -128,9 +128,9 @@
 
 <script>
 import { useI18n } from 'vue-i18n'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { mapActions, mapState } from 'vuex'
-import { Notify } from 'quasar'
+import { Notify, useQuasar } from 'quasar'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
 
@@ -139,7 +139,18 @@ import Banner from 'components/Banner'
 export default defineComponent({
   components: { Banner },
   setup () {
+    const $q = useQuasar()
     const { locale } = useI18n({ useScope: 'global' })
+
+    watch(locale, val => {
+      // dynamic import, so loading on demand only
+      const langIso = val === 'en' ? 'en-US' : val
+      import('quasar/lang/' + langIso)
+        .then(lang => {
+          $q.lang.set(lang.default)
+        })
+    })
+
     return {
       locale: locale,
       settings: settings,

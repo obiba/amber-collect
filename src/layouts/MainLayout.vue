@@ -27,11 +27,11 @@
           <q-btn-dropdown
             v-show="hasLocales"
             flat
-            :label="locale">
+            :label="$t('locales.' + locale)">
             <q-list>
               <q-item clickable v-close-popup @click="onLocaleSelection(localeOpt)" v-for="localeOpt in localeOptions" :key="localeOpt.value">
                 <q-item-section>
-                  <q-item-label class="text-uppercase">{{localeOpt.value}}</q-item-label>
+                  <q-item-label>{{$t('locales.' + localeOpt.value)}}</q-item-label>
                 </q-item-section>
               </q-item>
             </q-list>
@@ -194,8 +194,9 @@
 import { useI18n } from 'vue-i18n'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
+import { useQuasar } from 'quasar'
 
 import LockMixin from '../mixins/LockMixin'
 import EssentialLink from 'components/EssentialLink.vue'
@@ -221,8 +222,18 @@ export default defineComponent({
   mixins: [LockMixin],
 
   setup () {
+    const $q = useQuasar()
     const { locale } = useI18n({ useScope: 'global' })
     const leftDrawerOpen = ref(false)
+
+    watch(locale, val => {
+      // dynamic import, so loading on demand only
+      const langIso = val === 'en' ? 'en-US' : val
+      import('quasar/lang/' + langIso)
+        .then(lang => {
+          $q.lang.set(lang.default)
+        })
+    })
 
     return {
       contributors: contributors,

@@ -43,7 +43,8 @@ export default {
   },
   locales: {
     en: 'English',
-    fr: 'français'
+    fr: 'français',
+    ar: 'العربية'
   },
   main: {
     brand: 'Amber Collect',
@@ -87,7 +88,7 @@ export default {
     update_account: 'There was an error while updating your profile. If this persists, contact support.',
     get_case_report_forms: 'Error when getting case report forms.',
     save_case_report: 'Saving case report failed.',
-    save_case_report_error: 'Save error, the case report will be put onhold until the connection is restablished.',
+    save_case_report_error: 'Save error, the case report will be put on hold until the connection is reestablished.',
     network_error: 'Network error, please try again later.'
   },
   success: {
