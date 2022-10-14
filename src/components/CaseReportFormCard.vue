@@ -2,10 +2,10 @@
 
   <q-item-section>
     <q-item-label>
-      <span class="text-bold">{{ tr(form.schema.label) }}</span>
+      <span class="text-bold">{{ tr(form.name) }}</span>
     </q-item-label>
     <q-item-label caption>
-      <div v-html="md(tr(form.schema.description))"/>
+      <div v-html="md(tr(form.description))"/>
     </q-item-label>
   </q-item-section>
 

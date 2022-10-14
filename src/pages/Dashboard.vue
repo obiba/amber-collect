@@ -130,7 +130,7 @@ export default defineComponent({
     },
     getFormLabel (crfId) {
       const form = this.getForm(crfId)
-      return form ? this.tr(form.schema, form.schema.label) : '?'
+      return form ? this.tr(form.schema, form.name) : '?'
     },
     getCaseReportId (cr) {
       return (cr.data && cr.data._id) ? cr.data._id : ''
