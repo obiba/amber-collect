@@ -34,7 +34,7 @@
             <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2" :class="(canPrevious() && isMulti()) ? 'text-grey-3 text-center flex flex-center cursor-pointer' : ''" @click="previousStep">
               <q-icon
                 v-if="canPrevious()"
-                name="arrow_back"
+                :name="$q.lang.rtl ? 'arrow_forward' : 'arrow_back'"
                 size="xl"
                 class=""
                 />
@@ -65,7 +65,7 @@
             <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2" :class="(canNext() && isMulti()) ? 'text-grey-3 text-center flex flex-center cursor-pointer' : ''" @click="nextStep">
               <q-icon
                 v-if="canNext()"
-                name="arrow_forward"
+                :name="$q.lang.rtl ? 'arrow_back' : 'arrow_forward'"
                 size="xl"
                 />
             </div>
@@ -114,7 +114,7 @@
           v-if="isMulti()"
           stretch
           flat
-          icon="chevron_left"
+          :icon="$q.lang.rtl ? 'chevron_right' : 'chevron_left'"
           @click="previousStep"
           :label="$q.screen.lt.sm ? '' : $t('previous')"
           :disabled="!canPrevious()"/>
@@ -123,7 +123,7 @@
           v-if="isMulti()"
           stretch
           flat
-          icon="chevron_right"
+          :icon="$q.lang.rtl ? 'chevron_left' : 'chevron_right'"
           @click="nextStep"
           :label="$q.screen.lt.sm ? '' : $t('next')"
           :disabled="!canNext()"/>

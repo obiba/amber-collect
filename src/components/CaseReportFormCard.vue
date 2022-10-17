@@ -13,7 +13,7 @@
     <q-item-label caption>{{ 'v' + form.revision }}</q-item-label>
     <q-btn
         :label="$t('start')"
-        icon-right="play_arrow"
+        :icon-right="$q.lang.rtl ? 'chevron_left' : 'chevron_right'"
         class="text-capitalize q-mt-sm q-mb-sm"
         color="primary"
         @click="onStart"/>

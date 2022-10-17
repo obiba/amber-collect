@@ -49,7 +49,7 @@
                   <q-btn
                     v-if="cr.state === 'in_progress'"
                     :label="$t('resume')"
-                    icon-right="play_arrow"
+                    :icon-right="$q.lang.rtl ? 'chevron_left' : 'chevron_right'"
                     class="text-capitalize q-mt-sm q-mb-sm"
                     color="secondary"
                     :to="'/case-report/' + cr.id"/>
