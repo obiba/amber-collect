@@ -168,13 +168,24 @@ export default defineComponent({
         sortable: true
       },
       {
-        name: 'form',
+        name: 'crfId',
         required: true,
-        label: this.$t('form'),
+        label: this.$t('case_report_form'),
         align: 'left',
         field: row => {
           const form = this.getForm(row.crfId)
-          return form ? this.tr(form.schema, form.schema.label) : '?'
+          return form ? this.tr(form.schema, form.name ? form.name : form.schema.label) : '?'
+        },
+        sortable: true
+      },
+      {
+        name: 'revision',
+        required: true,
+        label: this.$t('revision'),
+        align: 'left',
+        field: row => {
+          const form = this.getForm(row.crfId)
+          return form ? form.revision : '?'
         },
         sortable: true
       },

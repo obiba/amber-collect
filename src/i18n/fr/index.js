@@ -130,7 +130,9 @@ export default {
     mit: 'Licence MIT'
   },
   id: 'ID',
+  case_report_form: 'Formulaire de rapport de cas',
   form: 'Formulaire',
+  revision: 'Version',
   data: 'Données',
   case_report: 'Rapport de cas',
   email: 'Courriel',
