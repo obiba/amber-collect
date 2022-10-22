@@ -20,6 +20,7 @@ export function addCaseReport (state, payload) {
 export function deleteCaseReport (state, payload) {
   state.caseReports = state.caseReports.filter(rec => rec.id !== payload.id)
   delete state.caseReportsInProcess[payload.id]
+  delete state.caseReportsInError[payload.id]
 }
 
 export function lockCaseReport (state, payload) {
@@ -27,6 +28,14 @@ export function lockCaseReport (state, payload) {
     state.caseReportsInProcess[payload.id] = true
   } else {
     delete state.caseReportsInProcess[payload.id]
+  }
+}
+
+export function markCaseReportInError (state, payload) {
+  if (payload.error) {
+    state.caseReportsInError[payload.id] = true
+  } else {
+    delete state.caseReportsInError[payload.id]
   }
 }
 

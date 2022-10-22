@@ -63,6 +63,10 @@ export async function saveCaseReport ({ commit, state }, payload) {
     console.log(`CR #${payload.id} is already being processed`)
     return
   }
+  if (state.caseReportsInError[payload.id] && !payload.force) {
+    console.log(`CR #${payload.id} is in error`)
+    return
+  }
   commit('lockCaseReport', {
     id: payload.id,
     lock: true
@@ -83,11 +87,19 @@ export async function saveCaseReport ({ commit, state }, payload) {
               message: t('error.save_case_report'),
               color: 'negative'
             })
+            commit('markCaseReportInError', {
+              id: payload.id,
+              error: true
+            })
           }
         } else if (!err.status) {
           Notify.create({
             message: t('error.save_case_report_error'),
             color: 'warning'
+          })
+          commit('markCaseReportInError', {
+            id: payload.id,
+            error: true
           })
         }
       }
