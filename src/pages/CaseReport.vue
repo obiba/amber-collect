@@ -25,13 +25,13 @@
     </q-header>
 
     <q-page-container>
-      <q-page>
+      <q-page class="bg-grey-2">
         <div v-if="isMulti()">
           <q-linear-progress :value="progress" animation-speed="100" />
         </div>
         <div class="q-pa-md">
           <div class="row">
-            <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2" :class="(canPrevious() && isMulti()) ? 'text-grey-3 text-center flex flex-center cursor-pointer' : ''" @click="previousStep">
+            <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2" :class="(canPrevious() && isMulti()) ? 'text-grey-5 text-center flex flex-center cursor-pointer' : ''" @click="previousStep">
               <q-icon
                 v-if="canPrevious()"
                 :name="$q.lang.rtl ? 'arrow_forward' : 'arrow_back'"
@@ -62,7 +62,7 @@
                 <pre>{{ JSON.stringify(formData, null, '  ') }}</pre>
               </div-->
             </div>
-            <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2" :class="(canNext() && isMulti()) ? 'text-grey-3 text-center flex flex-center cursor-pointer' : ''" @click="nextStep">
+            <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2" :class="(canNext() && isMulti()) ? 'text-grey-5 text-center flex flex-center cursor-pointer' : ''" @click="nextStep">
               <q-icon
                 v-if="canNext()"
                 :name="$q.lang.rtl ? 'arrow_back' : 'arrow_forward'"
