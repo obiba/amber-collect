@@ -76,18 +76,20 @@
 
     <q-footer elevated :class="settings.theme.footer" v-touch-swipe.mouse.left.right="handleSwipe">
       <q-toolbar>
-        <q-select
-          dark
-          emit-value
-          v-model="mode"
-          :options="modeOptions">
-          <template v-slot:selected>
-            <q-icon
-              :name="mode === 'single' ? 'grading' : 'dynamic_feed'"
-              size="sm"
-              />
-          </template>
-        </q-select>
+        <q-btn
+          v-if="mode === 'single'"
+          stretch
+          flat
+          icon="dynamic_feed"
+          @click="toggleMode('multi')"
+          :title="$t('multi_steps')"/>
+        <q-btn
+          v-if="mode === 'multi'"
+          stretch
+          flat
+          icon="grading"
+          @click="toggleMode('single')"
+          :title="$t('single_page')"/>
         <q-separator dark vertical v-if="mode === 'single'" />
         <q-btn-dropdown
           v-if="mode === 'single' && toc.length > 0"
@@ -373,6 +375,9 @@ export default defineComponent({
     },
     canPrevious () {
       return this.isMulti() && this.formData.__step > 0
+    },
+    toggleMode (value) {
+      this.mode = value
     },
     previousStep () {
       if (!this.canPrevious()) return
