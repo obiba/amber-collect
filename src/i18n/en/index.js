@@ -89,7 +89,8 @@ export default {
     get_case_report_forms: 'Error when getting case report forms.',
     save_case_report: 'Saving case report failed.',
     save_case_report_error: 'Save error, the case report will be put on hold until the connection is reestablished.',
-    network_error: 'Network error, please try again later.'
+    network_error: 'Connection error, please try again later.',
+    reauthenticate: 'Session expired, please sign-in again.'
   },
   success: {
     create_account: 'Account successfully created. Please check your email to verify your account.',

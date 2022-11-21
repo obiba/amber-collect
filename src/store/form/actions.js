@@ -9,7 +9,10 @@ export async function getCaseReportForms ({ commit }, payload) {
       if (errorCode) {
         console.error(err)
         if (errorCode === 401) {
-          this.$router.push('/login')
+          Notify.create({
+            message: t('error.reauthenticate'),
+            color: 'negative'
+          })
         } else {
           Notify.create({
             message: t('error.get_case_report_forms'),
@@ -17,10 +20,7 @@ export async function getCaseReportForms ({ commit }, payload) {
           })
         }
       } else if (!err.status) {
-        Notify.create({
-          message: t('error.network_error'),
-          color: 'negative'
-        })
+        window.location.reload()
       }
     }
   })

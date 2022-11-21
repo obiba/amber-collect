@@ -81,7 +81,10 @@ export async function saveCaseReport ({ commit, state }, payload) {
         if (errorCode) {
           console.error(err)
           if (errorCode === 401) {
-            this.$router.push('/login')
+            Notify.create({
+              message: t('error.reauthenticate'),
+              color: 'negative'
+            })
           } else {
             Notify.create({
               message: t('error.save_case_report'),
