@@ -181,8 +181,8 @@ module.exports = configure(function (ctx) {
         description: 'Electronic Data Collection Tool',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#191b84',
-        theme_color: '#027be3',
+        background_color: '#2E72AC',
+        theme_color: '#2E72AC',
         icons: [
           {
             src: 'icons/icon-128x128.png',
