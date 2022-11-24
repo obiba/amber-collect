@@ -18,12 +18,6 @@
         </q-toolbar-title>
 
         <div class="q-gutter-sm row items-center no-wrap">
-          <q-btn v-if="settings.lock.enabled" round dense flat icon="lock"
-                 @click="onLock">
-          </q-btn>
-          <!--q-btn round dense flat :icon="$q.fullscreen.isActive ? 'fullscreen_exit' : 'fullscreen'"
-                 @click="$q.fullscreen.toggle()">
-          </q-btn-->
           <q-btn-dropdown
             v-show="hasLocales"
             flat
@@ -81,24 +75,6 @@
 
         <q-separator/>
 
-        <q-item to="/" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="dashboard"/>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{$t('main.dashboard')}}</q-item-label>
-          </q-item-section>
-        </q-item>
-
-        <q-item to="/case-reports" active-class="q-item-no-link-highlighting">
-          <q-item-section avatar>
-            <q-icon name="summarize"/>
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>{{$t('main.case_reports')}} <q-badge>{{ caseReportsCount }}</q-badge></q-item-label>
-          </q-item-section>
-        </q-item>
-
         <q-item
           clickable
           @click="onUpdate"
@@ -148,6 +124,15 @@
         </q-item>
       </q-list>
     </q-drawer>
+
+    <q-footer elevated class="bg-white text-grey-10">
+      <q-tabs no-caps dense>
+        <q-route-tab to="/" icon="dashboard" :label="$t('main.dashboard')" />
+        <q-route-tab to="/case-reports" icon="summarize" :label="$t('main.case_reports')">
+          <q-badge floating>{{ caseReportsCount }}</q-badge>
+        </q-route-tab>
+      </q-tabs>
+    </q-footer>
 
     <q-dialog v-model="showAppInfo">
       <q-card :style="$q.screen.lt.sm ? 'min-width: 200px' : 'min-width: 400px'">

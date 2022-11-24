@@ -5,19 +5,44 @@
       <span class="text-bold">{{ tr(form.name ? form.name : form.schema.label) }}</span>
     </q-item-label>
     <q-item-label caption>
-      <div v-html="md(tr(form.description ? form.description : form.schema.description))"/>
+      <div v-html="md(truncate(tr(form.description ? form.description : form.schema.description)))"/>
     </q-item-label>
   </q-item-section>
 
   <q-item-section side top>
-    <q-item-label caption>{{ 'v' + form.revision }}</q-item-label>
     <q-btn
-        :label="$t('start')"
-        :icon-right="$q.lang.rtl ? 'chevron_left' : 'chevron_right'"
+        icon-right="more_horiz"
+        rounded
+        flat
         class="text-capitalize q-mt-sm q-mb-sm"
-        color="primary"
-        @click="onStart"/>
+        @click="onShowDetails"/>
   </q-item-section>
+
+  <q-dialog v-model='showCaseReportFormDetails' full-width position="bottom">
+    <q-card>
+      <q-card-section>
+        <q-item-label>
+          <span class="text-bold">{{ tr(form.name ? form.name : form.schema.label) }}</span>
+        </q-item-label>
+        <q-item-label caption>{{ 'v' + form.revision }}</q-item-label>
+      </q-card-section>
+      <q-separator/>
+      <q-card-section>
+        <q-item-label caption>
+          <div v-html="md(tr(form.description ? form.description : form.schema.description))"/>
+        </q-item-label>
+      </q-card-section>
+      <q-card-section>
+        <q-btn
+        :label="$t('main.new_case_report')"
+        :icon-right="$q.lang.rtl ? 'chevron_left' : 'chevron_right'"
+        color="primary"
+        no-caps
+        class="q-mt-sm q-mb-sm"
+        @click="onStart"/>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 
   <q-dialog v-model='showCreateCaseReportRecord' persistent>
     <q-card>
@@ -66,6 +91,7 @@ export default defineComponent({
 
   data () {
     return {
+      showCaseReportFormDetails: false,
       showCreateCaseReportRecord: false,
       remountCounter: 0,
       formData: {},
@@ -89,8 +115,16 @@ export default defineComponent({
     tr (key) {
       return makeSchemaFormTr(this.form.schema, { locale: this.currentLocale })(key)
     },
+    truncate (text) {
+      if (!text) return text
+      const sentences = text.split('.')
+      return sentences[0] + (sentences.length > 1 && sentences[1] !== '' ? '...' : '.')
+    },
     md (text) {
       return text ? snarkdown(text) : text
+    },
+    onShowDetails () {
+      this.showCaseReportFormDetails = true
     },
     onStart () {
       const idSchema = {
