@@ -94,7 +94,7 @@ export default {
     get_case_report_forms: 'Erreur à la récupération des formulaires de rapport de cas.',
     save_case_report: 'La sauvegarde du rapport de cas a échoué.',
     save_case_report_error: 'La sauvegarde du rapport de cas a échoué. Une nouvelle tentative sera effectuée au rétablissement de la connexion.',
-    network_error: 'Erreur de connection, veuillez réessayer plus tard.',
+    network_error: 'Erreur de connection, vous êtes hors ligne.',
     reauthenticate: 'Session expirée, veuillez vous identifier de nouveau.'
   },
   success: {

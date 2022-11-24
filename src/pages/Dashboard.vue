@@ -11,7 +11,10 @@
       no-caps
     >
       <q-tab name="forms" :label="$t('main.forms')" />
-      <q-tab name="in_progress" :label="$t('main.in_progress')" />
+      <q-tab name="in_progress">
+        <span class="q-mr-md">{{$t('main.in_progress')}}</span>
+        <q-badge floating>{{ notSavedCaseReports.length }}</q-badge>
+      </q-tab>
     </q-tabs>
 
     <q-separator />
