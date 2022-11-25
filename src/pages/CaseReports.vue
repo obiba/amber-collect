@@ -2,63 +2,105 @@
   <q-page class="q-pt-md q-pb-md">
     <div class="text-h6 q-ml-md q-mr-md">{{ $t('main.case_reports') }}</div>
     <q-table
-      flat
+      grid
       :rows="caseReports"
-      :columns="columns"
       row-key="id"
+      v-model:pagination="pagination"
     >
-      <template v-slot:body-cell-id='props'>
-        <q-td :props='props'>
-          <a v-if="canView(props.row)" href="javascript:void(0)" @click="onViewCaseReport(props.row)">{{ props.row.id }}</a>
-          <span v-else>{{ props.row.id }}</span>
-        </q-td>
-      </template>
-      <template v-slot:body-cell-action='props'>
-        <q-td :props='props'>
-          <q-btn
-            v-if="canResume(props.row)"
-            class="text-grey-8"
-            size="12px"
-            flat
-            dense
-            round
-            :title="$t('resume')"
-            icon="play_arrow"
-            :to="'/case-report/' + props.row.id">
-          </q-btn>
-          <q-btn
-            v-if="canSave(props.row)"
-            class="text-grey-8"
-            size="12px"
-            flat
-            dense
-            round
-            :title="$t('save')"
-            icon="cloud_upload"
-            @click="onSave(props.row)">
-          </q-btn>
-          <q-btn
-            v-if="canView(props.row)"
-            class="text-grey-8"
-            size="12px"
-            flat
-            dense
-            round
-            :title="$t('view')"
-            icon="visibility"
-            @click='onViewCaseReport(props.row)'>
-          </q-btn>
-          <q-btn
-            class="text-grey-8"
-            size="12px"
-            flat
-            dense
-            round
-            :title="$t('delete')"
-            icon="delete"
-            @click='onConfirmDelete(props.row)'>
-          </q-btn>
-        </q-td>
+
+      <template v-slot:item="props">
+        <div class="q-pt-md q-pr-md q-pl-md col-xs-12 col-sm-6 col-md-4">
+          <q-card :class="props.row.state !== 'saved' ? 'bg-secondary text-white' : ''">
+            <q-card-section>
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
+                    <span class="q-mr-sm" :class="props.row.state === 'saved' ? 'text-grey' : 'text-grey-4'">#{{ props.row.id }}</span>
+                    <span class="text-bold q-mr-sm">{{ (props.row.data && props.row.data._id) ? props.row.data._id : '' }}</span>
+                    <q-badge color="accent">{{ $t('record.state.' + props.row.state) }}</q-badge>
+                  </q-item-label>
+                  <q-item-label>
+                    <p class="q-mt-sm">
+                      {{ getFormLabel(props.row.crfId) }} (v{{ getFormRevision(props.row.crfId) }})
+                    </p>
+                    <div>{{  }}</div>
+                  </q-item-label>
+                  <q-item-label>
+                    <span class="text-caption" :class="props.row.state === 'saved' ? 'text-grey' : 'text-grey-4'">{{ $t('started_at', [startedDate(props.row)]) }}</span>
+                  </q-item-label>
+                  <q-item-label v-if="props.row.state === 'saved'">
+                    <span class="text-caption">{{ $t('updated_ago', [updatedAgo(props.row)]) }}</span>
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side v-if="props.row.state === 'saved'">
+                  <q-btn
+                    class="text-grey-8"
+                    size="12px"
+                    color="white"
+                    dense
+                    round
+                    :title="$t('delete')"
+                    icon="delete"
+                    @click='onConfirmDelete(props.row)'>
+                  </q-btn>
+                </q-item-section>
+              </q-item>
+              <q-item v-if="props.row.state !== 'saved'">
+                <q-item-section side v-if="canResume(props.row)">
+                  <q-btn
+                    class="text-grey-8"
+                    size="12px"
+                    color="white"
+                    dense
+                    round
+                    :title="$t('resume')"
+                    icon="play_arrow"
+                    :to="'/case-report/' + props.row.id">
+                  </q-btn>
+                </q-item-section>
+                <q-item-section side v-if="canSave(props.row)">
+                  <q-btn
+                    class="text-grey-8"
+                    size="12px"
+                    color="white"
+                    dense
+                    round
+                    :title="$t('save')"
+                    icon="cloud_upload"
+                    @click="onSave(props.row)">
+                  </q-btn>
+                </q-item-section>
+                <q-item-section side v-if="canView(props.row)">
+                  <q-btn
+                    class="text-grey-8"
+                    size="12px"
+                    color="white"
+                    dense
+                    round
+                    :title="$t('view')"
+                    icon="visibility"
+                    @click='onViewCaseReport(props.row)'>
+                  </q-btn>
+                </q-item-section>
+                <q-item-section side v-if="props.row.state !== 'saved'">
+                  <q-btn
+                    class="text-grey-8"
+                    size="12px"
+                    color="white"
+                    dense
+                    round
+                    :title="$t('delete')"
+                    icon="delete"
+                    @click='onConfirmDelete(props.row)'>
+                  </q-btn>
+                </q-item-section>
+                <q-item-section side>
+                  <span class="text-white text-caption">{{ $t('updated_ago', [updatedAgo(props.row)]) }}</span>
+                </q-item-section>
+              </q-item>
+            </q-card-section>
+          </q-card>
+        </div>
       </template>
     </q-table>
 
@@ -140,7 +182,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, computed } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { date } from 'quasar'
 import { BlitzForm } from '@blitzar/form'
@@ -149,86 +191,23 @@ import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-
 export default defineComponent({
   name: 'CaseReports',
   components: { BlitzForm },
-  data () {
-    const cols = [
-      {
-        name: 'id',
-        required: true,
-        label: '#',
-        align: 'left',
-        field: row => row.id,
-        sortable: true
-      },
-      {
-        name: '_id',
-        required: true,
-        label: this.$t('id'),
-        align: 'left',
-        field: row => (row.data && row.data._id) ? row.data._id : '',
-        sortable: true
-      },
-      {
-        name: 'crfId',
-        required: true,
-        label: this.$t('case_report_form'),
-        align: 'left',
-        field: row => {
-          const form = this.getForm(row.crfId)
-          return form ? this.tr(form.schema, form.name ? form.name : form.schema.label) : '?'
-        },
-        sortable: true
-      },
-      {
-        name: 'revision',
-        required: true,
-        label: this.$t('revision'),
-        align: 'left',
-        field: row => {
-          const form = this.getForm(row.crfId)
-          return form ? form.revision : '?'
-        },
-        sortable: true
-      },
-      {
-        name: 'started_at',
-        required: true,
-        label: this.$t('started_at'),
-        align: 'left',
-        field: row => {
-          const action = row.actions.filter(a => a.type === 'init').pop()
-          return action ? action.timestamp : '?'
-        },
-        format: (val) => date.formatDate(val, 'YYYY-MM-DD HH:mm'),
-        sortable: true
-      },
-      {
-        name: 'updated_at',
-        required: true,
-        label: this.$t('updated_at'),
-        align: 'left',
-        field: row => {
-          const action = row.actions[row.actions.length - 1]
-          return action ? action.timestamp : '?'
-        },
-        format: (val) => date.formatDate(val, 'YYYY-MM-DD HH:mm'),
-        sortable: true
-      },
-      {
-        name: 'state',
-        required: true,
-        label: this.$t('state'),
-        align: 'left',
-        field: row => this.$t('record.state.' + row.state),
-        sortable: true
-      },
-      {
-        name: 'action',
-        align: 'left',
-        label: this.$t('action')
-      }
-    ]
+  setup () {
+    const pagination = ref({
+      sortBy: 'id',
+      descending: true,
+      page: 1,
+      rowsPerPage: 10
+    })
+
     return {
-      columns: cols,
+      pagination,
+      pagesNumber: computed(() => {
+        return Math.ceil(this.caseReports.length / pagination.value.rowsPerPage)
+      })
+    }
+  },
+  data () {
+    return {
       viewTab: 'form',
       viewData: {},
       viewDataStr: '{}',
@@ -259,6 +238,37 @@ export default defineComponent({
     }),
     getForm (crfId) {
       return this.crfs.filter(f => f._id === crfId).pop()
+    },
+    getFormLabel (crfId) {
+      const form = this.getForm(crfId)
+      return form ? this.tr(form.schema, form.name ? form.name : form.schema.label) : '?'
+    },
+    getFormRevision (crfId) {
+      const form = this.getForm(crfId)
+      return form ? form.revision : '?'
+    },
+    startedDate (cr) {
+      const action = cr.actions.filter(a => a.type === 'init').pop()
+      return action ? date.formatDate(action.timestamp, 'YYYY-MM-DD HH:mm') : '?'
+    },
+    updatedDate (cr) {
+      const action = cr.actions[cr.actions.length - 1]
+      return action ? date.formatDate(action.timestamp, 'YYYY-MM-DD HH:mm') : '?'
+    },
+    updatedAgo (cr) {
+      const action = cr.actions[cr.actions.length - 1]
+      return action ? this.timestampAgo(action.timestamp) : '?'
+    },
+    timestampAgo (timestamp) {
+      const rtf = new Intl.RelativeTimeFormat(this.currentLocale, { style: 'long' })
+      const minutes = Math.ceil((timestamp - Date.now()) / 60000)
+      if (minutes <= -1440) {
+        return rtf.format(Math.ceil(minutes / 1440), 'day')
+      }
+      if (minutes <= -60) {
+        return rtf.format(Math.ceil(minutes / 60), 'hour')
+      }
+      return rtf.format(minutes, 'minute')
     },
     tr (schema, key) {
       return schema ? makeSchemaFormTr(schema, { locale: this.currentLocale })(key) : '-'
