@@ -15,8 +15,8 @@
                   </div>
                 </div>
               </q-card-section>
-              <q-card-section>
-                <q-form v-show="!withToken" @submit="onSubmit" class="q-gutter-md">
+              <q-card-section v-show="!withToken">
+                <q-form @submit="onSubmit" class="q-gutter-md">
                   <q-input
                     dark
                     color="white"
@@ -54,18 +54,30 @@
                       class="text-bold q-ml-md"/>
                   </div>
                 </q-form>
-
-                <div v-show="secret">
-                  <div class="col text-subtitle">
-                    {{$t('login.totp')}}
-                  </div>
-                  <div class="text-center q-mt-md">
-                    <img :src="qr"/>
-                  </div>
+              </q-card-section>
+              <q-card-section v-show="secret">
+                <div class="col text-subtitle">
+                  {{$t('login.totp')}}
                 </div>
-
-                <q-form v-show="withToken" @submit="onSubmit" class="q-gutter-md">
-
+                <div class="text-center q-mt-md">
+                  <img :src="qr"/>
+                </div>
+                <div class="col text-subtitle q-mt-md">
+                  {{$t('login.totp_secret')}}
+                </div>
+                <q-input
+                  dark
+                  dense
+                  color="white"
+                  v-model="secret"
+                  readonly>
+                  <template v-slot:after>
+                    <q-btn round dense flat icon="content_copy" @click="onCopySecret"/>
+                  </template>
+                </q-input>
+              </q-card-section>
+              <q-card-section v-show="withToken">
+                <q-form @submit="onSubmit" class="q-gutter-md">
                   <q-input
                     type="number"
                     dark
@@ -78,7 +90,6 @@
                     <q-icon name="fas fa-mobile" size="xs" />
                   </template>
                   </q-input>
-
                   <div>
                     <q-btn
                       :label="$t('login.validate')"
@@ -93,7 +104,6 @@
                       class="text-bold q-ml-md"/>
                   </div>
                 </q-form>
-
               </q-card-section>
               <q-card-section>
                 <q-btn
@@ -133,7 +143,7 @@
 import { useI18n } from 'vue-i18n'
 import { defineComponent, ref, watch } from 'vue'
 import { mapActions, mapState } from 'vuex'
-import { Notify, useQuasar } from 'quasar'
+import { Notify, useQuasar, copyToClipboard } from 'quasar'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
 
@@ -215,6 +225,14 @@ export default defineComponent({
         payload.secret = this.secret
       }
       return payload
+    },
+    onCopySecret () {
+      copyToClipboard(this.secret).then(() => {
+        Notify.create({
+          message: this.$t('login.secret_copied'),
+          color: 'positive'
+        })
+      })
     },
     onSubmit () {
       this.$store
