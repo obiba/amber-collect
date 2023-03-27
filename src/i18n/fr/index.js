@@ -45,8 +45,7 @@ export default {
   },
   locales: {
     en: 'English',
-    fr: 'français',
-    ar: 'العربية'
+    fr: 'français'
   },
   main: {
     brand: 'Amber Collect',
