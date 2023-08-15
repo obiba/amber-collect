@@ -8,7 +8,6 @@ WORKDIR /app
 RUN apk update && \
     apk add git
 COPY package*.json ./
-RUN yarn global add @quasar/cli
 COPY . .
 
 # build stage
@@ -16,7 +15,7 @@ FROM develop-stage as build-stage
 ARG AMBER_URL
 ARG RECAPTCHA_SITE_KEY
 RUN yarn
-RUN quasar build --mode pwa
+RUN yarn quasar build --mode pwa
 
 # production stage
 FROM nginx:alpine as production-stage
