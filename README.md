@@ -10,13 +10,13 @@
 ## Install the dependencies
 
 ```bash
-npm install
+yarn
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 
 ```bash
-quasar dev
+yarn quasar dev
 ```
 
 Note that the Amber server is expected to run at [http://localhost:3030](http://localhost:3030).
@@ -24,12 +24,12 @@ Note that the Amber server is expected to run at [http://localhost:3030](http://
 ### Build the app for production
 
 ```bash
-quasar build
+yarn quasar build
 ```
 
 Environment variable for building the app in production:
 
-* `AMBER_URL`, the url of the Amber server, exposing a REST API used by Amber Studio (make sure CORS policy is set correctly on the server)
+* `AMBER_URL`, the url of the Amber server, exposing a REST API used by Amber Collect (make sure CORS policy is set correctly on the server)
 * `RECAPTCHA_SITE_KEY`, the [reCAPTCHA v3](https://developers.google.com/recaptcha/docs/v3) site key for the Registration page
 
 ### Customize the configuration
