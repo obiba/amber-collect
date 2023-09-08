@@ -19,6 +19,7 @@
                 <q-form @submit="onSubmit" class="q-gutter-md">
 
                   <q-input
+                    autofocus
                     dark
                     color="white"
                     v-model="formData.email"

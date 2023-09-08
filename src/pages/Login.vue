@@ -15,9 +15,10 @@
                   </div>
                 </div>
               </q-card-section>
-              <q-card-section v-show="!withToken">
+              <q-card-section v-if="!withToken">
                 <q-form @submit="onSubmit" class="q-gutter-md">
                   <q-input
+                    autofocus
                     dark
                     color="white"
                     v-model="email"
@@ -55,7 +56,7 @@
                   </div>
                 </q-form>
               </q-card-section>
-              <q-card-section v-show="secret">
+              <q-card-section v-if="secret">
                 <div class="col text-subtitle">
                   {{$t('login.totp')}}
                 </div>
@@ -76,9 +77,10 @@
                   </template>
                 </q-input>
               </q-card-section>
-              <q-card-section v-show="withToken">
+              <q-card-section v-if="withToken">
                 <q-form @submit="onSubmit" class="q-gutter-md">
                   <q-input
+                    autofocus
                     type="number"
                     dark
                     color="white"
