@@ -20,6 +20,7 @@
     "@feathersjs/rest-client": "^4.5.11",
     "@feathersjs/vuex": "^4.0.1-pre.7",
     "@feathersjs/vuex-commons": "0.0.2-pre.4",
+    "@quasar/app-webpack": "^3.10.1",
     "@quasar/cli": "^1.4.0",
     "@quasar/extras": "^1.16.4",
     "@vuelidate/core": "^2.0.0-alpha.32",
