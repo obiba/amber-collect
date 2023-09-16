@@ -40,7 +40,8 @@
                     <q-btn
                       :label="$t('forgot_password.submit')"
                       type="submit"
-                      color="dark"/>
+                      color="dark"
+                      :disable="disableSubmit"/>
                     <q-btn
                       :label="$t('forgot_password.login')"
                       flat
@@ -90,7 +91,7 @@ export default {
       submitting: state => state.auth.showLoading
     }),
     disableSubmit () {
-      return this.v$.formData.$invalid
+      return this.v$.resetEmail.$invalid
     }
   },
   methods: {
