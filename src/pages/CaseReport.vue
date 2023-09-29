@@ -136,7 +136,7 @@
           flat
           class="bg-primary"
           :title="$t('validate_save')"
-          :label="$q.screen.lt.sm ? '' : $t('save')"
+          :label="$t('save')"
           icon="cloud_upload"
           @click="onComplete"/>
         <q-separator dark vertical />
