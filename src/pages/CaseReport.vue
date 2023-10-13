@@ -40,17 +40,7 @@
                 />
             </div>
             <div class="col-md-4 col-sm-8 col-xs-12 q-mt-sm q-mb-sm">
-              <div v-if="isFinalStep">
-                <div class="text-subtitle1 q-mt-md q-mb-md">
-                  {{ $t('final_step_label') }}
-                </div>
-                <q-btn
-                  :label="$t('save')"
-                  icon="cloud_upload"
-                  color="primary"
-                  @click="onComplete"/>
-              </div>
-              <div v-else>
+              <div>
                 <BlitzForm
                   :key="remountCounter"
                   :schema="schema"
@@ -122,7 +112,7 @@
           :disabled="!canPrevious()"/>
         <q-separator dark vertical v-if="isMulti()" />
         <q-btn
-          v-if="isMulti()"
+          v-if="isMulti() && !isFinalStep"
           stretch
           flat
           :icon="$q.lang.rtl ? 'chevron_left' : 'chevron_right'"
@@ -131,7 +121,7 @@
           :disabled="!canNext()"/>
         <q-separator dark vertical v-if="mode === 'single'" />
         <q-btn
-          v-if="mode === 'single'"
+          v-if="mode === 'single' || isFinalStep"
           stretch
           flat
           class="bg-primary"
@@ -310,7 +300,7 @@ export default defineComponent({
       return this.crf.schema.idLabel ? this.tr(this.crf.schema.idLabel) : 'ID'
     },
     isFinalStep () {
-      return this.isMulti() && this.formData.__step === this.crf.schema.items.length
+      return this.isMulti() && this.formData.__step === this.crf.schema.items.length - 1
     },
     modeOptions () {
       return [
@@ -353,7 +343,7 @@ export default defineComponent({
       }
     },
     updateProgress () {
-      this.progress = this.formData.__step / this.crf.schema.items.length
+      this.progress = this.formData.__step / (this.crf.schema.items.length - 1)
     },
     isMulti () {
       return this.mode === 'multi'
@@ -396,7 +386,7 @@ export default defineComponent({
       window.scrollTo(0, 0)
     },
     canNext () {
-      return this.isMulti() && this.formData.__step < this.crf.schema.items.length
+      return this.isMulti() && this.formData.__step < this.crf.schema.items.length - 1
     },
     nextStep () {
       if (!this.canNext()) return
