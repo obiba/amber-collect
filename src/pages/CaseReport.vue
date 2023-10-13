@@ -170,7 +170,7 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { mapState, mapActions, mapGetters } from 'vuex'
-import snarkdown from 'snarkdown'
+import { marked } from 'marked'
 import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr, getBlitzarErrors } from '@obiba/quasar-ui-amber'
 import { Notify, scroll } from 'quasar'
 import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
@@ -467,7 +467,7 @@ export default defineComponent({
       return makeSchemaFormTr(this.crf.schema, { locale: this.currentLocale })(key)
     },
     md (text) {
-      return text ? snarkdown(text) : text
+      return text ? marked.parse(this.tr(text), { headerIds: false, mangle: false }) : text
     }
   }
 

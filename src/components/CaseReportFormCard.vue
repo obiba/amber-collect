@@ -78,7 +78,7 @@
 <script>
 import { defineComponent } from 'vue'
 import { mapActions, mapState } from 'vuex'
-import snarkdown from 'snarkdown'
+import { marked } from 'marked'
 import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
 
@@ -121,7 +121,7 @@ export default defineComponent({
       return sentences[0] + (sentences.length > 1 && sentences[1] !== '' ? '...' : '.')
     },
     md (text) {
-      return text ? snarkdown(text) : text
+      return text ? marked.parse(this.tr(text), { headerIds: false, mangle: false }) : text
     },
     onShowDetails () {
       this.showCaseReportFormDetails = true
