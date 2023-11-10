@@ -76,7 +76,17 @@
                   <template v-slot:after>
                     <q-btn round dense flat icon="content_copy" @click="onCopySecret"/>
                   </template>
-                </q-input>
+                </q-input><div class="col text-subtitle q-mt-md">
+                  {{$t('login.email_otp')}}
+                </div>
+                <div class="q-mt-md">
+                <q-btn
+                  :label="$t('login.send_email_token')"
+                  @click="onEmailToken"
+                  color="info"
+                  stretch
+                  class="text-bold q-ml-md"/>
+                </div>
               </q-card-section>
               <q-card-section v-if="withToken">
                 <q-form @submit="onSubmit" class="q-gutter-md">
@@ -175,7 +185,8 @@ export default defineComponent({
       token: ref(''),
       secret: ref(''),
       qr: ref(''),
-      withToken: ref(false)
+      withToken: ref(false),
+      method: ref('')
     }
   },
   watch: {
@@ -219,12 +230,13 @@ export default defineComponent({
       const payload = {
         strategy: 'local',
         email: this.email,
-        password: this.password
+        password: this.password,
+        method: this.method || undefined
       }
-      if (this.token && this.token.length > 0) {
+      if (this.token) {
         payload.token = this.token
       }
-      if (this.secret && this.secret.length > 0) {
+      if (!this.method && this.secret) {
         payload.secret = this.secret
       }
       return payload
@@ -271,12 +283,17 @@ export default defineComponent({
           }
         })
     },
+    onEmailToken () {
+      this.method = 'otp'
+      this.onSubmit()
+    },
     onCancelToken () {
       this.secret = ''
       this.qr = ''
       this.withToken = ''
       this.token = ''
       this.password = ''
+      this.method = ''
     }
   }
 })
