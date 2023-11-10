@@ -9,7 +9,7 @@ export default {
     register: 'Enregistrement',
     validate: 'Valider',
     token: 'Jeton à 6 chiffres',
-    totp: 'Scanner ce code QR avec une app d\'authentification multifacteur (Microsoft authenticator est recommandée), puis entrer le code temporaire indiqué.',
+    totp: 'Scanner ce code QR avec une app d\'authentification multifacteur (Microsoft authenticator est recommandée), puis entrer le jeton temporaire indiqué.',
     totp_secret: 'Ou copier ce code secret à ajouter manuellement à l\'application d\'authentification multifacteur.',
     email_otp: 'Ou envoyer le jeton temporaire à votre adresse courriel.',
     send_email_token: 'Envoyer le jeton',
