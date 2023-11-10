@@ -85,7 +85,7 @@
                   @click="onEmailToken"
                   color="info"
                   stretch
-                  class="text-bold q-ml-md"/>
+                  class="text-bold"/>
                 </div>
               </q-card-section>
               <q-card-section v-if="withToken">
