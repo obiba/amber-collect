@@ -42,10 +42,12 @@
             <div class="col-md-4 col-sm-8 col-xs-12 q-mt-sm q-mb-sm">
               <div>
                 <BlitzForm
+                  ref="form"
                   :key="remountCounter"
                   :schema="schema"
                   v-model="formData"
                   :columnCount="1"
+                  :show-errors-on="errorMode"
                   gridGap='32px'/>
               </div>
               <!--div class="bg-black text-white q-mt-lg q-pa-md">
@@ -209,6 +211,7 @@ export default defineComponent({
     ]
     return {
       errorsRemain: ref(false),
+      errorMode: ref('interaction'),
       errors: ref([]),
       settings: settings,
       ccLicenses: ccLicenses
@@ -401,6 +404,7 @@ export default defineComponent({
           color: 'negative'
         })
       } else {
+        this.errorMode = 'interaction'
         this.mergeCaseReportData({
           id: this.caseReportId,
           data: { __step: this.formData.__step + 1 }
@@ -417,6 +421,7 @@ export default defineComponent({
       })
     },
     onValidate () {
+      this.errorMode = 'always'
       this.errors = getBlitzarErrors(this.schema, validateFormPerSchema(this.formData, this.schema))
       this.errorsRemain = this.errors.length > 0
     },
