@@ -48,6 +48,7 @@
                   v-model="formData"
                   :columnCount="1"
                   :show-errors-on="errorMode"
+                  :lang="lang"
                   gridGap='32px'/>
               </div>
               <!--div class="bg-black text-white q-mt-lg q-pa-md">
@@ -213,6 +214,7 @@ export default defineComponent({
       errorsRemain: ref(false),
       errorMode: ref('interaction'),
       errors: ref([]),
+      lang: ref({}),
       settings: settings,
       ccLicenses: ccLicenses
     }
@@ -244,6 +246,9 @@ export default defineComponent({
           id: this.caseReportId,
           data: { __step: 0 }
         })
+      }
+      this.lang = {
+        requiredField: this.$t('required_field')
       }
       this.formData = caseReport.data
       this.updateProgress()
