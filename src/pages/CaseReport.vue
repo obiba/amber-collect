@@ -8,15 +8,9 @@
         </q-toolbar-title>
         <q-toolbar-title>
           <span class="text-subtitle2 float-right">{{ tr(crf.schema.label) }}
-          <q-btn
-            v-if="crf.schema.description || crf.schema.copyright || crf.schema.license"
-            size="12px"
-            flat
-            dense
-            round
-            icon='info'
-            @click='onShowFormDescription'>
-          </q-btn></span>
+            <q-btn v-if="crf.schema.description || crf.schema.copyright || crf.schema.license" size="12px" flat dense
+              round icon='info' @click='onShowFormDescription'>
+            </q-btn></span>
         </q-toolbar-title>
       </q-toolbar>
       <q-toolbar v-if="hasIdLabel()" class="bg-secondary q-pt-sm q-pb-sm" style="min-height: 20px">
@@ -31,36 +25,24 @@
         </div>
         <div class="q-pa-md">
           <div class="row">
-            <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2" :class="(canPrevious() && isMulti()) ? 'text-grey-5 text-center flex flex-center cursor-pointer' : ''" @click="previousStep">
-              <q-icon
-                v-if="canPrevious()"
-                :name="$q.lang.rtl ? 'arrow_forward' : 'arrow_back'"
-                size="xl"
-                class=""
-                />
+            <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2"
+              :class="(canPrevious() && isMulti()) ? 'text-grey-5 text-center flex flex-center cursor-pointer' : ''"
+              @click="previousStep">
+              <q-icon v-if="canPrevious()" :name="$q.lang.rtl ? 'arrow_forward' : 'arrow_back'" size="xl" class="" />
             </div>
             <div class="col-md-4 col-sm-8 col-xs-12 q-mt-sm q-mb-sm">
               <div>
-                <BlitzForm
-                  ref="form"
-                  :key="remountCounter"
-                  :schema="schema"
-                  v-model="formData"
-                  :columnCount="1"
-                  :show-errors-on="errorMode"
-                  :lang="lang"
-                  gridGap='32px'/>
+                <BlitzForm ref="form" :key="remountCounter" :schema="schema" v-model="formData" :columnCount="1"
+                  :show-errors-on="errorMode" :lang="lang" gridGap='32px' @update:model-value="onFormDataUpdated" />
               </div>
               <!--div class="bg-black text-white q-mt-lg q-pa-md">
                 <pre>{{ JSON.stringify(formData, null, '  ') }}</pre>
               </div-->
             </div>
-            <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2" :class="(canNext() && isMulti()) ? 'text-grey-5 text-center flex flex-center cursor-pointer' : ''" @click="nextStep">
-              <q-icon
-                v-if="canNext()"
-                :name="$q.lang.rtl ? 'arrow_back' : 'arrow_forward'"
-                size="xl"
-                />
+            <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2"
+              :class="(canNext() && isMulti()) ? 'text-grey-5 text-center flex flex-center cursor-pointer' : ''"
+              @click="nextStep">
+              <q-icon v-if="canNext()" :name="$q.lang.rtl ? 'arrow_back' : 'arrow_forward'" size="xl" />
             </div>
           </div>
         </div>
@@ -69,34 +51,15 @@
 
     <q-footer elevated :class="settings.theme.footer" v-touch-swipe.mouse.left.right="handleSwipe">
       <q-toolbar>
-        <q-btn
-          v-if="mode === 'single'"
-          stretch
-          flat
-          icon="dynamic_feed"
-          @click="toggleMode('multi')"
-          :title="$t('multi_steps')"/>
-        <q-btn
-          v-if="mode === 'multi'"
-          stretch
-          flat
-          icon="grading"
-          @click="toggleMode('single')"
-          :title="$t('single_page')"/>
+        <q-btn v-if="mode === 'single'" stretch flat icon="dynamic_feed" @click="toggleMode('multi')"
+          :title="$t('multi_steps')" />
+        <q-btn v-if="mode === 'multi'" stretch flat icon="grading" @click="toggleMode('single')"
+          :title="$t('single_page')" />
         <q-separator dark vertical v-if="mode === 'single'" />
-        <q-btn-dropdown
-          v-if="mode === 'single' && toc.length > 1"
-          stretch
-          flat
-          icon="toc"
+        <q-btn-dropdown v-if="mode === 'single' && toc.length > 1" stretch flat icon="toc"
           :label="$q.screen.lt.sm ? '' : $t('go_to')">
           <q-list>
-            <q-item-label
-              v-for="entry in toc"
-              :key="entry.id"
-              header
-              clickable
-              v-close-popup
+            <q-item-label v-for="entry in toc" :key="entry.id" header clickable v-close-popup
               @click="onScroll(entry.id)">
               {{ entry.label }}
             </q-item-label>
@@ -105,51 +68,27 @@
         <q-space />
 
         <q-separator dark vertical v-if="isMulti()" />
-        <q-btn
-          v-if="isMulti()"
-          stretch
-          flat
-          :icon="$q.lang.rtl ? 'chevron_right' : 'chevron_left'"
-          @click="previousStep"
-          :label="$q.screen.lt.sm ? '' : $t('previous')"
-          :disabled="!canPrevious()"/>
+        <q-btn v-if="isMulti()" stretch flat :icon="$q.lang.rtl ? 'chevron_right' : 'chevron_left'"
+          @click="previousStep" :label="$q.screen.lt.sm ? '' : $t('previous')" :disabled="!canPrevious()" />
         <q-separator dark vertical v-if="isMulti()" />
-        <q-btn
-          v-if="isMulti() && !isFinalStep"
-          stretch
-          flat
-          :icon="$q.lang.rtl ? 'chevron_left' : 'chevron_right'"
-          @click="nextStep"
-          :label="$q.screen.lt.sm ? '' : $t('next')"
-          :disabled="!canNext()"/>
+        <q-btn v-if="isMulti() && !isFinalStep" stretch flat :icon="$q.lang.rtl ? 'chevron_left' : 'chevron_right'"
+          @click="nextStep" :label="$q.screen.lt.sm ? '' : $t('next')" :disabled="!canNext()" />
         <q-separator dark vertical v-if="mode === 'single'" />
-        <q-btn
-          v-if="mode === 'single' || isFinalStep"
-          stretch
-          flat
-          class="bg-primary"
-          :title="$t('validate_save')"
-          :label="$t('save')"
-          icon="cloud_upload"
-          @click="onComplete"/>
+        <q-btn v-if="mode === 'single' || isFinalStep" stretch flat class="bg-primary" :title="$t('validate_save')"
+          :label="$t('save')" icon="cloud_upload" @click="onComplete" />
         <q-separator dark vertical />
-        <q-btn
-          stretch
-          flat
-          :label="$q.screen.lt.sm ? '' : $t('pause')"
-          icon="pause"
-          @click="onPause"/>
+        <q-btn stretch flat :label="$q.screen.lt.sm ? '' : $t('pause')" icon="pause" @click="onPause" />
       </q-toolbar>
     </q-footer>
 
     <q-dialog v-model="showFormDescription">
       <q-card style="min-width: 300px">
         <q-card-section>
-          <div v-if="crf.schema.description" v-html="md(tr(crf.schema.description))"/>
+          <div v-if="crf.schema.description" v-html="md(tr(crf.schema.description))" />
         </q-card-section>
         <q-card-section>
-          <div v-if="crf.schema.copyright" v-html="'&#169; ' + md(tr(crf.schema.copyright))"/>
-          <div v-if="caseReportLicense" class="q-mt-sm" v-html="md($t(caseReportLicense))"/>
+          <div v-if="crf.schema.copyright" v-html="'&#169; ' + md(tr(crf.schema.copyright))" />
+          <div v-if="caseReportLicense" class="q-mt-sm" v-html="md($t(caseReportLicense))" />
         </q-card-section>
         <q-card-actions align="right">
           <q-btn flat label="OK" color="primary" v-close-popup />
@@ -179,7 +118,7 @@ export default defineComponent({
     BlitzForm
   },
 
-  setup () {
+  setup() {
     const ccLicenses = [
       {
         value: 'cc-by-40',
@@ -220,7 +159,7 @@ export default defineComponent({
     }
   },
 
-  data () {
+  data() {
     return {
       debug: false,
       remountCounter: 0,
@@ -233,7 +172,7 @@ export default defineComponent({
     }
   },
 
-  mounted () {
+  mounted() {
     const caseReport = this.getCaseReportById()(this.user, this.caseReportId)
     if (caseReport) {
       this.crf = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop() : { schema: { items: [] } }
@@ -260,7 +199,7 @@ export default defineComponent({
   },
 
   watch: {
-    mode (newValue, oldValue) {
+    mode(newValue, oldValue) {
       this.updateFormData()
       if (newValue === 'single') {
         this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, debug: this.debug })
@@ -277,13 +216,13 @@ export default defineComponent({
       crfs: state => state.form.crfs,
       user: state => state.record.user
     }),
-    currentLocale () {
+    currentLocale() {
       return this.$root.$i18n.locale
     },
-    caseReportId () {
+    caseReportId() {
       return this.$route.params.id
     },
-    caseReportLicense () {
+    caseReportLicense() {
       const license = this.crf.schema.license
       let found = this.ccLicenses.filter(lic => lic.value === license).pop()
       if (!found && settings.licenses) {
@@ -294,7 +233,7 @@ export default defineComponent({
       }
       return license
     },
-    toc () {
+    toc() {
       const toc = []
       if (this.crf.schema && this.crf.schema.items) {
         this.crf.schema.items.filter(item => ['group', 'section'].includes(item.type)).forEach(item => toc.push({
@@ -304,13 +243,13 @@ export default defineComponent({
       }
       return toc.filter(entry => entry.label)
     },
-    idLabel () {
+    idLabel() {
       return this.crf.schema.idLabel ? this.tr(this.crf.schema.idLabel) : 'ID'
     },
-    isFinalStep () {
+    isFinalStep() {
       return this.isMulti() && this.formData.__step === this.crf.schema.items.length - 1
     },
-    modeOptions () {
+    modeOptions() {
       return [
         {
           value: 'single',
@@ -335,13 +274,13 @@ export default defineComponent({
       setCaseReportData: 'record/setCaseReportData',
       mergeCaseReportData: 'record/mergeCaseReportData'
     }),
-    hasIdLabel () {
+    hasIdLabel() {
       return this.crf.schema.idLabel
     },
-    onShowFormDescription () {
+    onShowFormDescription() {
       this.showFormDescription = true
     },
-    onScroll (id) {
+    onScroll(id) {
       const ele = document.getElementById(id)
       if (ele) {
         const target = getScrollTarget(ele)
@@ -350,13 +289,13 @@ export default defineComponent({
         setVerticalScrollPosition(target, offset, duration)
       }
     },
-    updateProgress () {
+    updateProgress() {
       this.progress = this.formData.__step / (this.crf.schema.items.length - 1)
     },
-    isMulti () {
+    isMulti() {
       return this.mode === 'multi'
     },
-    handleSwipe ({ evt, ...newInfo }) {
+    handleSwipe({ evt, ...newInfo }) {
       if (this.isMulti()) {
         if (newInfo.direction === 'left') {
           this.nextStep()
@@ -365,7 +304,7 @@ export default defineComponent({
         }
       }
     },
-    formatErrorMessages () {
+    formatErrorMessages() {
       const errorMessages = this.errors.map(err => {
         let errMessage = err.message === 'Field is required' ? t('required_field') : err.message
         errMessage = errMessage.charAt(0).toLowerCase() + errMessage.slice(1)
@@ -373,13 +312,13 @@ export default defineComponent({
       }).join('')
       return `<ul>${errorMessages}</ul>`
     },
-    canPrevious () {
+    canPrevious() {
       return this.isMulti() && this.formData.__step > 0
     },
-    toggleMode (value) {
+    toggleMode(value) {
       this.mode = value
     },
-    previousStep () {
+    previousStep() {
       if (!this.canPrevious()) return
 
       this.updateFormData()
@@ -393,10 +332,10 @@ export default defineComponent({
       this.errors = undefined
       window.scrollTo(0, 0)
     },
-    canNext () {
+    canNext() {
       return this.isMulti() && this.formData.__step < this.crf.schema.items.length - 1
     },
-    nextStep () {
+    nextStep() {
       if (!this.canNext()) return
 
       this.updateFormData()
@@ -419,18 +358,18 @@ export default defineComponent({
         window.scrollTo(0, 0)
       }
     },
-    updateFormData () {
+    updateFormData() {
       this.setCaseReportData({
         id: this.caseReportId,
         data: this.formData
       })
     },
-    onValidate () {
+    onValidate() {
       this.errorMode = 'always'
       this.errors = getBlitzarErrors(this.schema, validateFormPerSchema(this.formData, this.schema))
       this.errorsRemain = this.errors.length > 0
     },
-    onComplete () {
+    onComplete() {
       this.updateFormData()
       this.onValidate()
       if (this.errorsRemain) {
@@ -454,7 +393,7 @@ export default defineComponent({
         })
       }
     },
-    onPause () {
+    onPause() {
       this.updateFormData()
       this.pauseCaseReport({
         id: this.caseReportId,
@@ -463,11 +402,14 @@ export default defineComponent({
         this.$router.push('/')
       })
     },
-    tr (key) {
+    tr(key) {
       return makeSchemaFormTr(this.crf.schema, { locale: this.currentLocale })(key)
     },
-    md (text) {
+    md(text) {
       return text ? marked.parse(this.tr(text), { headerIds: false, mangle: false }) : text
+    },
+    onFormDataUpdated() {
+      this.updateFormData()
     }
   }
 
