@@ -2,147 +2,100 @@
   <q-layout>
     <q-page-container>
       <q-page class="flex flex-center" :class="settings.theme.front.bg">
-        <div class="column" :style="$q.screen.lt.sm?{'width': '80%'}:$q.screen.lt.md?{'width':'50%'}:{'width':'30%'}">
+        <div class="column"
+          :style="$q.screen.lt.sm ? { 'width': '80%' } : $q.screen.lt.md ? { 'width': '50%' } : { 'width': '30%' }">
           <div class="col">
-            <banner/>
+            <banner />
           </div>
           <div class="col">
             <q-card :class="settings.theme.front.card">
               <q-card-section>
                 <div class="text-center q-pt-sm">
                   <div class="col text-subtitle">
-                    {{$t('login.title')}}
+                    {{ $t('login.title') }}
                   </div>
                 </div>
               </q-card-section>
               <q-card-section v-if="!withToken">
                 <q-form @submit="onSubmit" class="q-gutter-md">
-                  <q-input
-                    autofocus
-                    dark
-                    color="white"
-                    v-model="email"
-                    :label="$t('email')"
-                    lazy-rules>
-                  <template v-slot:prepend>
-                    <q-icon name="fas fa-envelope" size="xs" />
-                  </template>
+                  <q-input autofocus dark color="white" v-model="email" :label="$t('email')" lazy-rules>
+                    <template v-slot:prepend>
+                      <q-icon name="fas fa-envelope" size="xs" />
+                    </template>
                   </q-input>
 
-                  <q-input
-                    type="password"
-                    dark
-                    color="white"
-                    v-model="password"
-                    :label="$t('password')"
-                    lazy-rules>
+                  <q-input :type="showPassword ? 'text' : 'password'" dark color="white" v-model="password"
+                    :label="$t('password')" lazy-rules>
                     <template v-slot:prepend>
-                    <q-icon name="fas fa-lock" size="xs" />
-                  </template>
-                </q-input>
+                      <q-icon name="fas fa-lock" size="xs" />
+                    </template>
+                    <template v-slot:append>
+                      <q-btn round dense flat :icon="showPassword ? 'visibility_off' : 'visibility'"
+                        @click="showPassword = !showPassword" />
+                    </template>
+                  </q-input>
 
                   <div>
-                    <q-btn
-                      :label="$t('login.submit')"
-                      type="submit"
-                      color="dark"
-                      :disable="disableSubmit"/>
-                    <q-btn
-                      v-if="settings.register_enabled"
-                      :label="$t('login.register')"
-                      flat
-                      to="/register"
-                      stretch
-                      class="text-bold q-ml-md"/>
+                    <q-btn :label="$t('login.submit')" type="submit" color="dark" :disable="disableSubmit" />
+                    <q-btn v-if="settings.register_enabled" :label="$t('login.register')" flat to="/register" stretch
+                      class="text-bold q-ml-md" />
                   </div>
                 </q-form>
               </q-card-section>
               <q-card-section v-if="secret">
                 <div class="col text-subtitle">
-                  {{$t('login.totp')}}
+                  {{ $t('login.totp') }}
                 </div>
                 <div class="text-center q-mt-md">
-                  <img :src="qr"/>
+                  <img :src="qr" />
                 </div>
                 <div class="col text-subtitle q-mt-md">
-                  {{$t('login.totp_secret')}}
+                  {{ $t('login.totp_secret') }}
                 </div>
-                <q-input
-                  dark
-                  dense
-                  color="white"
-                  v-model="secret"
-                  readonly>
+                <q-input dark dense color="white" v-model="secret" readonly>
                   <template v-slot:after>
-                    <q-btn round dense flat icon="content_copy" @click="onCopySecret"/>
+                    <q-btn round dense flat icon="content_copy" @click="onCopySecret" />
                   </template>
-                </q-input><div class="col text-subtitle q-mt-md">
-                  {{$t('login.email_otp')}}
+                </q-input>
+                <div class="col text-subtitle q-mt-md">
+                  {{ $t('login.email_otp') }}
                 </div>
                 <div class="q-mt-md">
-                <q-btn
-                  :label="$t('login.send_email_token')"
-                  @click="onEmailToken"
-                  color="info"
-                  stretch
-                  class="text-bold"/>
+                  <q-btn :label="$t('login.send_email_token')" @click="onEmailToken" color="info" stretch
+                    class="text-bold" />
                 </div>
               </q-card-section>
               <q-card-section v-if="withToken">
                 <q-form @submit="onSubmit" class="q-gutter-md">
-                  <q-input
-                    autofocus
-                    type="number"
-                    dark
-                    color="white"
-                    v-model="token"
-                    :label="$t('login.token')"
-                    lazy-rules
-                    class="no-spinner">
+                  <q-input autofocus type="number" dark color="white" v-model="token" :label="$t('login.token')"
+                    lazy-rules class="no-spinner">
                     <template v-slot:prepend>
-                    <q-icon name="fas fa-mobile" size="xs" />
-                  </template>
+                      <q-icon name="fas fa-mobile" size="xs" />
+                    </template>
                   </q-input>
                   <div>
-                    <q-btn
-                      :label="$t('login.validate')"
-                      type="submit"
-                      color="dark"
-                      :disable="disableValidate"/>
-                    <q-btn
-                      :label="$t('cancel')"
-                      @click="onCancelToken"
-                      flat
-                      stretch
-                      class="text-bold q-ml-md"/>
+                    <q-btn :label="$t('login.validate')" type="submit" color="dark" :disable="disableValidate" />
+                    <q-btn :label="$t('cancel')" @click="onCancelToken" flat stretch class="text-bold q-ml-md" />
                   </div>
                 </q-form>
               </q-card-section>
               <q-card-section>
-                <q-btn
-                  flat
-                  to="/forgot-password"
-                  dense
-                  no-caps
-                  class="text-bold">
-                  {{$t('login.forgot_password')}}
+                <q-btn flat to="/forgot-password" dense no-caps class="text-bold">
+                  {{ $t('login.forgot_password') }}
                 </q-btn>
-                <q-btn-dropdown
-                  v-show="hasLocales"
-                  flat
-                  :label="$t('locales.' + locale)"
-                  class="float-right">
-                <q-list>
-                  <q-item clickable v-close-popup @click="onLocaleSelection(localeOpt)" v-for="localeOpt in localeOptions" :key="localeOpt.value">
-                    <q-item-section>
-                      <q-item-label>{{localeOpt.label}}</q-item-label>
-                    </q-item-section>
-                    <q-item-section avatar v-if="locale === localeOpt.value">
-                      <q-icon color="primary" name="check" />
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-btn-dropdown>
+                <q-btn-dropdown v-show="hasLocales" flat :label="$t('locales.' + locale)" class="float-right">
+                  <q-list>
+                    <q-item clickable v-close-popup @click="onLocaleSelection(localeOpt)"
+                      v-for="localeOpt in localeOptions" :key="localeOpt.value">
+                      <q-item-section>
+                        <q-item-label>{{ localeOpt.label }}</q-item-label>
+                      </q-item-section>
+                      <q-item-section avatar v-if="locale === localeOpt.value">
+                        <q-icon color="primary" name="check" />
+                      </q-item-section>
+                    </q-item>
+                  </q-list>
+                </q-btn-dropdown>
               </q-card-section>
             </q-card>
           </div>
@@ -164,7 +117,7 @@ import Banner from 'components/Banner'
 
 export default defineComponent({
   components: { Banner },
-  setup () {
+  setup() {
     const $q = useQuasar()
     const { locale } = useI18n({ useScope: 'global' })
 
@@ -186,14 +139,16 @@ export default defineComponent({
       secret: ref(''),
       qr: ref(''),
       withToken: ref(false),
-      method: ref('')
+      method: ref(''),
+      showPassword: ref(false)
     }
   },
   watch: {
-    user (newUser, oldUser) {
+    user(newUser, oldUser) {
       if (newUser !== null) {
         this.$router.push('/')
       }
+      this.showPassword = false
     }
   },
   computed: {
@@ -201,13 +156,13 @@ export default defineComponent({
       user: state => state.auth.user,
       submitting: state => state.auth.isAuthenticatePending
     }),
-    disableSubmit () {
+    disableSubmit() {
       return this.email.length === 0 || this.password.length === 0
     },
-    disableValidate () {
+    disableValidate() {
       return this.token.length < 6
     },
-    localeOptions () {
+    localeOptions() {
       return locales.map(loc => {
         return {
           value: loc,
@@ -215,7 +170,7 @@ export default defineComponent({
         }
       })
     },
-    hasLocales () {
+    hasLocales() {
       return locales.length > 1
     }
   },
@@ -223,10 +178,10 @@ export default defineComponent({
     ...mapActions({
       initUser: 'record/initUser'
     }),
-    onLocaleSelection (opt) {
+    onLocaleSelection(opt) {
       this.locale = opt.value
     },
-    makePayload () {
+    makePayload() {
       const payload = {
         strategy: 'local',
         email: this.email,
@@ -241,7 +196,7 @@ export default defineComponent({
       }
       return payload
     },
-    onCopySecret () {
+    onCopySecret() {
       copyToClipboard(this.secret).then(() => {
         Notify.create({
           message: this.$t('login.secret_copied'),
@@ -249,7 +204,7 @@ export default defineComponent({
         })
       })
     },
-    onSubmit () {
+    onSubmit() {
       this.$store
         .dispatch('auth/authenticate', this.makePayload())
         .then(response => {
@@ -283,11 +238,11 @@ export default defineComponent({
           }
         })
     },
-    onEmailToken () {
+    onEmailToken() {
       this.method = 'otp'
       this.onSubmit()
     },
-    onCancelToken () {
+    onCancelToken() {
       this.secret = ''
       this.qr = ''
       this.withToken = ''
