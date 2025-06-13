@@ -168,7 +168,9 @@ export default defineComponent({
       schema: [],
       crf: { schema: { items: [] } },
       showFormDescription: false,
-      mode: 'multi'
+      mode: 'multi',
+      lastAutoSave: null,
+      autoSavePending: false
     }
   },
 
@@ -409,7 +411,15 @@ export default defineComponent({
       return text ? marked.parse(this.tr(text), { headerIds: false, mangle: false }) : text
     },
     onFormDataUpdated() {
-      this.updateFormData()
+      if (this.autoSavePending) return
+      // save locally changed form data automatically after at least 5 seconds
+      if (this.lastAutoSave === null || Date.now() - this.lastAutoSave > 5000) {
+        this.autoSavePending = true
+        this.updateFormData()
+        this.lastAutoSave = Date.now()
+        console.debug('Form data auto saved locally')
+        this.autoSavePending = false
+      }
     }
   }
 
