@@ -58,3 +58,6 @@ export default store(function (/* { ssrContext } */) {
 
   return Store
 })
+
+// Optionally export storeKey for injection (needed for Quasar CLI with Vite)
+export const storeKey = 'store'
