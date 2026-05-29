@@ -157,7 +157,7 @@ import { required, minLength, maxLength, email, strongPassword } from '../boot/v
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
 
-import Banner from 'components/Banner'
+import Banner from 'components/Banner.vue'
 
 export default defineComponent({
   components: { Banner },

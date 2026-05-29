@@ -113,7 +113,7 @@ import { Notify, useQuasar, copyToClipboard } from 'quasar'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
 
-import Banner from 'components/Banner'
+import Banner from 'components/Banner.vue'
 
 export default defineComponent({
   components: { Banner },

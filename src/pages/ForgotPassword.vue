@@ -65,7 +65,7 @@ import { required, email } from '../boot/vuelidate'
 import useVuelidate from '@vuelidate/core'
 import { settings } from '../boot/settings'
 
-import Banner from 'components/Banner'
+import Banner from 'components/Banner.vue'
 
 export default {
   components: { Banner },
