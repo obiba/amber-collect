@@ -130,7 +130,7 @@ export default defineComponent({
     watch(locale, val => {
       // dynamic import, so loading on demand only
       const langIso = val === 'en' ? 'en-US' : val
-      import('quasar/lang/' + langIso)
+      import(/* @vite-ignore */ 'quasar/lang/' + langIso)
         .then(lang => {
           $q.lang.set(lang.default)
         })
