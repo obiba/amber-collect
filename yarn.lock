@@ -744,17 +744,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@feathersjs/adapter-commons@npm:^4.5.11":
-  version: 4.5.12
-  resolution: "@feathersjs/adapter-commons@npm:4.5.12"
-  dependencies:
-    "@feathersjs/commons": "npm:^4.5.12"
-    "@feathersjs/errors": "npm:^4.5.12"
-    "@feathersjs/feathers": "npm:^4.5.12"
-  checksum: 10c0/820bfbfbda96779e8879cb40a1df5599e9ceba561561cab956e558f3d4af9cdd1ffde2d0eafc350ed306c9f3dc055a98e39f0ce936942a35c50f22c2f965c66d
-  languageName: node
-  linkType: hard
-
 "@feathersjs/authentication-client@npm:^4.5.11":
   version: 4.5.13
   resolution: "@feathersjs/authentication-client@npm:4.5.13"
@@ -857,48 +846,6 @@ __metadata:
     lodash: "npm:^4.17.21"
     radix-router: "npm:^3.0.1"
   checksum: 10c0/587bb3eff4b28230396deda703033aea752ad936fc6353dd05b197efef95a9746ee0d0b1d1c557b995343e9c00f745527a97171788053ec278e132005fe94c65
-  languageName: node
-  linkType: hard
-
-"@feathersjs/vuex-commons@npm:^0.0.2-pre.8":
-  version: 0.0.2-pre.16
-  resolution: "@feathersjs/vuex-commons@npm:0.0.2-pre.16"
-  dependencies:
-    "@feathersjs/adapter-commons": "npm:^4.5.11"
-    "@feathersjs/commons": "npm:^4.5.11"
-    "@feathersjs/errors": "npm:^4.5.11"
-    "@types/feathersjs__feathers": "npm:^3.1.7"
-    "@types/inflection": "npm:^1.5.28"
-    "@types/lodash": "npm:^4.14.165"
-    "@types/npm": "npm:^2.0.31"
-    bson-objectid: "npm:^1.3.1"
-    debug: "npm:^4.3.1"
-    events: "npm:^3.2.0"
-    fast-copy: "npm:^2.1.0"
-    fast-json-stable-stringify: "npm:^2.1.0"
-    inflection: "npm:^1.12.0"
-    jwt-decode: "npm:^3.1.2"
-    lodash: "npm:^4.17.20"
-    serialize-error: "npm:^7.0.1"
-    sift: "npm:^9.0.4"
-    vue-demi: "npm:latest"
-  peerDependencies:
-    "@vue/composition-api": ^1.0.0-beta.20
-    vue: ^2.0.0 || >=3.0.3
-  checksum: 10c0/49c3c4ca3c60d9fb122d245b3a74665479ad06cf726968ac253804bc678d1fd547d8acd11b4a12c71b63b769929f457d4b22de9d71f59f9539199dcc77404d32
-  languageName: node
-  linkType: hard
-
-"@feathersjs/vuex@npm:^4.0.1-pre.7":
-  version: 4.0.1-pre.7
-  resolution: "@feathersjs/vuex@npm:4.0.1-pre.7"
-  dependencies:
-    "@feathersjs/vuex-commons": "npm:^0.0.2-pre.8"
-    "@types/feathersjs__feathers": "npm:^3.1.7"
-    serialize-error: "npm:^7.0.1"
-  peerDependencies:
-    vue: ^3.0.4
-  checksum: 10c0/6dc418bda3cb420e6981e034f831158c312113eb0bac139c151542c91062e9f89a79b283206bf7ed9674188617fa3ac98fb2e7184904fa378cf7d52b8f96368c
   languageName: node
   linkType: hard
 
@@ -2097,15 +2044,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/feathersjs__feathers@npm:^3.1.7":
-  version: 3.1.8
-  resolution: "@types/feathersjs__feathers@npm:3.1.8"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/08a8048c4361765eec494ffca2e3b0eaaa5cbbcf8cd1a6436926f866f60408e0df14442cfb67bc92dff85e72153ed90d48b07b8e61695cecca928393de0b884b
-  languageName: node
-  linkType: hard
-
 "@types/filesystem@npm:*":
   version: 0.0.32
   resolution: "@types/filesystem@npm:0.0.32"
@@ -2143,13 +2081,6 @@ __metadata:
   version: 2.0.1
   resolution: "@types/http-errors@npm:2.0.1"
   checksum: 10c0/3bbc8c84fb02b381737e2eec563b434121384b1aef4e070edec4479a1bc74f27373edc09162680cd3ea1035ef8e5ab6d606bd7c99e3855c424045fb74376cb66
-  languageName: node
-  linkType: hard
-
-"@types/inflection@npm:^1.5.28":
-  version: 1.13.0
-  resolution: "@types/inflection@npm:1.13.0"
-  checksum: 10c0/c9f6f3af1a95588c83904f922bf9ef5cceab5318df8b5d711ef5ea0b6b1fd133fdc7b03693d957f26c5ab6a08f30f7e82c72eb6e82ba820565fd7daafadbddb6
   languageName: node
   linkType: hard
 
@@ -2194,13 +2125,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.165":
-  version: 4.14.180
-  resolution: "@types/lodash@npm:4.14.180"
-  checksum: 10c0/8f4b63231919b82e3488f8a2a5f8c8243563b3f712a21acdd2ffcb2af283568cb61c35663e03e34e07c84b89632418da0a5e99e4acc9c623e9a1871978ff0e83
-  languageName: node
-  linkType: hard
-
 "@types/mime@npm:^1":
   version: 1.3.2
   resolution: "@types/mime@npm:1.3.2"
@@ -2212,15 +2136,6 @@ __metadata:
   version: 17.0.23
   resolution: "@types/node@npm:17.0.23"
   checksum: 10c0/5c70285a5454aa1daa1f515c1b6df8ccdc85ba18c19d650355f32ac00f82494d9b0ec4c6f943bcc4081acc5662aa68ff84f4e91f35f0b23087b3ed4682f73ad4
-  languageName: node
-  linkType: hard
-
-"@types/npm@npm:^2.0.31":
-  version: 2.0.32
-  resolution: "@types/npm@npm:2.0.32"
-  dependencies:
-    "@types/node": "npm:*"
-  checksum: 10c0/9bfad4e4357094d62bb5a4e6e5e69a643f4c7081b17f911211412b42837d88274f651074279bf2740c0c0dedef4f99cb2843b81aacc58fa5ee7bba09bb5d1e7c
   languageName: node
   linkType: hard
 
@@ -2451,7 +2366,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/devtools-api@npm:^6.0.0, @vue/devtools-api@npm:^6.0.0-beta.11, @vue/devtools-api@npm:^6.0.0-beta.7":
+"@vue/devtools-api@npm:^6.0.0, @vue/devtools-api@npm:^6.0.0-beta.7":
   version: 6.1.3
   resolution: "@vue/devtools-api@npm:6.1.3"
   checksum: 10c0/11630771f45c8320107942487c64c6e139072a24736d98d2f1150e59fa4b6202927613907863434f8acaf045c5794559d1190e90ffd045ffd36e2980725fc77c
@@ -2766,7 +2681,6 @@ __metadata:
     "@feathersjs/client": "npm:^4.5.11"
     "@feathersjs/feathers": "npm:^4.5.11"
     "@feathersjs/rest-client": "npm:^4.5.11"
-    "@feathersjs/vuex": "npm:^4.0.1-pre.7"
     "@obiba/quasar-app-extension-amber": "npm:1.2.0"
     "@quasar/app-vite": "npm:^2.0.0"
     "@quasar/extras": "npm:^2.0.0"
@@ -2796,8 +2710,6 @@ __metadata:
     vue-i18n: "npm:^9.0.0"
     vue-recaptcha-v3: "npm:^2.0.1"
     vue-router: "npm:^4.0.0"
-    vuex: "npm:^4.0.1"
-    vuex-persistedstate: "npm:^4.1.0"
     yarn-audit-fix: "npm:^10.0.7"
   languageName: unknown
   linkType: soft
@@ -3212,13 +3124,6 @@ __metadata:
   bin:
     browserslist: cli.js
   checksum: 10c0/5a1f673ce0d6e61a68369835a6b66e199669bde02c3bed5ec51e77598d8daafd91719dba55b15af2021b9ad0bbaa94951fd702eb71087449eb28be8002815ece
-  languageName: node
-  linkType: hard
-
-"bson-objectid@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "bson-objectid@npm:1.3.1"
-  checksum: 10c0/622de442daffe4b6a4d9136f33aa18ba8e01736b35be355b866adbb1183db7045ce04cc4213ac0d7b0840057f54c2f0b13b46e3befac9946adafae0eeddf80d1
   languageName: node
   linkType: hard
 
@@ -3838,13 +3743,6 @@ __metadata:
   version: 0.1.4
   resolution: "deep-is@npm:0.1.4"
   checksum: 10c0/7f0ee496e0dff14a573dc6127f14c95061b448b87b995fc96c017ce0a1e66af1675e73f1d6064407975bc4ea6ab679497a29fff7b5b9c4e99cb10797c1ad0b4c
-  languageName: node
-  linkType: hard
-
-"deepmerge@npm:^4.2.2":
-  version: 4.2.2
-  resolution: "deepmerge@npm:4.2.2"
-  checksum: 10c0/d6136eee869057fea7a829aa2d10073ed49db5216e42a77cc737dd385334aab9b68dae22020a00c24c073d5f79cbbdd3f11b8d4fc87700d112ddaa0e1f968ef2
   languageName: node
   linkType: hard
 
@@ -4583,7 +4481,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"events@npm:^3.2.0, events@npm:^3.3.0":
+"events@npm:^3.3.0":
   version: 3.3.0
   resolution: "events@npm:3.3.0"
   checksum: 10c0/d6b6f2adbccbcda74ddbab52ed07db727ef52e31a61ed26db9feb7dc62af7fc8e060defa65e5f8af9449b86b52cc1a1f6a79f2eafcf4e62add2b7a1fa4a432f6
@@ -4652,13 +4550,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-copy@npm:^2.1.0":
-  version: 2.1.1
-  resolution: "fast-copy@npm:2.1.1"
-  checksum: 10c0/0ec1e2bf66a4e3d1aa3b7c864239d246dbe59b36abcd9b465d23f161db6f78de9d59e927e2c35924ac28eadb9e3b74a9fa78d86460442ec4b71421a3ba733c9d
-  languageName: node
-  linkType: hard
-
 "fast-deep-equal@npm:^3.1.1, fast-deep-equal@npm:^3.1.3":
   version: 3.1.3
   resolution: "fast-deep-equal@npm:3.1.3"
@@ -4686,7 +4577,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-json-stable-stringify@npm:^2.0.0, fast-json-stable-stringify@npm:^2.1.0":
+"fast-json-stable-stringify@npm:^2.0.0":
   version: 2.1.0
   resolution: "fast-json-stable-stringify@npm:2.1.0"
   checksum: 10c0/7f081eb0b8a64e0057b3bb03f974b3ef00135fbf36c1c710895cd9300f13c94ba809bb3a81cf4e1b03f6e5285610a61abbd7602d0652de423144dfee5a389c9b
@@ -5381,13 +5272,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"inflection@npm:^1.12.0":
-  version: 1.13.2
-  resolution: "inflection@npm:1.13.2"
-  checksum: 10c0/7b03a002c38f3c3cf4525fe011b339211206fd78c8e79c01a22bfb06808b401f201701da89df61105e9be1d73bf8fd09a6b26e6c7276a95606897aac1b94fc12
-  languageName: node
-  linkType: hard
-
 "inflight@npm:^1.0.4":
   version: 1.0.6
   resolution: "inflight@npm:1.0.6"
@@ -5903,13 +5787,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jwt-decode@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "jwt-decode@npm:3.1.2"
-  checksum: 10c0/a951547946b5e8b1d9df818152d6b1dbaf13eebb3a6e6daceedf888968f5d255959852c8188aae2c825dc9104a99d25cb6c23f25d76545d1aa0315b968b6912e
-  languageName: node
-  linkType: hard
-
 "kind-of@npm:^6.0.2":
   version: 6.0.3
   resolution: "kind-of@npm:6.0.3"
@@ -6150,7 +6027,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:4.17.21, lodash@npm:^4.17.20, lodash@npm:^4.17.21":
+"lodash@npm:4.17.21, lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -7981,15 +7858,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"serialize-error@npm:^7.0.1":
-  version: 7.0.1
-  resolution: "serialize-error@npm:7.0.1"
-  dependencies:
-    type-fest: "npm:^0.13.1"
-  checksum: 10c0/7982937d578cd901276c8ab3e2c6ed8a4c174137730f1fb0402d005af209a0e84d04acc874e317c936724c7b5b26c7a96ff7e4b8d11a469f4924a4b0ea814c05
-  languageName: node
-  linkType: hard
-
 "serialize-javascript@npm:^7.0.4":
   version: 7.0.5
   resolution: "serialize-javascript@npm:7.0.5"
@@ -8057,13 +7925,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shvl@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "shvl@npm:2.0.3"
-  checksum: 10c0/a9db18c4f940060d64993c33d5966d07716ac099bfe528e7e06e4c5b327eba3ffe12eb2559f0c0cd3eb7963d3967b999aa2211ed35ccc590e0a33e10d07ef974
-  languageName: node
-  linkType: hard
-
 "side-channel-list@npm:^1.0.0":
   version: 1.0.1
   resolution: "side-channel-list@npm:1.0.1"
@@ -8120,13 +7981,6 @@ __metadata:
     side-channel-map: "npm:^1.0.1"
     side-channel-weakmap: "npm:^1.0.2"
   checksum: 10c0/cb20dad41eb032e6c24c0982e1e5a24963a28aa6122b4f05b3f3d6bf8ae7fd5474ef382c8f54a6a3ab86e0cac4d41a23bd64ede3970e5bfb50326ba02a7996e6
-  languageName: node
-  linkType: hard
-
-"sift@npm:^9.0.4":
-  version: 9.0.7
-  resolution: "sift@npm:9.0.7"
-  checksum: 10c0/979a9e5777d1fbeaa5a6e1f6115aea49e40cd93a2920cff406e6167e5ac166394a77b313dc9b422354331031d5abf32b1931fd38475b6bfc5397d75e2f1d22e1
   languageName: node
   linkType: hard
 
@@ -8692,13 +8546,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"type-fest@npm:^0.13.1":
-  version: 0.13.1
-  resolution: "type-fest@npm:0.13.1"
-  checksum: 10c0/0c0fa07ae53d4e776cf4dac30d25ad799443e9eef9226f9fddbb69242db86b08584084a99885cfa5a9dfe4c063ebdc9aa7b69da348e735baede8d43f1aeae93b
-  languageName: node
-  linkType: hard
-
 "type-fest@npm:^0.20.2":
   version: 0.20.2
   resolution: "type-fest@npm:0.20.2"
@@ -8964,22 +8811,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vue-demi@npm:latest":
-  version: 0.14.7
-  resolution: "vue-demi@npm:0.14.7"
-  peerDependencies:
-    "@vue/composition-api": ^1.0.0-rc.1
-    vue: ^3.0.0-0 || ^2.6.0
-  peerDependenciesMeta:
-    "@vue/composition-api":
-      optional: true
-  bin:
-    vue-demi-fix: bin/vue-demi-fix.js
-    vue-demi-switch: bin/vue-demi-switch.js
-  checksum: 10c0/303216e3e6ee3f6ab5631488dd00a767ef3760a0a14e580c0223b278d093dc9ada8164ecec6bf8d8e12034e0bdf8dbb947c0c6f83095c6a53030a4a6dcbd57ce
-  languageName: node
-  linkType: hard
-
 "vue-eslint-parser@npm:^7.10.0":
   version: 7.11.0
   resolution: "vue-eslint-parser@npm:7.11.0"
@@ -9095,29 +8926,6 @@ __metadata:
     typescript:
       optional: true
   checksum: 10c0/1662c31ce74f408a79590f3eed962f6eb87c8cecad859f01904cfc7866b1223be7ffc837d9fd544a57320e3029e3a4c54d46273285cc8c0b0f83007dc3e2c988
-  languageName: node
-  linkType: hard
-
-"vuex-persistedstate@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "vuex-persistedstate@npm:4.1.0"
-  dependencies:
-    deepmerge: "npm:^4.2.2"
-    shvl: "npm:^2.0.3"
-  peerDependencies:
-    vuex: ^3.0 || ^4.0.0-rc
-  checksum: 10c0/1fef94866de2b82d75f5bd959e8c82ed38330f05a8ec58b5f58e57bd489089c9742350120b5c0b723aea8cfd8cf391dd84aeff065e092ec5f1eac5620bb547de
-  languageName: node
-  linkType: hard
-
-"vuex@npm:^4.0.1":
-  version: 4.0.2
-  resolution: "vuex@npm:4.0.2"
-  dependencies:
-    "@vue/devtools-api": "npm:^6.0.0-beta.11"
-  peerDependencies:
-    vue: ^3.0.2
-  checksum: 10c0/1e7898091bd7f913ad200302fe0a0393f90618a8bbb4517357136042cb106e4adeb0e066d41ab15720706d10362c146a065c61765d11222d3d9b642b8be0a4d5
   languageName: node
   linkType: hard
 
