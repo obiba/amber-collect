@@ -60,18 +60,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { required, email } from '../boot/vuelidate'
 import useVuelidate from '@vuelidate/core'
 import { settings } from '../boot/settings'
+import { useAccountStore } from '../stores/account'
 
 import Banner from 'components/Banner.vue'
 
 export default {
   components: { Banner },
   setup () {
+    const accountStore = useAccountStore()
+    
     return {
-      settings: settings
+      settings: settings,
+      accountStore
     }
   },
   data () {
@@ -87,17 +90,14 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      submitting: state => state.auth.showLoading
-    }),
     disableSubmit () {
       return this.v$.resetEmail.$invalid
     }
   },
   methods: {
     forgotPassword () {
-      this.$store
-        .dispatch('account/forgotPassword', {
+      this.accountStore
+        .forgotPassword({
           emailAddress: this.resetEmail
         })
         .then(() => {

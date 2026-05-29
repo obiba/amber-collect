@@ -100,14 +100,16 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { defineComponent, ref, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import { marked } from 'marked'
 import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr, getBlitzarErrors } from '@obiba/quasar-ui-amber'
 import { Notify, scroll } from 'quasar'
 import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
 import { t } from '../boot/i18n'
 import { settings } from '../boot/settings'
+import { useRecordStore } from '../stores/record'
+import { useFormStore } from '../stores/form'
 
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
@@ -119,6 +121,12 @@ export default defineComponent({
   },
 
   setup() {
+    const recordStore = useRecordStore()
+    const formStore = useFormStore()
+    
+    const { crfs } = storeToRefs(formStore)
+    const { user } = storeToRefs(recordStore)
+    
     const ccLicenses = [
       {
         value: 'cc-by-40',
@@ -150,6 +158,10 @@ export default defineComponent({
       }
     ]
     return {
+      recordStore,
+      formStore,
+      crfs,
+      user,
       errorsRemain: ref(false),
       errorMode: ref('interaction'),
       errors: ref([]),
@@ -175,7 +187,7 @@ export default defineComponent({
   },
 
   mounted() {
-    const caseReport = this.getCaseReportById()(this.user, this.caseReportId)
+    const caseReport = this.recordStore.getCaseReportById(this.user, this.caseReportId)
     if (caseReport) {
       this.crf = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop() : { schema: { items: [] } }
       if (this.crf.schema.layout) {
@@ -183,7 +195,7 @@ export default defineComponent({
       }
       this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, stepId: '__step', debug: this.debug })
       if (!caseReport.data || !caseReport.data.__step) {
-        this.mergeCaseReportData({
+        this.recordStore.mergeCaseReportData({
           id: this.caseReportId,
           data: { __step: 0 }
         })
@@ -214,10 +226,6 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState({
-      crfs: state => state.form.crfs,
-      user: state => state.record.user
-    }),
     currentLocale() {
       return this.$root.$i18n.locale
     },
@@ -266,16 +274,6 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapGetters({
-      getCaseReportById: 'record/getCaseReportById'
-    }),
-    ...mapActions({
-      pauseCaseReport: 'record/pauseCaseReport',
-      completeCaseReport: 'record/completeCaseReport',
-      saveCaseReport: 'record/saveCaseReport',
-      setCaseReportData: 'record/setCaseReportData',
-      mergeCaseReportData: 'record/mergeCaseReportData'
-    }),
     hasIdLabel() {
       return this.crf.schema.idLabel
     },
@@ -324,7 +322,7 @@ export default defineComponent({
       if (!this.canPrevious()) return
 
       this.updateFormData()
-      this.mergeCaseReportData({
+      this.recordStore.mergeCaseReportData({
         id: this.caseReportId,
         data: { __step: this.formData.__step - 1 }
       })
@@ -351,7 +349,7 @@ export default defineComponent({
         })
       } else {
         this.errorMode = 'interaction'
-        this.mergeCaseReportData({
+        this.recordStore.mergeCaseReportData({
           id: this.caseReportId,
           data: { __step: this.formData.__step + 1 }
         })
@@ -361,7 +359,7 @@ export default defineComponent({
       }
     },
     updateFormData() {
-      this.setCaseReportData({
+      this.recordStore.setCaseReportData({
         id: this.caseReportId,
         data: this.formData
       })
@@ -381,12 +379,12 @@ export default defineComponent({
           color: 'negative'
         })
       } else {
-        this.completeCaseReport({
+        this.recordStore.completeCaseReport({
           id: this.caseReportId,
           user: this.user.email,
           revision: this.crf.revision
         }).then(() => {
-          this.saveCaseReport({
+          this.recordStore.saveCaseReport({
             id: this.caseReportId,
             user: this.user.email
           })
@@ -397,7 +395,7 @@ export default defineComponent({
     },
     onPause() {
       this.updateFormData()
-      this.pauseCaseReport({
+      this.recordStore.pauseCaseReport({
         id: this.caseReportId,
         user: this.user.email
       }).then(() => {

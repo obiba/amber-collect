@@ -150,12 +150,13 @@
 <script>
 import { useI18n } from 'vue-i18n'
 import { defineComponent } from 'vue'
-import { mapState } from 'vuex'
 import useVuelidate from '@vuelidate/core'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import { required, minLength, maxLength, email, strongPassword } from '../boot/vuelidate'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
+import { useAccountStore } from '../stores/account'
+import { storeToRefs } from 'pinia'
 
 import Banner from 'components/Banner.vue'
 
@@ -164,6 +165,9 @@ export default defineComponent({
   setup () {
     const { locale } = useI18n({ useScope: 'global' })
     const { executeRecaptcha, recaptchaLoaded } = useReCaptcha()
+    const accountStore = useAccountStore()
+    
+    const { registrationComplete } = storeToRefs(accountStore)
 
     const recaptcha = async () => {
       // (optional) Wait until recaptcha has been loaded.
@@ -180,7 +184,9 @@ export default defineComponent({
       locale,
       v$: useVuelidate(),
       recaptcha,
-      settings
+      settings,
+      accountStore,
+      registrationComplete
     }
   },
   data () {
@@ -222,10 +228,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState({
-      submitting: state => state.auth.showLoading,
-      registrationComplete: state => state.auth.registrationComplete
-    }),
     disableSubmit () {
       return this.v$.formData.$invalid
     },
@@ -248,7 +250,7 @@ export default defineComponent({
         const data = this.formData
         data.language = this.locale
         data.token = token
-        this.$store.dispatch('account/registerUser', { formData: data })
+        this.accountStore.registerUser({ formData: data })
       })
     }
   }

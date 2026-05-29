@@ -97,9 +97,11 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
-import { mapState } from 'vuex'
 import { Notify } from 'quasar'
 import { settings } from '../boot/settings'
+import { useAuthStore } from '../stores/auth'
+import { useRecordStore } from '../stores/record'
+import { storeToRefs } from 'pinia'
 
 import LockMixin from '../mixins/LockMixin'
 import LockPad from '../components/LockPad.vue'
@@ -116,9 +118,16 @@ export default defineComponent({
   mixins: [LockMixin],
 
   setup () {
+    const authStore = useAuthStore()
+    const recordStore = useRecordStore()
+    const { user } = storeToRefs(recordStore)
+    
     return {
       isPwd: ref('password'),
       settings: settings,
+      authStore,
+      recordStore,
+      user,
       password1: ref(''),
       password2: ref(''),
       password: ref('')
@@ -178,9 +187,6 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState({
-      user: state => state.record.user
-    }),
     userName () {
       if (this.user) {
         const fullname = this.user.firstname + ' ' + this.user.lastname
@@ -205,7 +211,7 @@ export default defineComponent({
     onLogout () {
       if (this.user) {
         this.clearLock(this.user._id)
-        this.$store.dispatch('auth/logout')
+        this.authStore.logout()
       } else {
         this.triggerLock({ status: false })
         this.$router.push('/login')

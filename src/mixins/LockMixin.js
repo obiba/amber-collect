@@ -1,19 +1,27 @@
-import { mapGetters, mapActions } from 'vuex'
+import { mapState } from 'pinia'
+import { useLockStore } from '../stores/lock'
 
 const LockMixin = {
   computed: {
-    ...mapGetters({
-      lockId: 'lock/getLockId',
-      lockPassword: 'lock/getLockPassword',
-      lockStatus: 'lock/getLockStatus'
+    ...mapState(useLockStore, {
+      lockId: 'getLockId',
+      lockPassword: 'getLockPassword',
+      lockStatus: 'getLockStatus'
     })
   },
   methods: {
-    ...mapActions({
-      triggerLock: 'lock/triggerLock',
-      updatePassword: 'lock/updatePassword',
-      clearPassword: 'lock/clearPassword'
-    }),
+    triggerLock(payload) {
+      const lockStore = useLockStore()
+      lockStore.triggerLock(payload)
+    },
+    updatePassword(payload) {
+      const lockStore = useLockStore()
+      lockStore.updatePassword(payload)
+    },
+    clearPassword(payload) {
+      const lockStore = useLockStore()
+      lockStore.clearPassword(payload)
+    },
     resetLock (userId) {
       this.updatePassword({
         id: userId

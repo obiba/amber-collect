@@ -77,16 +77,27 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { mapActions, mapState } from 'vuex'
+import { storeToRefs } from 'pinia'
 import { marked } from 'marked'
 import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
+import { useRecordStore } from '../stores/record'
 
 export default defineComponent({
   name: 'CaseReportFormCard',
   props: ['form'],
   components: {
     BlitzForm
+  },
+
+  setup () {
+    const recordStore = useRecordStore()
+    const { user } = storeToRefs(recordStore)
+
+    return {
+      recordStore,
+      user
+    }
   },
 
   data () {
@@ -100,18 +111,12 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState({
-      user: state => state.record.user
-    }),
     currentLocale () {
       return this.$root.$i18n.locale
     }
   },
 
   methods: {
-    ...mapActions({
-      initCaseReport: 'record/initCaseReport'
-    }),
     tr (key) {
       return makeSchemaFormTr(this.form.schema, { locale: this.currentLocale })(key)
     },
@@ -154,7 +159,7 @@ export default defineComponent({
           return obj
         }, {})
       if (Object.keys(errors).length === 0) {
-        this.initCaseReport({
+        this.recordStore.initCaseReport({
           crf: this.form,
           data: this.formData,
           user: this.user.email

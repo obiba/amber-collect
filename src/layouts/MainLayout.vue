@@ -182,9 +182,14 @@
 import { useI18n } from 'vue-i18n'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
-import { defineComponent, ref, watch } from 'vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { defineComponent, ref, watch, computed } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useQuasar } from 'quasar'
+
+import { useAuthStore } from '../stores/auth'
+import { useRecordStore } from '../stores/record'
+import { useFormStore } from '../stores/form'
+import { useLockStore } from '../stores/lock'
 
 import LockMixin from '../mixins/LockMixin'
 import EssentialLink from 'components/EssentialLink.vue'
@@ -214,6 +219,15 @@ export default defineComponent({
     const { locale } = useI18n({ useScope: 'global' })
     const leftDrawerOpen = ref(false)
 
+    // Initialize stores
+    const authStore = useAuthStore()
+    const recordStore = useRecordStore()
+    const formStore = useFormStore()
+    const lockStore = useLockStore()
+
+    // Extract reactive state from stores
+    const { user } = storeToRefs(recordStore)
+
     watch(locale, val => {
       // dynamic import, so loading on demand only
       const langIso = val === 'en' ? 'en-US' : val
@@ -231,7 +245,14 @@ export default defineComponent({
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       },
-      showAppInfo: ref(false)
+      showAppInfo: ref(false),
+      // Store references
+      authStore,
+      recordStore,
+      formStore,
+      lockStore,
+      // State
+      user
     }
   },
 
@@ -247,11 +268,8 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState({
-      user: state => state.record.user
-    }),
     caseReportsCount () {
-      return this.getCaseReportsCount()(this.user)
+      return this.recordStore.getCaseReportsCount(this.user)
     },
     localeOptions () {
       return locales.map(loc => {
@@ -277,12 +295,6 @@ export default defineComponent({
   },
 
   methods: {
-    ...mapActions({
-      getCaseReportForms: 'form/getCaseReportForms'
-    }),
-    ...mapGetters({
-      getCaseReportsCount: 'record/getCaseReportsCount'
-    }),
     onShowAppInfo () {
       this.showAppInfo = true
     },
@@ -290,8 +302,8 @@ export default defineComponent({
       this.locale = opt.value
     },
     onLogout () {
-      this.$store.dispatch('form/clearCaseReportForms')
-      this.$store.dispatch('auth/logout')
+      this.formStore.clearCaseReportForms()
+      this.authStore.logout()
         .then(() => {
           this.$router.push('/login')
         })
@@ -301,7 +313,7 @@ export default defineComponent({
       this.$router.push('/lock')
     },
     onUpdate () {
-      this.getCaseReportForms({})
+      this.formStore.getCaseReportForms({})
     },
     onUpgrade () {
       window.location.reload()

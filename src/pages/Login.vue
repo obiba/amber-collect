@@ -108,10 +108,12 @@
 <script>
 import { useI18n } from 'vue-i18n'
 import { defineComponent, ref, watch } from 'vue'
-import { mapActions, mapState } from 'vuex'
 import { Notify, useQuasar, copyToClipboard } from 'quasar'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
+import { useAuthStore } from '../stores/auth'
+import { useRecordStore } from '../stores/record'
+import { storeToRefs } from 'pinia'
 
 import Banner from 'components/Banner.vue'
 
@@ -120,6 +122,10 @@ export default defineComponent({
   setup() {
     const $q = useQuasar()
     const { locale } = useI18n({ useScope: 'global' })
+    const authStore = useAuthStore()
+    const recordStore = useRecordStore()
+    
+    const { user } = storeToRefs(authStore)
 
     watch(locale, val => {
       // dynamic import, so loading on demand only
@@ -133,6 +139,9 @@ export default defineComponent({
     return {
       locale: locale,
       settings: settings,
+      authStore,
+      recordStore,
+      user,
       email: ref(''),
       password: ref(''),
       token: ref(''),
@@ -152,10 +161,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState({
-      user: state => state.auth.user,
-      submitting: state => state.auth.isAuthenticatePending
-    }),
     disableSubmit() {
       return this.email.length === 0 || this.password.length === 0
     },
@@ -175,9 +180,6 @@ export default defineComponent({
     }
   },
   methods: {
-    ...mapActions({
-      initUser: 'record/initUser'
-    }),
     onLocaleSelection(opt) {
       this.locale = opt.value
     },
@@ -205,8 +207,8 @@ export default defineComponent({
       })
     },
     onSubmit() {
-      this.$store
-        .dispatch('auth/authenticate', this.makePayload())
+      this.authStore
+        .authenticate(this.makePayload())
         .then(response => {
           if (response.data && response.data.qr && response.data.secret) {
             // 2FA is enabled for that user
@@ -214,7 +216,7 @@ export default defineComponent({
             this.secret = response.data.secret
             this.withToken = true
           } else {
-            this.initUser(this.user)
+            this.recordStore.initUser(this.user)
           }
         })
         // Just use the returned error instead of mapping it from the store.

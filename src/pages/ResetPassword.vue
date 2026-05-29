@@ -50,7 +50,6 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { mapState } from 'vuex'
 import useVuelidate from '@vuelidate/core'
 import { required, minLength, maxLength, strongPassword } from '../boot/vuelidate'
 import userService from '../services/user'
@@ -88,9 +87,6 @@ export default defineComponent({
     }
   },
   computed: {
-    ...mapState({
-      submitting: state => state.auth.showLoading
-    }),
     disableSubmit() {
       return this.v$.formData.$invalid
     }

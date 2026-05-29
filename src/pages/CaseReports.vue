@@ -183,15 +183,23 @@
 
 <script>
 import { defineComponent, ref, computed } from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { storeToRefs } from 'pinia'
 import { date } from 'quasar'
 import { BlitzForm } from '@blitzar/form'
 import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
+import { useFormStore } from '../stores/form'
+import { useRecordStore } from '../stores/record'
 
 export default defineComponent({
   name: 'CaseReports',
   components: { BlitzForm },
   setup () {
+    const formStore = useFormStore()
+    const recordStore = useRecordStore()
+    
+    const { crfs } = storeToRefs(formStore)
+    const { user } = storeToRefs(recordStore)
+    
     const pagination = ref({
       sortBy: 'id',
       descending: true,
@@ -199,10 +207,19 @@ export default defineComponent({
       rowsPerPage: 10
     })
 
+    const caseReports = computed(() => {
+      return recordStore.getCaseReports(user.value)
+    })
+
     return {
+      formStore,
+      recordStore,
+      crfs,
+      user,
       pagination,
+      caseReports,
       pagesNumber: computed(() => {
-        return Math.ceil(this.caseReports.length / pagination.value.rowsPerPage)
+        return Math.ceil(caseReports.value.length / pagination.value.rowsPerPage)
       })
     }
   },
@@ -220,22 +237,12 @@ export default defineComponent({
   },
 
   computed: {
-    ...mapState({
-      crfs: state => state.form.crfs,
-      user: state => state.record.user
-    }),
-    caseReports () {
-      return this.getCaseReports()(this.user)
-    },
     currentLocale () {
       return this.$root.$i18n.locale
     }
   },
 
   methods: {
-    ...mapGetters({
-      getCaseReports: 'record/getCaseReports'
-    }),
     getForm (crfId) {
       return this.crfs.filter(f => f._id === crfId).pop()
     },
@@ -296,14 +303,14 @@ export default defineComponent({
       this.showViewCaseReport = true
     },
     onSave (caseReport) {
-      this.$store.dispatch('record/saveCaseReport', { id: caseReport.id, force: true })
+      this.recordStore.saveCaseReport({ id: caseReport.id, force: true })
     },
     onConfirmDelete (caseReport) {
       this.selectedCaseReport = caseReport
       this.showConfirmDeleteCaseReport = true
     },
     deleteCaseReport () {
-      this.$store.dispatch('record/deleteCaseReport', { id: this.selectedCaseReport.id })
+      this.recordStore.deleteCaseReport({ id: this.selectedCaseReport.id })
     }
   }
 })

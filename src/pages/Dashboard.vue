@@ -108,10 +108,12 @@
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { ref, computed, defineComponent } from 'vue'
+import { storeToRefs } from 'pinia'
 import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import CaseReportFormCard from 'components/CaseReportFormCard.vue'
+import { useFormStore } from '../stores/form'
+import { useRecordStore } from '../stores/record'
 
 export default defineComponent({
   name: 'Dashboard',
@@ -120,49 +122,55 @@ export default defineComponent({
   },
 
   setup () {
-    return {
-      tab: ref('forms')
-    }
-  },
+    const formStore = useFormStore()
+    const recordStore = useRecordStore()
+    
+    const { crfs } = storeToRefs(formStore)
+    const { user } = storeToRefs(recordStore)
 
-  mounted () {
-    this.getCaseReportForms({ silent: true })
-  },
+    const caseReports = computed(() => {
+      return recordStore.getCaseReports(user.value)
+    })
 
-  computed: {
-    ...mapState({
-      crfs: state => state.form.crfs,
-      user: state => state.record.user
-    }),
-    caseReports () {
-      return this.getCaseReports()(this.user)
-    },
-    notSavedCaseReports () {
-      return this.caseReports
-        .filter(cr => ['in_progress', 'completed'].includes(cr.state) && this.getForm(cr.crfId))
+    const notSavedCaseReports = computed(() => {
+      return caseReports.value
+        .filter(cr => ['in_progress', 'completed'].includes(cr.state) && getForm(cr.crfId))
         .sort((cr1, cr2) => {
           const action1 = cr1.actions[cr1.actions.length - 1]
           const action2 = cr2.actions[cr2.actions.length - 1]
           return action2.timestamp - action1.timestamp
         })
-    },
+    })
+
+    const getForm = (crfId) => {
+      return crfs.value.filter(f => f._id === crfId).pop()
+    }
+
+    return {
+      tab: ref('forms'),
+      formStore,
+      recordStore,
+      crfs,
+      user,
+      caseReports,
+      notSavedCaseReports,
+      getForm
+    }
+  },
+
+  mounted () {
+    this.formStore.getCaseReportForms({ silent: true })
+  },
+
+  computed: {
     currentLocale () {
       return this.$root.$i18n.locale
     }
   },
 
   methods: {
-    ...mapActions({
-      getCaseReportForms: 'form/getCaseReportForms'
-    }),
-    ...mapGetters({
-      getCaseReports: 'record/getCaseReports'
-    }),
     tr (schema, key) {
       return schema ? makeSchemaFormTr(schema, { locale: this.currentLocale })(key) : '-'
-    },
-    getForm (crfId) {
-      return this.crfs.filter(f => f._id === crfId).pop()
     },
     getFormLabel (crfId) {
       const form = this.getForm(crfId)
@@ -188,10 +196,10 @@ export default defineComponent({
       return rtf.format(minutes, 'minute')
     },
     onRefresh (done) {
-      this.getCaseReportForms({}).then(() => done())
+      this.formStore.getCaseReportForms({}).then(() => done())
     },
     onSave (caseReport) {
-      this.$store.dispatch('record/saveCaseReport', { id: caseReport.id, force: true })
+      this.recordStore.saveCaseReport({ id: caseReport.id, force: true })
     }
   }
 })
