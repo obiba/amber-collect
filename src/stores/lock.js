@@ -1,57 +1,71 @@
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
 import { secureStorage } from './index'
 
-export const useLockStore = defineStore('lock', {
-  state: () => ({
-    id: '',
-    password: '',
-    status: false,
-    locks: {}
-  }),
+export const useLockStore = defineStore('lock', () => {
+  // State
+  const id = ref('')
+  const password = ref('')
+  const status = ref(false)
+  const locks = ref({})
 
-  getters: {
-    getLockId: (state) => state.id === null ? '' : state.id,
-    getLockPassword: (state) => state.password === null ? '' : state.password,
-    getLockStatus: (state) => state.status
-  },
+  // Getters
+  const getLockId = computed(() => id.value === null ? '' : id.value)
+  const getLockPassword = computed(() => password.value === null ? '' : password.value)
+  const getLockStatus = computed(() => status.value)
 
-  actions: {
-    triggerLock(payload) {
-      this.status = payload.status
-    },
+  // Actions
+  function triggerLock(payload) {
+    status.value = payload.status
+  }
 
-    clearPassword(payload) {
-      if (payload.id) {
-        this.locks[payload.id] = undefined
-        this.id = ''
-        this.password = ''
-      }
-    },
-
-    updatePassword(payload) {
-      this.id = payload.id
-      if (payload.password) {
-        // set current lock
-        this.password = payload.password
-      } else if (payload.id) {
-        if (this.locks[payload.id]) {
-          // reinstate user lock
-          this.password = this.locks[payload.id]
-        } else {
-          // no lock to reinstate, will create a new one
-          this.password = null
-        }
-      } else {
-        // reset current lock
-        this.password = null
-      }
-      // update user lock
-      if (payload.id && payload.password) {
-        this.locks[payload.id] = payload.password
-      }
+  function clearPassword(payload) {
+    if (payload.id) {
+      locks.value[payload.id] = undefined
+      id.value = ''
+      password.value = ''
     }
-  },
+  }
 
+  function updatePassword(payload) {
+    id.value = payload.id
+    if (payload.password) {
+      // set current lock
+      password.value = payload.password
+    } else if (payload.id) {
+      if (locks.value[payload.id]) {
+        // reinstate user lock
+        password.value = locks.value[payload.id]
+      } else {
+        // no lock to reinstate, will create a new one
+        password.value = null
+      }
+    } else {
+      // reset current lock
+      password.value = null
+    }
+    // update user lock
+    if (payload.id && payload.password) {
+      locks.value[payload.id] = payload.password
+    }
+  }
+
+  return {
+    // State
+    id,
+    password,
+    status,
+    locks,
+    // Getters
+    getLockId,
+    getLockPassword,
+    getLockStatus,
+    // Actions
+    triggerLock,
+    clearPassword,
+    updatePassword
+  }
+}, {
   persist: {
     key: 'lock',
     storage: secureStorage

@@ -1,94 +1,104 @@
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
 import { secureStorage } from './index'
 import { feathersClient } from '../boot/feathersClient'
 
-export const useAuthStore = defineStore('auth', {
-  state: () => ({
-    user: null,
-    accessToken: null,
-    isAuthenticatePending: false,
-    isLogoutPending: false,
-    errorOnAuthenticate: null,
-    errorOnLogout: null
-  }),
+export const useAuthStore = defineStore('auth', () => {
+  // State
+  const user = ref(null)
+  const accessToken = ref(null)
+  const isAuthenticatePending = ref(false)
+  const isLogoutPending = ref(false)
+  const errorOnAuthenticate = ref(null)
+  const errorOnLogout = ref(null)
 
-  getters: {
-    isAuthenticated: (state) => !!state.accessToken && !!state.user
-  },
+  // Getters
+  const isAuthenticated = computed(() => !!accessToken.value && !!user.value)
 
-  actions: {
-    // Handle authentication response
-    responseHandler(response) {
-      if (response && response.user) {
-        this.user = response.user
-      }
-      if (response && response.accessToken) {
-        this.accessToken = response.accessToken
-      }
-      return response
-    },
-
-    // Authenticate with Feathers
-    async authenticate(credentials) {
-      this.isAuthenticatePending = true
-      this.errorOnAuthenticate = null
-      
-      try {
-        const response = await feathersClient.authenticate(credentials)
-        this.responseHandler(response)
-        this.isAuthenticatePending = false
-        return response
-      } catch (error) {
-        this.errorOnAuthenticate = error
-        this.isAuthenticatePending = false
-        throw error
-      }
-    },
-
-    // Re-authenticate using stored JWT
-    async reAuthenticate() {
-      this.isAuthenticatePending = true
-      this.errorOnAuthenticate = null
-      
-      try {
-        const response = await feathersClient.reAuthenticate()
-        this.responseHandler(response)
-        this.isAuthenticatePending = false
-        return response
-      } catch (error) {
-        this.errorOnAuthenticate = error
-        this.isAuthenticatePending = false
-        // Clear auth state on re-auth failure
-        this.user = null
-        this.accessToken = null
-        throw error
-      }
-    },
-
-    // Logout
-    async logout() {
-      this.isLogoutPending = true
-      this.errorOnLogout = null
-      
-      try {
-        await feathersClient.logout()
-        this.user = null
-        this.accessToken = null
-        this.isLogoutPending = false
-      } catch (error) {
-        this.errorOnLogout = error
-        this.isLogoutPending = false
-        throw error
-      }
-    },
-
-    // Clear error states
-    clearAuthErrors() {
-      this.errorOnAuthenticate = null
-      this.errorOnLogout = null
+  // Actions
+  function responseHandler(response) {
+    if (response && response.user) {
+      user.value = response.user
     }
-  },
+    if (response && response.accessToken) {
+      accessToken.value = response.accessToken
+    }
+    return response
+  }
 
+  async function authenticate(credentials) {
+    isAuthenticatePending.value = true
+    errorOnAuthenticate.value = null
+    
+    try {
+      const response = await feathersClient.authenticate(credentials)
+      responseHandler(response)
+      isAuthenticatePending.value = false
+      return response
+    } catch (error) {
+      errorOnAuthenticate.value = error
+      isAuthenticatePending.value = false
+      throw error
+    }
+  }
+
+  async function reAuthenticate() {
+    isAuthenticatePending.value = true
+    errorOnAuthenticate.value = null
+    
+    try {
+      const response = await feathersClient.reAuthenticate()
+      responseHandler(response)
+      isAuthenticatePending.value = false
+      return response
+    } catch (error) {
+      errorOnAuthenticate.value = error
+      isAuthenticatePending.value = false
+      // Clear auth state on re-auth failure
+      user.value = null
+      accessToken.value = null
+      throw error
+    }
+  }
+
+  async function logout() {
+    isLogoutPending.value = true
+    errorOnLogout.value = null
+    
+    try {
+      await feathersClient.logout()
+      user.value = null
+      accessToken.value = null
+      isLogoutPending.value = false
+    } catch (error) {
+      errorOnLogout.value = error
+      isLogoutPending.value = false
+      throw error
+    }
+  }
+
+  function clearAuthErrors() {
+    errorOnAuthenticate.value = null
+    errorOnLogout.value = null
+  }
+
+  return {
+    // State
+    user,
+    accessToken,
+    isAuthenticatePending,
+    isLogoutPending,
+    errorOnAuthenticate,
+    errorOnLogout,
+    // Getters
+    isAuthenticated,
+    // Actions
+    authenticate,
+    reAuthenticate,
+    logout,
+    clearAuthErrors
+  }
+}, {
   persist: {
     key: 'auth',
     storage: secureStorage,
