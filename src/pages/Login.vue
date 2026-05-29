@@ -115,7 +115,17 @@ import { useAuthStore } from '../stores/auth'
 import { useRecordStore } from '../stores/record'
 import { storeToRefs } from 'pinia'
 
+// Import Quasar language files statically
+import langEnUS from 'quasar/lang/en-US'
+import langFr from 'quasar/lang/fr'
+
 import Banner from 'components/Banner.vue'
+
+// Map locale codes to Quasar language objects
+const quasarLangMap = {
+  en: langEnUS,
+  fr: langFr
+}
 
 export default defineComponent({
   components: { Banner },
@@ -128,12 +138,9 @@ export default defineComponent({
     const { user } = storeToRefs(authStore)
 
     watch(locale, val => {
-      // dynamic import, so loading on demand only
-      const langIso = val === 'en' ? 'en-US' : val
-      import(/* @vite-ignore */ 'quasar/lang/' + langIso)
-        .then(lang => {
-          $q.lang.set(lang.default)
-        })
+      // Set Quasar language based on locale
+      const lang = quasarLangMap[val] || quasarLangMap.en
+      $q.lang.set(lang)
     })
 
     return {

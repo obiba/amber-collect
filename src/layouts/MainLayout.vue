@@ -180,19 +180,28 @@
 
 <script>
 import { useI18n } from 'vue-i18n'
+import { defineComponent, ref, watch } from 'vue'
+import { useQuasar } from 'quasar'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
-import { defineComponent, ref, watch, computed } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useQuasar } from 'quasar'
-
 import { useAuthStore } from '../stores/auth'
 import { useRecordStore } from '../stores/record'
 import { useFormStore } from '../stores/form'
 import { useLockStore } from '../stores/lock'
+import { storeToRefs } from 'pinia'
+
+// Import Quasar language files statically
+import langEnUS from 'quasar/lang/en-US'
+import langFr from 'quasar/lang/fr'
 
 import LockMixin from '../mixins/LockMixin'
 import EssentialLink from 'components/EssentialLink.vue'
+
+// Map locale codes to Quasar language objects
+const quasarLangMap = {
+  en: langEnUS,
+  fr: langFr
+}
 
 const contributors = [
   {
@@ -229,12 +238,9 @@ export default defineComponent({
     const { user } = storeToRefs(recordStore)
 
     watch(locale, val => {
-      // dynamic import, so loading on demand only
-      const langIso = val === 'en' ? 'en-US' : val
-      import(/* @vite-ignore */ 'quasar/lang/' + langIso)
-        .then(lang => {
-          $q.lang.set(lang.default)
-        })
+      // Set Quasar language based on locale
+      const lang = quasarLangMap[val] || quasarLangMap.en
+      $q.lang.set(lang)
     })
 
     return {
