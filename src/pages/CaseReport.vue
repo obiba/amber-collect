@@ -99,8 +99,10 @@
   </q-layout>
 </template>
 
-<script>
-import { defineComponent, ref, computed } from 'vue'
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { marked } from 'marked'
 import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr, getBlitzarErrors } from '@obiba/quasar-ui-amber'
@@ -113,313 +115,316 @@ import { useFormStore } from '../stores/form'
 
 const { getScrollTarget, setVerticalScrollPosition } = scroll
 
-export default defineComponent({
-  name: 'CaseReport',
+// Router and i18n
+const router = useRouter()
+const route = useRoute()
+const { locale } = useI18n({ useScope: 'global' })
 
-  components: {
-    BlitzForm
+// Stores
+const recordStore = useRecordStore()
+const formStore = useFormStore()
+
+const { crfs } = storeToRefs(formStore)
+const { user } = storeToRefs(recordStore)
+
+// Constants
+const ccLicenses = [
+  {
+    value: 'cc-by-40',
+    label: 'license.cc_by_40'
   },
+  {
+    value: 'cc-by-sa-40',
+    label: 'license.cc_by_sa_40'
+  },
+  {
+    value: 'cc-by-nc-40',
+    label: 'license.cc_by_nc_40'
+  },
+  {
+    value: 'cc-by-nc-sa-40',
+    label: 'license.cc_by_nc_sa_40'
+  },
+  {
+    value: 'cc-by_nd-40',
+    label: 'license.cc_by_nd_40'
+  },
+  {
+    value: 'cc-by-nc-nd-40',
+    label: 'license.cc_by_nc_nd_40'
+  },
+  {
+    value: 'cc-cc0-10',
+    label: 'license.cc_cc0_10'
+  }
+]
 
-  setup() {
-    const recordStore = useRecordStore()
-    const formStore = useFormStore()
-    
-    const { crfs } = storeToRefs(formStore)
-    const { user } = storeToRefs(recordStore)
-    
-    const ccLicenses = [
-      {
-        value: 'cc-by-40',
-        label: 'license.cc_by_40'
-      },
-      {
-        value: 'cc-by-sa-40',
-        label: 'license.cc_by_sa_40'
-      },
-      {
-        value: 'cc-by-nc-40',
-        label: 'license.cc_by_nc_40'
-      },
-      {
-        value: 'cc-by-nc-sa-40',
-        label: 'license.cc_by_nc_sa_40'
-      },
-      {
-        value: 'cc-by_nd-40',
-        label: 'license.cc_by_nd_40'
-      },
-      {
-        value: 'cc-by-nc-nd-40',
-        label: 'license.cc_by_nc_nd_40'
-      },
-      {
-        value: 'cc-cc0-10',
-        label: 'license.cc_cc0_10'
-      }
-    ]
-    return {
-      recordStore,
-      formStore,
-      crfs,
-      user,
-      errorsRemain: ref(false),
-      errorMode: ref('interaction'),
-      errors: ref([]),
-      lang: ref({}),
-      settings: settings,
-      ccLicenses: ccLicenses
+// Reactive state
+const debug = ref(false)
+const remountCounter = ref(0)
+const progress = ref(0)
+const formData = ref({})
+const schema = ref([])
+const crf = ref({ schema: { items: [] } })
+const showFormDescription = ref(false)
+const mode = ref('multi')
+const lastAutoSave = ref(null)
+const autoSavePending = ref(false)
+const errorsRemain = ref(false)
+const errorMode = ref('interaction')
+const errors = ref([])
+const lang = ref({})
+
+// Computed properties
+const currentLocale = computed(() => locale.value)
+
+const caseReportId = computed(() => route.params.id)
+
+const caseReportLicense = computed(() => {
+  const license = crf.value.schema.license
+  let found = ccLicenses.filter(lic => lic.value === license).pop()
+  if (!found && settings.licenses) {
+    found = settings.licenses.filter(lic => lic.value === license).pop()
+  }
+  if (found) {
+    return found.label ? found.label : found.value
+  }
+  return license
+})
+
+const toc = computed(() => {
+  const tocList = []
+  if (crf.value.schema && crf.value.schema.items) {
+    crf.value.schema.items.filter(item => ['group', 'section'].includes(item.type)).forEach(item => tocList.push({
+      id: item.name.replaceAll('.', '_').toLowerCase(),
+      label: tr(item.label)
+    }))
+  }
+  return tocList.filter(entry => entry.label)
+})
+
+const idLabel = computed(() => {
+  return crf.value.schema.idLabel ? tr(crf.value.schema.idLabel) : 'ID'
+})
+
+const isFinalStep = computed(() => {
+  return isMulti() && formData.value.__step === crf.value.schema.items.length - 1
+})
+
+const modeOptions = computed(() => {
+  return [
+    {
+      value: 'single',
+      label: t('single_page')
+    },
+    {
+      value: 'multi',
+      label: t('multi_steps')
     }
-  },
+  ]
+})
 
-  data() {
-    return {
-      debug: false,
-      remountCounter: 0,
-      progress: 0,
-      formData: {},
-      schema: [],
-      crf: { schema: { items: [] } },
-      showFormDescription: false,
-      mode: 'multi',
-      lastAutoSave: null,
-      autoSavePending: false
-    }
-  },
+// Methods
+const hasIdLabel = () => {
+  return crf.value.schema.idLabel
+}
 
-  mounted() {
-    const caseReport = this.recordStore.getCaseReportById(this.user, this.caseReportId)
-    if (caseReport) {
-      this.crf = this.crfs ? this.crfs.filter(f => f._id === caseReport.crfId).pop() : { schema: { items: [] } }
-      if (this.crf.schema.layout) {
-        this.mode = this.crf.schema.layout
-      }
-      this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, stepId: '__step', debug: this.debug })
-      if (!caseReport.data || !caseReport.data.__step) {
-        this.recordStore.mergeCaseReportData({
-          id: this.caseReportId,
-          data: { __step: 0 }
-        })
-      }
-      this.lang = {
-        requiredField: this.$t('required_field')
-      }
-      this.formData = caseReport.data
-      this.updateProgress()
-      this.remountCounter++
-    } else {
-      console.error('No such record with id: ' + this.caseReportId)
-      this.$router.push('/')
-    }
-  },
+const onShowFormDescription = () => {
+  showFormDescription.value = true
+}
 
-  watch: {
-    mode(newValue, oldValue) {
-      this.updateFormData()
-      if (newValue === 'single') {
-        this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, debug: this.debug })
-      } else {
-        this.schema = makeBlitzarQuasarSchemaForm(this.crf.schema, { locale: this.currentLocale, stepId: '__step', debug: this.debug })
-      }
-      this.updateProgress()
-      this.remountCounter++
-    }
-  },
+const onScroll = (id) => {
+  const ele = document.getElementById(id)
+  if (ele) {
+    const target = getScrollTarget(ele)
+    const offset = ele.offsetTop
+    const duration = 200
+    setVerticalScrollPosition(target, offset, duration)
+  }
+}
 
-  computed: {
-    currentLocale() {
-      return this.$root.$i18n.locale
-    },
-    caseReportId() {
-      return this.$route.params.id
-    },
-    caseReportLicense() {
-      const license = this.crf.schema.license
-      let found = this.ccLicenses.filter(lic => lic.value === license).pop()
-      if (!found && settings.licenses) {
-        found = settings.licenses.filter(lic => lic.value === license).pop()
-      }
-      if (found) {
-        return found.label ? found.label : found.value
-      }
-      return license
-    },
-    toc() {
-      const toc = []
-      if (this.crf.schema && this.crf.schema.items) {
-        this.crf.schema.items.filter(item => ['group', 'section'].includes(item.type)).forEach(item => toc.push({
-          id: item.name.replaceAll('.', '_').toLowerCase(),
-          label: this.tr(item.label)
-        }))
-      }
-      return toc.filter(entry => entry.label)
-    },
-    idLabel() {
-      return this.crf.schema.idLabel ? this.tr(this.crf.schema.idLabel) : 'ID'
-    },
-    isFinalStep() {
-      return this.isMulti() && this.formData.__step === this.crf.schema.items.length - 1
-    },
-    modeOptions() {
-      return [
-        {
-          value: 'single',
-          label: t('single_page')
-        },
-        {
-          value: 'multi',
-          label: t('multi_steps')
-        }
-      ]
-    }
-  },
+const updateProgress = () => {
+  progress.value = formData.value.__step / (crf.value.schema.items.length - 1)
+}
 
-  methods: {
-    hasIdLabel() {
-      return this.crf.schema.idLabel
-    },
-    onShowFormDescription() {
-      this.showFormDescription = true
-    },
-    onScroll(id) {
-      const ele = document.getElementById(id)
-      if (ele) {
-        const target = getScrollTarget(ele)
-        const offset = ele.offsetTop
-        const duration = 200
-        setVerticalScrollPosition(target, offset, duration)
-      }
-    },
-    updateProgress() {
-      this.progress = this.formData.__step / (this.crf.schema.items.length - 1)
-    },
-    isMulti() {
-      return this.mode === 'multi'
-    },
-    handleSwipe({ evt, ...newInfo }) {
-      if (this.isMulti()) {
-        if (newInfo.direction === 'left') {
-          this.nextStep()
-        } else if (newInfo.direction === 'right') {
-          this.previousStep()
-        }
-      }
-    },
-    formatErrorMessages() {
-      const errorMessages = this.errors.map(err => {
-        let errMessage = err.message === 'Field is required' ? t('required_field') : err.message
-        errMessage = errMessage.charAt(0).toLowerCase() + errMessage.slice(1)
-        return `<li>${err.label}: ${errMessage}</li>`
-      }).join('')
-      return `<ul>${errorMessages}</ul>`
-    },
-    canPrevious() {
-      return this.isMulti() && this.formData.__step > 0
-    },
-    toggleMode(value) {
-      this.mode = value
-    },
-    previousStep() {
-      if (!this.canPrevious()) return
+const isMulti = () => {
+  return mode.value === 'multi'
+}
 
-      this.updateFormData()
-      this.recordStore.mergeCaseReportData({
-        id: this.caseReportId,
-        data: { __step: this.formData.__step - 1 }
-      })
-      this.updateProgress()
-      this.remountCounter++
-      this.errorsRemain = false
-      this.errors = undefined
-      window.scrollTo(0, 0)
-    },
-    canNext() {
-      return this.isMulti() && this.formData.__step < this.crf.schema.items.length - 1
-    },
-    nextStep() {
-      if (!this.canNext()) return
-
-      this.updateFormData()
-      this.onValidate()
-      // if no error in the step, continue
-      if (this.errorsRemain) {
-        Notify.create({
-          message: this.$t('validation_errors', { errors: this.formatErrorMessages() }),
-          html: true,
-          color: 'negative'
-        })
-      } else {
-        this.errorMode = 'interaction'
-        this.recordStore.mergeCaseReportData({
-          id: this.caseReportId,
-          data: { __step: this.formData.__step + 1 }
-        })
-        this.updateProgress()
-        this.remountCounter++
-        window.scrollTo(0, 0)
-      }
-    },
-    updateFormData() {
-      this.recordStore.setCaseReportData({
-        id: this.caseReportId,
-        data: this.formData
-      })
-    },
-    onValidate() {
-      this.errorMode = 'always'
-      this.errors = getBlitzarErrors(this.schema, validateFormPerSchema(this.formData, this.schema))
-      this.errorsRemain = this.errors.length > 0
-    },
-    onComplete() {
-      this.updateFormData()
-      this.onValidate()
-      if (this.errorsRemain) {
-        Notify.create({
-          message: this.$t('validation_errors', { errors: this.formatErrorMessages() }),
-          html: true,
-          color: 'negative'
-        })
-      } else {
-        this.recordStore.completeCaseReport({
-          id: this.caseReportId,
-          user: this.user.email,
-          revision: this.crf.revision
-        }).then(() => {
-          this.recordStore.saveCaseReport({
-            id: this.caseReportId,
-            user: this.user.email
-          })
-        }).then(() => {
-          this.$router.push('/')
-        })
-      }
-    },
-    onPause() {
-      this.updateFormData()
-      this.recordStore.pauseCaseReport({
-        id: this.caseReportId,
-        user: this.user.email
-      }).then(() => {
-        this.$router.push('/')
-      })
-    },
-    tr(key) {
-      return makeSchemaFormTr(this.crf.schema, { locale: this.currentLocale })(key)
-    },
-    md(text) {
-      return text ? marked.parse(this.tr(text), { headerIds: false, mangle: false }) : text
-    },
-    onFormDataUpdated() {
-      if (this.autoSavePending) return
-      // save locally changed form data automatically after at least 5 seconds
-      if (this.lastAutoSave === null || Date.now() - this.lastAutoSave > 5000) {
-        this.autoSavePending = true
-        this.updateFormData()
-        this.lastAutoSave = Date.now()
-        console.debug('Form data auto saved locally')
-        this.autoSavePending = false
-      }
+const handleSwipe = ({ evt, ...newInfo }) => {
+  if (isMulti()) {
+    if (newInfo.direction === 'left') {
+      nextStep()
+    } else if (newInfo.direction === 'right') {
+      previousStep()
     }
   }
+}
 
+const formatErrorMessages = () => {
+  const errorMessages = errors.value.map(err => {
+    let errMessage = err.message === 'Field is required' ? t('required_field') : err.message
+    errMessage = errMessage.charAt(0).toLowerCase() + errMessage.slice(1)
+    return `<li>${err.label}: ${errMessage}</li>`
+  }).join('')
+  return `<ul>${errorMessages}</ul>`
+}
+
+const canPrevious = () => {
+  return isMulti() && formData.value.__step > 0
+}
+
+const toggleMode = (value) => {
+  mode.value = value
+}
+
+const previousStep = () => {
+  if (!canPrevious()) return
+
+  updateFormData()
+  recordStore.mergeCaseReportData({
+    id: caseReportId.value,
+    data: { __step: formData.value.__step - 1 }
+  })
+  updateProgress()
+  remountCounter.value++
+  errorsRemain.value = false
+  errors.value = undefined
+  window.scrollTo(0, 0)
+}
+
+const canNext = () => {
+  return isMulti() && formData.value.__step < crf.value.schema.items.length - 1
+}
+
+const nextStep = () => {
+  if (!canNext()) return
+
+  updateFormData()
+  onValidate()
+  // if no error in the step, continue
+  if (errorsRemain.value) {
+    Notify.create({
+      message: t('validation_errors', { errors: formatErrorMessages() }),
+      html: true,
+      color: 'negative'
+    })
+  } else {
+    errorMode.value = 'interaction'
+    recordStore.mergeCaseReportData({
+      id: caseReportId.value,
+      data: { __step: formData.value.__step + 1 }
+    })
+    updateProgress()
+    remountCounter.value++
+    window.scrollTo(0, 0)
+  }
+}
+
+const updateFormData = () => {
+  recordStore.setCaseReportData({
+    id: caseReportId.value,
+    data: formData.value
+  })
+}
+
+const onValidate = () => {
+  errorMode.value = 'always'
+  errors.value = getBlitzarErrors(schema.value, validateFormPerSchema(formData.value, schema.value))
+  errorsRemain.value = errors.value.length > 0
+}
+
+const onComplete = () => {
+  updateFormData()
+  onValidate()
+  if (errorsRemain.value) {
+    Notify.create({
+      message: t('validation_errors', { errors: formatErrorMessages() }),
+      html: true,
+      color: 'negative'
+    })
+  } else {
+    recordStore.completeCaseReport({
+      id: caseReportId.value,
+      user: user.value.email,
+      revision: crf.value.revision
+    }).then(() => {
+      recordStore.saveCaseReport({
+        id: caseReportId.value,
+        user: user.value.email
+      })
+    }).then(() => {
+      router.push('/')
+    })
+  }
+}
+
+const onPause = () => {
+  updateFormData()
+  recordStore.pauseCaseReport({
+    id: caseReportId.value,
+    user: user.value.email
+  }).then(() => {
+    router.push('/')
+  })
+}
+
+const tr = (key) => {
+  return makeSchemaFormTr(crf.value.schema, { locale: currentLocale.value })(key)
+}
+
+const md = (text) => {
+  return text ? marked.parse(tr(text), { headerIds: false, mangle: false }) : text
+}
+
+const onFormDataUpdated = () => {
+  if (autoSavePending.value) return
+  // save locally changed form data automatically after at least 5 seconds
+  if (lastAutoSave.value === null || Date.now() - lastAutoSave.value > 5000) {
+    autoSavePending.value = true
+    updateFormData()
+    lastAutoSave.value = Date.now()
+    console.debug('Form data auto saved locally')
+    autoSavePending.value = false
+  }
+}
+
+// Watchers
+watch(mode, (newValue, oldValue) => {
+  updateFormData()
+  if (newValue === 'single') {
+    schema.value = makeBlitzarQuasarSchemaForm(crf.value.schema, { locale: currentLocale.value, debug: debug.value })
+  } else {
+    schema.value = makeBlitzarQuasarSchemaForm(crf.value.schema, { locale: currentLocale.value, stepId: '__step', debug: debug.value })
+  }
+  updateProgress()
+  remountCounter.value++
+})
+
+// Lifecycle hooks
+onMounted(() => {
+  const caseReport = recordStore.getCaseReportById(user.value, caseReportId.value)
+  if (caseReport) {
+    crf.value = crfs.value ? crfs.value.filter(f => f._id === caseReport.crfId).pop() : { schema: { items: [] } }
+    if (crf.value.schema.layout) {
+      mode.value = crf.value.schema.layout
+    }
+    schema.value = makeBlitzarQuasarSchemaForm(crf.value.schema, { locale: currentLocale.value, stepId: '__step', debug: debug.value })
+    if (!caseReport.data || !caseReport.data.__step) {
+      recordStore.mergeCaseReportData({
+        id: caseReportId.value,
+        data: { __step: 0 }
+      })
+    }
+    lang.value = {
+      requiredField: t('required_field')
+    }
+    formData.value = caseReport.data
+    updateProgress()
+    remountCounter.value++
+  } else {
+    console.error('No such record with id: ' + caseReportId.value)
+    router.push('/')
+  }
 })
 </script>

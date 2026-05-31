@@ -178,23 +178,23 @@
   </q-layout>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { defineComponent, ref, watch } from 'vue'
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
 import { useAuthStore } from '../stores/auth'
 import { useRecordStore } from '../stores/record'
 import { useFormStore } from '../stores/form'
 import { useLockStore } from '../stores/lock'
-import { storeToRefs } from 'pinia'
 
 // Import Quasar language files statically
 import langEnUS from 'quasar/lang/en-US'
 import langFr from 'quasar/lang/fr'
 
-import LockMixin from '../mixins/LockMixin'
 import EssentialLink from 'components/EssentialLink.vue'
 
 // Map locale codes to Quasar language objects
@@ -214,115 +214,136 @@ const contributors = [
   }
 ]
 
-export default defineComponent({
-  name: 'MainLayout',
+// Composition API setup
+const $q = useQuasar()
+const { locale, t } = useI18n({ useScope: 'global' })
+const router = useRouter()
 
-  components: {
-    EssentialLink
-  },
+// Reactive state
+const leftDrawerOpen = ref(false)
+const showAppInfo = ref(false)
 
-  mixins: [LockMixin],
+// Initialize stores
+const authStore = useAuthStore()
+const recordStore = useRecordStore()
+const formStore = useFormStore()
+const lockStore = useLockStore()
 
-  setup () {
-    const $q = useQuasar()
-    const { locale } = useI18n({ useScope: 'global' })
-    const leftDrawerOpen = ref(false)
+// Extract reactive state from stores
+const { user } = storeToRefs(recordStore)
 
-    // Initialize stores
-    const authStore = useAuthStore()
-    const recordStore = useRecordStore()
-    const formStore = useFormStore()
-    const lockStore = useLockStore()
+// LockMixin functionality inlined
+const { lockId, lockPassword, lockStatus } = storeToRefs(lockStore)
 
-    // Extract reactive state from stores
-    const { user } = storeToRefs(recordStore)
+const triggerLock = (payload) => {
+  lockStore.triggerLock(payload)
+}
 
-    watch(locale, val => {
-      // Set Quasar language based on locale
-      const lang = quasarLangMap[val] || quasarLangMap.en
-      $q.lang.set(lang)
-    })
+const updatePassword = (payload) => {
+  lockStore.updatePassword(payload)
+}
 
+const clearPassword = (payload) => {
+  lockStore.clearPassword(payload)
+}
+
+const resetLock = (userId) => {
+  updatePassword({
+    id: userId
+  })
+  triggerLock({
+    status: false
+  })
+}
+
+const clearLock = (userId) => {
+  clearPassword({
+    id: userId
+  })
+  triggerLock({
+    status: false
+  })
+}
+
+// Computed properties
+const caseReportsCount = computed(() => {
+  return recordStore.getCaseReportsCount(user.value)
+})
+
+const localeOptions = computed(() => {
+  return locales.map(loc => {
     return {
-      contributors: contributors,
-      settings: settings,
-      locale,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      },
-      showAppInfo: ref(false),
-      // Store references
-      authStore,
-      recordStore,
-      formStore,
-      lockStore,
-      // State
-      user
+      value: loc,
+      label: t('locales.' + loc)
     }
-  },
+  })
+})
 
-  created () {
-    if (settings.lock.enabled) {
-      if (this.lockStatus) {
-        this.$router.push('/lock')
-      }
-      if (this.user._id !== this.lockId) {
-        this.resetLock(this.user._id)
-      }
+const hasLocales = computed(() => {
+  return locales.length > 1
+})
+
+const userName = computed(() => {
+  const fullname = user.value ? user.value.firstname + ' ' + user.value.lastname : ''
+  return fullname.trim().length === 0 ? userEmail.value : fullname
+})
+
+const userEmail = computed(() => {
+  if (user.value) {
+    return user.value.email
+  }
+  return ''
+})
+
+// Methods
+const toggleLeftDrawer = () => {
+  leftDrawerOpen.value = !leftDrawerOpen.value
+}
+
+const onShowAppInfo = () => {
+  showAppInfo.value = true
+}
+
+const onLocaleSelection = (opt) => {
+  locale.value = opt.value
+}
+
+const onLogout = () => {
+  formStore.clearCaseReportForms()
+  authStore.logout()
+    .then(() => {
+      router.push('/login')
+    })
+  resetLock()
+}
+
+const onLock = () => {
+  router.push('/lock')
+}
+
+const onUpdate = () => {
+  formStore.getCaseReportForms({})
+}
+
+const onUpgrade = () => {
+  window.location.reload()
+}
+
+// Watch locale changes
+watch(locale, val => {
+  // Set Quasar language based on locale
+  const lang = quasarLangMap[val] || quasarLangMap.en
+  $q.lang.set(lang)
+})
+
+// Lifecycle hook (replaces created)
+onMounted(() => {
+  if (settings.lock.enabled) {
+    if (lockStatus.value) {
+      router.push('/lock')
     }
-  },
-
-  computed: {
-    caseReportsCount () {
-      return this.recordStore.getCaseReportsCount(this.user)
-    },
-    localeOptions () {
-      return locales.map(loc => {
-        return {
-          value: loc,
-          label: this.$t('locales.' + loc)
-        }
-      })
-    },
-    hasLocales () {
-      return locales.length > 1
-    },
-    userName () {
-      const fullname = this.user ? this.user.firstname + ' ' + this.user.lastname : ''
-      return fullname.trim().length === 0 ? this.userEmail : fullname
-    },
-    userEmail () {
-      if (this.user) {
-        return this.user.email
-      }
-      return ''
-    }
-  },
-
-  methods: {
-    onShowAppInfo () {
-      this.showAppInfo = true
-    },
-    onLocaleSelection (opt) {
-      this.locale = opt.value
-    },
-    onLogout () {
-      this.formStore.clearCaseReportForms()
-      this.authStore.logout()
-        .then(() => {
-          this.$router.push('/login')
-        })
-      this.resetLock()
-    },
-    onLock () {
-      this.$router.push('/lock')
-    },
-    onUpdate () {
-      this.formStore.getCaseReportForms({})
-    },
-    onUpgrade () {
-      window.location.reload()
+    if (user.value._id !== lockId.value) {
+      resetLock(user.value._id)
     }
   }
 })

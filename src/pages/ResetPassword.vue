@@ -48,8 +48,10 @@
   </q-layout>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
+import { ref, reactive, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import useVuelidate from '@vuelidate/core'
 import { required, minLength, maxLength, strongPassword } from '../boot/vuelidate'
 import userService from '../services/user'
@@ -58,71 +60,59 @@ import { settings } from '../boot/settings'
 
 import Banner from 'components/Banner.vue'
 
-export default defineComponent({
-  components: { Banner },
-  setup() {
-    return {
-      v$: useVuelidate(),
-      settings
-    }
-  },
-  data() {
-    return {
-      valid: false,
-      success: false,
-      showPassword: false,
-      formData: {
-        password: ''
-      }
-    }
-  },
-  validations: {
-    formData: {
-      password: {
-        required,
-        minLength: minLength(8),
-        maxLength: maxLength(64),
-        strongPassword
-      }
-    }
-  },
-  computed: {
-    disableSubmit() {
-      return this.v$.formData.$invalid
-    }
-  },
-  methods: {
-    async resetPassword() {
-      const token = this.$route.query.token
-      let result
-      if (token) {
-        result = await userService
-          .resetPassword(token, this.formData.password)
-          .catch(err => {
-            if (err.response) {
-              Notify.create({
-                message: this.$t('reset.failure'),
-                color: 'negative',
-                icon: 'fas fa-times'
-              })
-            }
-          })
-      } else {
-        Notify.create({
-          message: this.$t('reset.bad_link'),
-          color: 'negative',
-          icon: 'fas fa-times'
-        })
-      }
-      if (result && result.status === 201) {
-        Notify.create({
-          message: this.$t('reset.success'),
-          color: 'positive',
-          icon: 'fas fa-check'
-        })
-        this.$router.push('/')
-      }
+const router = useRouter()
+const route = useRoute()
+const { t } = useI18n()
+
+const showPassword = ref(false)
+const formData = reactive({
+  password: ''
+})
+
+const rules = {
+  formData: {
+    password: {
+      required,
+      minLength: minLength(8),
+      maxLength: maxLength(64),
+      strongPassword
     }
   }
-})
+}
+
+const v$ = useVuelidate(rules, { formData })
+
+const disableSubmit = computed(() => v$.value.formData.$invalid)
+
+const resetPassword = async () => {
+  const token = route.query.token
+  let result
+  if (token) {
+    result = await userService
+      .resetPassword(token, formData.password)
+      .catch(err => {
+        if (err.response) {
+          Notify.create({
+            message: t('reset.failure'),
+            color: 'negative',
+            icon: 'fas fa-times'
+          })
+        }
+      })
+  } else {
+    Notify.create({
+      message: t('reset.bad_link'),
+      color: 'negative',
+      icon: 'fas fa-times'
+    })
+  }
+  if (result && result.status === 201) {
+    Notify.create({
+      message: t('reset.success'),
+      color: 'positive',
+      icon: 'fas fa-check'
+    })
+    router.push('/')
+  }
+}
 </script>

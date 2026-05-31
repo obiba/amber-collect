@@ -147,9 +147,10 @@
   </q-layout>
 </template>
 
-<script>
+<script setup>
+import { reactive, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { defineComponent } from 'vue'
+import { useRouter } from 'vue-router'
 import useVuelidate from '@vuelidate/core'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import { required, minLength, maxLength, email, strongPassword } from '../boot/vuelidate'
@@ -160,99 +161,87 @@ import { storeToRefs } from 'pinia'
 
 import Banner from 'components/Banner.vue'
 
-export default defineComponent({
-  components: { Banner },
-  setup () {
-    const { locale } = useI18n({ useScope: 'global' })
-    const { executeRecaptcha, recaptchaLoaded } = useReCaptcha()
-    const accountStore = useAccountStore()
-    
-    const { registrationComplete } = storeToRefs(accountStore)
+const { locale, t } = useI18n({ useScope: 'global' })
+const router = useRouter()
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha()
+const accountStore = useAccountStore()
 
-    const recaptcha = async () => {
-      // (optional) Wait until recaptcha has been loaded.
-      await recaptchaLoaded()
+const { registrationComplete } = storeToRefs(accountStore)
 
-      // Execute reCAPTCHA with action "login".
-      const token = await executeRecaptcha('login')
+const formData = reactive({
+  firstname: '',
+  lastname: '',
+  language: '',
+  email: '',
+  password: ''
+})
 
-      // Do stuff with the received token.
-      return token
-    }
-
-    return {
-      locale,
-      v$: useVuelidate(),
-      recaptcha,
-      settings,
-      accountStore,
-      registrationComplete
-    }
-  },
-  data () {
-    return {
-      formData: {
-        firstname: '',
-        lastname: '',
-        language: '',
-        email: '',
-        password: ''
-      }
-    }
-  },
-  validations: {
-    formData: {
-      firstname: {
-        required,
-        minLength: minLength(2)
-      },
-      lastname: {
-        required,
-        minLength: minLength(2)
-      },
-      email: {
-        required,
-        email
-      },
-      password: {
-        required,
-        minLength: minLength(8),
-        maxLength: maxLength(64),
-        strongPassword
-      }
-    }
-  },
-  mounted () {
-    if (!this.settings.register_enabled) {
-      this.$router.push('/')
-    }
-  },
-  computed: {
-    disableSubmit () {
-      return this.v$.formData.$invalid
+const rules = {
+  formData: {
+    firstname: {
+      required,
+      minLength: minLength(2)
     },
-    localeOptions () {
-      return locales.map(loc => {
-        return {
-          value: loc,
-          label: this.$t('locales.' + loc)
-        }
-      })
+    lastname: {
+      required,
+      minLength: minLength(2)
     },
-    hasLocales () {
-      return locales.length > 1
+    email: {
+      required,
+      email
+    },
+    password: {
+      required,
+      minLength: minLength(8),
+      maxLength: maxLength(64),
+      strongPassword
     }
-  },
-  methods: {
-    onSubmit () {
-      // Execute reCAPTCHA with action "login".
-      this.recaptcha().then((token) => {
-        const data = this.formData
-        data.language = this.locale
-        data.token = token
-        this.accountStore.registerUser({ formData: data })
-      })
+  }
+}
+
+const v$ = useVuelidate(rules, { formData })
+
+const recaptcha = async () => {
+  // (optional) Wait until recaptcha has been loaded.
+  await recaptchaLoaded()
+
+  // Execute reCAPTCHA with action "login".
+  const token = await executeRecaptcha('login')
+
+  // Do stuff with the received token.
+  return token
+}
+
+const disableSubmit = computed(() => {
+  return v$.value.formData.$invalid
+})
+
+const localeOptions = computed(() => {
+  return locales.map(loc => {
+    return {
+      value: loc,
+      label: t('locales.' + loc)
     }
+  })
+})
+
+const hasLocales = computed(() => {
+  return locales.length > 1
+})
+
+const onSubmit = () => {
+  // Execute reCAPTCHA with action "login".
+  recaptcha().then((token) => {
+    const data = formData
+    data.language = locale.value
+    data.token = token
+    accountStore.registerUser({ formData: data })
+  })
+}
+
+onMounted(() => {
+  if (!settings.register_enabled) {
+    router.push('/')
   }
 })
 </script>

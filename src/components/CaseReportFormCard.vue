@@ -75,99 +75,89 @@
 
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
+import { ref, computed, getCurrentInstance } from 'vue'
+import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { marked } from 'marked'
 import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
 import { useRecordStore } from '../stores/record'
 
-export default defineComponent({
-  name: 'CaseReportFormCard',
-  props: ['form'],
-  components: {
-    BlitzForm
-  },
-
-  setup () {
-    const recordStore = useRecordStore()
-    const { user } = storeToRefs(recordStore)
-
-    return {
-      recordStore,
-      user
-    }
-  },
-
-  data () {
-    return {
-      showCaseReportFormDetails: false,
-      showCreateCaseReportRecord: false,
-      remountCounter: 0,
-      formData: {},
-      schema: []
-    }
-  },
-
-  computed: {
-    currentLocale () {
-      return this.$root.$i18n.locale
-    }
-  },
-
-  methods: {
-    tr (key) {
-      return makeSchemaFormTr(this.form.schema, { locale: this.currentLocale })(key)
-    },
-    truncate (text) {
-      if (!text) return text
-      const sentences = text.split('.')
-      return sentences[0] + (sentences.length > 1 && sentences[1] !== '' ? '...' : '.')
-    },
-    md (text) {
-      return text ? marked.parse(this.tr(text), { headerIds: false, mangle: false }) : text
-    },
-    onShowDetails () {
-      this.showCaseReportFormDetails = true
-    },
-    onStart () {
-      const idSchema = {
-        items: [{
-          name: '_id',
-          type: 'text',
-          label: this.form.schema.idLabel ? this.form.schema.idLabel : 'ID',
-          description: this.form.schema.idDescription,
-          mask: this.form.schema.idMask,
-          validation: this.form.schema.idValidation,
-          validationMessage: this.form.schema.idValidationMessage,
-          required: true
-        }],
-        i18n: this.form.schema.i18n
-      }
-      this.schema = makeBlitzarQuasarSchemaForm(idSchema, { locale: this.currentLocale })
-      this.formData = {}
-      this.remountCounter++
-      this.showCreateCaseReportRecord = true
-    },
-    startRecord () {
-      const result = validateFormPerSchema(this.formData, this.schema)
-      const errors = Object.keys(result)
-        .filter(key => result[key] !== null && result[key] !== false)
-        .reduce((obj, key) => {
-          obj[key] = result[key]
-          return obj
-        }, {})
-      if (Object.keys(errors).length === 0) {
-        this.recordStore.initCaseReport({
-          crf: this.form,
-          data: this.formData,
-          user: this.user.email
-        }).then((recordId) => {
-          this.$router.push('/case-report/' + recordId)
-        })
-      }
-    }
+const props = defineProps({
+  form: {
+    type: Object,
+    required: true
   }
 })
+
+const router = useRouter()
+const recordStore = useRecordStore()
+const { user } = storeToRefs(recordStore)
+
+const showCaseReportFormDetails = ref(false)
+const showCreateCaseReportRecord = ref(false)
+const remountCounter = ref(0)
+const formData = ref({})
+const schema = ref([])
+
+const instance = getCurrentInstance()
+const currentLocale = computed(() => instance?.proxy?.$root?.$i18n?.locale)
+
+const tr = (key) => {
+  return makeSchemaFormTr(props.form.schema, { locale: currentLocale.value })(key)
+}
+
+const truncate = (text) => {
+  if (!text) return text
+  const sentences = text.split('.')
+  return sentences[0] + (sentences.length > 1 && sentences[1] !== '' ? '...' : '.')
+}
+
+const md = (text) => {
+  return text ? marked.parse(tr(text), { headerIds: false, mangle: false }) : text
+}
+
+const onShowDetails = () => {
+  showCaseReportFormDetails.value = true
+}
+
+const onStart = () => {
+  const idSchema = {
+    items: [{
+      name: '_id',
+      type: 'text',
+      label: props.form.schema.idLabel ? props.form.schema.idLabel : 'ID',
+      description: props.form.schema.idDescription,
+      mask: props.form.schema.idMask,
+      validation: props.form.schema.idValidation,
+      validationMessage: props.form.schema.idValidationMessage,
+      required: true
+    }],
+    i18n: props.form.schema.i18n
+  }
+  schema.value = makeBlitzarQuasarSchemaForm(idSchema, { locale: currentLocale.value })
+  formData.value = {}
+  remountCounter.value++
+  showCreateCaseReportRecord.value = true
+}
+
+const startRecord = () => {
+  const result = validateFormPerSchema(formData.value, schema.value)
+  const errors = Object.keys(result)
+    .filter(key => result[key] !== null && result[key] !== false)
+    .reduce((obj, key) => {
+      obj[key] = result[key]
+      return obj
+    }, {})
+  if (Object.keys(errors).length === 0) {
+    recordStore.initCaseReport({
+      crf: props.form,
+      data: formData.value,
+      user: user.value.email
+    }).then((recordId) => {
+      router.push('/case-report/' + recordId)
+    })
+  }
+}
 </script>
