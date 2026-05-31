@@ -178,7 +178,6 @@ const isNewPwd = computed(() => {
 })
 
 const isFirstPwd = computed(() => {
-  console.log('$ ' + password1.value)
   return ('' + password1.value).length < 4
 })
 

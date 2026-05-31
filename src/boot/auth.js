@@ -43,7 +43,7 @@ export default boot(async ({ router }) => {
           recordStore.initUser(response.user)
           router.push(to.path)
         }).catch((err) => {
-          console.log(err)
+          console.error(err)
           if (err.response) {
             // remove expired/unusable token
             LocalStorage.remove('feathers-jwt')
