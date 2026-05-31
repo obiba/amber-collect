@@ -12,20 +12,20 @@ export const useRecordStore = defineStore('record', () => {
   const caseReportsInProcess = ref({})
   const caseReportsInError = ref({})
 
-  // Getters
-  const getCaseReportById = computed(() => {
-    return (userParam, id) => caseReports.value.filter(rec => rec.id === id && userParam && rec.actions[0].user === userParam.email).pop()
-  })
-  
-  const getCaseReportsCount = computed(() => {
-    return (userParam) => caseReports.value.filter(rec => userParam && rec.actions[0].user === userParam.email).length
-  })
-  
-  const getCaseReports = computed(() => {
-    return (userParam) => caseReports.value.filter(rec => userParam && rec.actions[0].user === userParam.email)
-  })
 
   // Actions
+  function getCaseReportById(userParam, id) {
+    return caseReports.value.filter(rec => rec.id === id && userParam && rec.actions[0].user === userParam.email).pop()
+  }
+
+  function getCaseReportsCount(userParam) {
+    return caseReports.value.filter(rec => userParam && rec.actions[0].user === userParam.email).length
+  }
+
+  function getCaseReports(userParam) {
+    return caseReports.value.filter(rec => userParam && rec.actions[0].user === userParam.email)
+  }
+
   async function initUser(payload) {
     user.value = payload
   }
@@ -238,11 +238,10 @@ export const useRecordStore = defineStore('record', () => {
     caseReports,
     caseReportsInProcess,
     caseReportsInError,
-    // Getters
+    // Actions
     getCaseReportById,
     getCaseReportsCount,
     getCaseReports,
-    // Actions
     initUser,
     initCaseReport,
     addCaseReport,
