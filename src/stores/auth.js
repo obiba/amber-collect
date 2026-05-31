@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { secureStorage } from './index'
 import { feathersClient } from '../boot/feathersClient'
 
@@ -11,9 +11,6 @@ export const useAuthStore = defineStore('auth', () => {
   const isLogoutPending = ref(false)
   const errorOnAuthenticate = ref(null)
   const errorOnLogout = ref(null)
-
-  // Getters
-  const isAuthenticated = computed(() => !!accessToken.value && !!user.value)
 
   // Actions
   function responseHandler(response) {
@@ -90,8 +87,6 @@ export const useAuthStore = defineStore('auth', () => {
     isLogoutPending,
     errorOnAuthenticate,
     errorOnLogout,
-    // Getters
-    isAuthenticated,
     // Actions
     authenticate,
     reAuthenticate,
