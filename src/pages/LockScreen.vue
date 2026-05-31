@@ -121,10 +121,8 @@ const lockStore = useLockStore()
 // Store state
 const { user } = storeToRefs(recordStore)
 
-// Inlined LockMixin computed properties
-const lockId = lockStore.getLockId
-const lockPassword = lockStore.getLockPassword
-const lockStatus = lockStore.getLockStatus
+// LockMixin functionality inlined - use state refs directly
+const { id: lockId, password: lockPassword, status: lockStatus } = storeToRefs(lockStore)
 
 // Inlined LockMixin methods
 const triggerLock = (payload) => {

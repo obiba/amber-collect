@@ -4,9 +4,9 @@ import { useLockStore } from '../stores/lock'
 const LockMixin = {
   computed: {
     ...mapState(useLockStore, {
-      lockId: 'getLockId',
-      lockPassword: 'getLockPassword',
-      lockStatus: 'getLockStatus'
+      lockId: 'id',
+      lockPassword: 'password',
+      lockStatus: 'status'
     })
   },
   methods: {

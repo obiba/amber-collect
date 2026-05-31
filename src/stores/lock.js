@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { secureStorage } from './index'
 
 export const useLockStore = defineStore('lock', () => {
@@ -8,11 +8,6 @@ export const useLockStore = defineStore('lock', () => {
   const password = ref('')
   const status = ref(false)
   const locks = ref({})
-
-  // Getters
-  const getLockId = computed(() => id.value || '')
-  const getLockPassword = computed(() => password.value || '')
-  const getLockStatus = computed(() => status.value)
 
   // Actions
   function triggerLock(payload) {
@@ -38,11 +33,11 @@ export const useLockStore = defineStore('lock', () => {
         password.value = locks.value[payload.id]
       } else {
         // no lock to reinstate, will create a new one
-        password.value = null
+        password.value = ''
       }
     } else {
       // reset current lock
-      password.value = null
+      password.value = ''
     }
     // update user lock
     if (payload.id && payload.password) {
@@ -56,10 +51,6 @@ export const useLockStore = defineStore('lock', () => {
     password,
     status,
     locks,
-    // Getters
-    getLockId,
-    getLockPassword,
-    getLockStatus,
     // Actions
     triggerLock,
     clearPassword,

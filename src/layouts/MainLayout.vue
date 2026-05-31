@@ -231,11 +231,7 @@ const lockStore = useLockStore()
 
 // Extract reactive state from stores
 const { user } = storeToRefs(recordStore)
-
-// LockMixin functionality inlined - access getters directly
-const lockId = lockStore.getLockId
-const lockPassword = lockStore.getLockPassword
-const lockStatus = lockStore.getLockStatus
+const { id: lockId, password: lockPassword, status: lockStatus } = storeToRefs(lockStore)
 
 const triggerLock = (payload) => {
   lockStore.triggerLock(payload)
