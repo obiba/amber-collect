@@ -174,7 +174,7 @@ const userName = computed(() => {
 })
 
 const isNewPwd = computed(() => {
-  return lockPassword.value.length === 0
+  return !lockPassword.value || lockPassword.value.length === 0
 })
 
 const isFirstPwd = computed(() => {
@@ -207,7 +207,7 @@ watch(password, (newValue) => {
   // verify code and remove lock wall
   const newStr = newValue + ''
   if (newStr.length === passwordLength) {
-    if (newStr === lockPassword.value) {
+    if (lockPassword.value && newStr === lockPassword.value) {
       triggerLock({
         status: false
       })

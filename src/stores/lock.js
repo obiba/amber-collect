@@ -10,8 +10,8 @@ export const useLockStore = defineStore('lock', () => {
   const locks = ref({})
 
   // Getters
-  const getLockId = computed(() => id.value === null ? '' : id.value)
-  const getLockPassword = computed(() => password.value === null ? '' : password.value)
+  const getLockId = computed(() => id.value || '')
+  const getLockPassword = computed(() => password.value || '')
   const getLockStatus = computed(() => status.value)
 
   // Actions
