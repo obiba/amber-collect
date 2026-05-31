@@ -232,8 +232,10 @@ const lockStore = useLockStore()
 // Extract reactive state from stores
 const { user } = storeToRefs(recordStore)
 
-// LockMixin functionality inlined
-const { lockId, lockPassword, lockStatus } = storeToRefs(lockStore)
+// LockMixin functionality inlined - access getters directly
+const lockId = lockStore.getLockId
+const lockPassword = lockStore.getLockPassword
+const lockStatus = lockStore.getLockStatus
 
 const triggerLock = (payload) => {
   lockStore.triggerLock(payload)
@@ -338,7 +340,7 @@ watch(locale, val => {
 
 // Lifecycle hook (replaces created)
 onMounted(() => {
-  if (settings.lock.enabled) {
+  if (settings.lock.enabled && user.value) {
     if (lockStatus.value) {
       router.push('/lock')
     }
