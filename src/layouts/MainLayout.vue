@@ -178,16 +178,30 @@
   </q-layout>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
-import { defineComponent, ref, watch } from 'vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
-import { useQuasar } from 'quasar'
+import { useAuthStore } from '../stores/auth'
+import { useRecordStore } from '../stores/record'
+import { useFormStore } from '../stores/form'
+import { useLockStore } from '../stores/lock'
 
-import LockMixin from '../mixins/LockMixin'
+// Import Quasar language files statically
+import langEnUS from 'quasar/lang/en-US'
+import langFr from 'quasar/lang/fr'
+
 import EssentialLink from 'components/EssentialLink.vue'
+
+// Map locale codes to Quasar language objects
+const quasarLangMap = {
+  en: langEnUS,
+  fr: langFr
+}
 
 const contributors = [
   {
@@ -200,111 +214,134 @@ const contributors = [
   }
 ]
 
-export default defineComponent({
-  name: 'MainLayout',
+// Composition API setup
+const $q = useQuasar()
+const { locale, t } = useI18n({ useScope: 'global' })
+const router = useRouter()
 
-  components: {
-    EssentialLink
-  },
+// Reactive state
+const leftDrawerOpen = ref(false)
+const showAppInfo = ref(false)
 
-  mixins: [LockMixin],
+// Initialize stores
+const authStore = useAuthStore()
+const recordStore = useRecordStore()
+const formStore = useFormStore()
+const lockStore = useLockStore()
 
-  setup () {
-    const $q = useQuasar()
-    const { locale } = useI18n({ useScope: 'global' })
-    const leftDrawerOpen = ref(false)
+// Extract reactive state from stores
+const { user } = storeToRefs(recordStore)
+const { id: lockId, password: lockPassword, status: lockStatus } = storeToRefs(lockStore)
 
-    watch(locale, val => {
-      // dynamic import, so loading on demand only
-      const langIso = val === 'en' ? 'en-US' : val
-      import('quasar/lang/' + langIso)
-        .then(lang => {
-          $q.lang.set(lang.default)
-        })
-    })
+const triggerLock = (payload) => {
+  lockStore.triggerLock(payload)
+}
 
+const updatePassword = (payload) => {
+  lockStore.updatePassword(payload)
+}
+
+const clearPassword = (payload) => {
+  lockStore.clearPassword(payload)
+}
+
+const resetLock = (userId) => {
+  updatePassword({
+    id: userId
+  })
+  triggerLock({
+    status: false
+  })
+}
+
+const clearLock = (userId) => {
+  clearPassword({
+    id: userId
+  })
+  triggerLock({
+    status: false
+  })
+}
+
+// Computed properties
+const caseReportsCount = computed(() => {
+  return recordStore.getCaseReportsCount(user.value)
+})
+
+const localeOptions = computed(() => {
+  return locales.map(loc => {
     return {
-      contributors: contributors,
-      settings: settings,
-      locale,
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      },
-      showAppInfo: ref(false)
+      value: loc,
+      label: t('locales.' + loc)
     }
-  },
+  })
+})
 
-  created () {
-    if (settings.lock.enabled) {
-      if (this.lockStatus) {
-        this.$router.push('/lock')
-      }
-      if (this.user._id !== this.lockId) {
-        this.resetLock(this.user._id)
-      }
+const hasLocales = computed(() => {
+  return locales.length > 1
+})
+
+const userName = computed(() => {
+  const fullname = user.value ? user.value.firstname + ' ' + user.value.lastname : ''
+  return fullname.trim().length === 0 ? userEmail.value : fullname
+})
+
+const userEmail = computed(() => {
+  if (user.value) {
+    return user.value.email
+  }
+  return ''
+})
+
+// Methods
+const toggleLeftDrawer = () => {
+  leftDrawerOpen.value = !leftDrawerOpen.value
+}
+
+const onShowAppInfo = () => {
+  showAppInfo.value = true
+}
+
+const onLocaleSelection = (opt) => {
+  locale.value = opt.value
+}
+
+const onLogout = () => {
+  formStore.clearCaseReportForms()
+  authStore.logout()
+    .then(() => {
+      router.push('/login')
+    })
+  resetLock()
+}
+
+const onLock = () => {
+  router.push('/lock')
+}
+
+const onUpdate = () => {
+  formStore.getCaseReportForms({})
+}
+
+const onUpgrade = () => {
+  window.location.reload()
+}
+
+// Watch locale changes
+watch(locale, val => {
+  // Set Quasar language based on locale
+  const lang = quasarLangMap[val] || quasarLangMap.en
+  $q.lang.set(lang)
+})
+
+// Lifecycle hook (replaces created)
+onMounted(() => {
+  if (settings.lock.enabled && user.value) {
+    if (lockStatus.value) {
+      router.push('/lock')
     }
-  },
-
-  computed: {
-    ...mapState({
-      user: state => state.record.user
-    }),
-    caseReportsCount () {
-      return this.getCaseReportsCount()(this.user)
-    },
-    localeOptions () {
-      return locales.map(loc => {
-        return {
-          value: loc,
-          label: this.$t('locales.' + loc)
-        }
-      })
-    },
-    hasLocales () {
-      return locales.length > 1
-    },
-    userName () {
-      const fullname = this.user ? this.user.firstname + ' ' + this.user.lastname : ''
-      return fullname.trim().length === 0 ? this.userEmail : fullname
-    },
-    userEmail () {
-      if (this.user) {
-        return this.user.email
-      }
-      return ''
-    }
-  },
-
-  methods: {
-    ...mapActions({
-      getCaseReportForms: 'form/getCaseReportForms'
-    }),
-    ...mapGetters({
-      getCaseReportsCount: 'record/getCaseReportsCount'
-    }),
-    onShowAppInfo () {
-      this.showAppInfo = true
-    },
-    onLocaleSelection (opt) {
-      this.locale = opt.value
-    },
-    onLogout () {
-      this.$store.dispatch('form/clearCaseReportForms')
-      this.$store.dispatch('auth/logout')
-        .then(() => {
-          this.$router.push('/login')
-        })
-      this.resetLock()
-    },
-    onLock () {
-      this.$router.push('/lock')
-    },
-    onUpdate () {
-      this.getCaseReportForms({})
-    },
-    onUpgrade () {
-      window.location.reload()
+    if (user.value._id !== lockId.value) {
+      resetLock(user.value._id)
     }
   }
 })

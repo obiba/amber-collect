@@ -181,130 +181,140 @@
   </q-page>
 </template>
 
-<script>
-import { defineComponent, ref, computed } from 'vue'
-import { mapState, mapGetters } from 'vuex'
-import { date } from 'quasar'
+<script setup>
+import { ref, computed } from 'vue'
+import { storeToRefs } from 'pinia'
+import { date, useQuasar } from 'quasar'
+import { useI18n } from 'vue-i18n'
 import { BlitzForm } from '@blitzar/form'
 import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
+import { useFormStore } from '../stores/form'
+import { useRecordStore } from '../stores/record'
 
-export default defineComponent({
-  name: 'CaseReports',
-  components: { BlitzForm },
-  setup () {
-    const pagination = ref({
-      sortBy: 'id',
-      descending: true,
-      page: 1,
-      rowsPerPage: 10
-    })
+// Stores
+const formStore = useFormStore()
+const recordStore = useRecordStore()
 
-    return {
-      pagination,
-      pagesNumber: computed(() => {
-        return Math.ceil(this.caseReports.length / pagination.value.rowsPerPage)
-      })
-    }
-  },
-  data () {
-    return {
-      viewTab: 'form',
-      viewData: {},
-      viewDataStr: '{}',
-      viewSchema: {},
-      remountCounter: 0,
-      showViewCaseReport: false,
-      selectedCaseReport: {},
-      showConfirmDeleteCaseReport: false
-    }
-  },
+const { crfs } = storeToRefs(formStore)
+const { user } = storeToRefs(recordStore)
 
-  computed: {
-    ...mapState({
-      crfs: state => state.form.crfs,
-      user: state => state.record.user
-    }),
-    caseReports () {
-      return this.getCaseReports()(this.user)
-    },
-    currentLocale () {
-      return this.$root.$i18n.locale
-    }
-  },
+// Quasar and i18n
+const $q = useQuasar()
+const { locale } = useI18n()
 
-  methods: {
-    ...mapGetters({
-      getCaseReports: 'record/getCaseReports'
-    }),
-    getForm (crfId) {
-      return this.crfs.filter(f => f._id === crfId).pop()
-    },
-    getFormLabel (crfId) {
-      const form = this.getForm(crfId)
-      return form ? this.tr(form.schema, form.name ? form.name : form.schema.label) : '?'
-    },
-    getFormRevision (crfId) {
-      const form = this.getForm(crfId)
-      return form ? form.revision : '?'
-    },
-    startedDate (cr) {
-      const action = cr.actions.filter(a => a.type === 'init').pop()
-      return action ? date.formatDate(action.timestamp, 'YYYY-MM-DD HH:mm') : '?'
-    },
-    updatedDate (cr) {
-      const action = cr.actions[cr.actions.length - 1]
-      return action ? date.formatDate(action.timestamp, 'YYYY-MM-DD HH:mm') : '?'
-    },
-    updatedAgo (cr) {
-      const action = cr.actions[cr.actions.length - 1]
-      return action ? this.timestampAgo(action.timestamp) : '?'
-    },
-    timestampAgo (timestamp) {
-      const rtf = new Intl.RelativeTimeFormat(this.currentLocale, { style: 'long' })
-      const minutes = Math.ceil((timestamp - Date.now()) / 60000)
-      if (minutes <= -1440) {
-        return rtf.format(Math.ceil(minutes / 1440), 'day')
-      }
-      if (minutes <= -60) {
-        return rtf.format(Math.ceil(minutes / 60), 'hour')
-      }
-      return rtf.format(minutes, 'minute')
-    },
-    tr (schema, key) {
-      return schema ? makeSchemaFormTr(schema, { locale: this.currentLocale })(key) : '-'
-    },
-    canResume (caseReport) {
-      return caseReport.state === 'in_progress' && this.getForm(caseReport.crfId)
-    },
-    canSave (caseReport) {
-      return caseReport.state === 'completed' && this.getForm(caseReport.crfId)
-    },
-    canView (caseReport) {
-      return caseReport.state !== 'saved' && this.getForm(caseReport.crfId)
-    },
-    onViewCaseReport (caseReport) {
-      const crf = this.getForm(caseReport.crfId)
-      this.viewData = caseReport.data
-      this.viewDataStr = JSON.stringify(caseReport.data, null, '  ')
-      if (crf) {
-        this.viewSchema = makeBlitzarQuasarSchemaForm(crf.schema, { locale: this.currentLocale })
-        this.remountCounter++
-      } else {
-        this.viewSchema = null
-      }
-      this.viewTab = 'form'
-      this.showViewCaseReport = true
-    },
-    onSave (caseReport) {
-      this.$store.dispatch('record/saveCaseReport', { id: caseReport.id, force: true })
-    },
-    onConfirmDelete (caseReport) {
-      this.selectedCaseReport = caseReport
-      this.showConfirmDeleteCaseReport = true
-    },
-    deleteCaseReport () {
-      this.$store.dispatch('record/deleteCaseReport', { id: this.selectedCaseReport.id })
-    }
-  }
+// Pagination
+const pagination = ref({
+  sortBy: 'id',
+  descending: true,
+  page: 1,
+  rowsPerPage: 10
 })
+
+// View dialog state
+const viewTab = ref('form')
+const viewData = ref({})
+const viewDataStr = ref('{}')
+const viewSchema = ref({})
+const remountCounter = ref(0)
+const showViewCaseReport = ref(false)
+const selectedCaseReport = ref({})
+const showConfirmDeleteCaseReport = ref(false)
+
+// Computed properties
+const caseReports = computed(() => {
+  return recordStore.getCaseReports(user.value)
+})
+
+const pagesNumber = computed(() => {
+  return Math.ceil(caseReports.value.length / pagination.value.rowsPerPage)
+})
+
+const currentLocale = computed(() => {
+  return locale.value
+})
+
+// Methods
+const getForm = (crfId) => {
+  return crfs.value.filter(f => f._id === crfId).pop()
+}
+
+const getFormLabel = (crfId) => {
+  const form = getForm(crfId)
+  return form ? tr(form.schema, form.name ? form.name : form.schema.label) : '?'
+}
+
+const getFormRevision = (crfId) => {
+  const form = getForm(crfId)
+  return form ? form.revision : '?'
+}
+
+const startedDate = (cr) => {
+  const action = cr.actions.filter(a => a.type === 'init').pop()
+  return action ? date.formatDate(action.timestamp, 'YYYY-MM-DD HH:mm') : '?'
+}
+
+const updatedDate = (cr) => {
+  const action = cr.actions[cr.actions.length - 1]
+  return action ? date.formatDate(action.timestamp, 'YYYY-MM-DD HH:mm') : '?'
+}
+
+const updatedAgo = (cr) => {
+  const action = cr.actions[cr.actions.length - 1]
+  return action ? timestampAgo(action.timestamp) : '?'
+}
+
+const timestampAgo = (timestamp) => {
+  const rtf = new Intl.RelativeTimeFormat(currentLocale.value, { style: 'long' })
+  const minutes = Math.ceil((timestamp - Date.now()) / 60000)
+  if (minutes <= -1440) {
+    return rtf.format(Math.ceil(minutes / 1440), 'day')
+  }
+  if (minutes <= -60) {
+    return rtf.format(Math.ceil(minutes / 60), 'hour')
+  }
+  return rtf.format(minutes, 'minute')
+}
+
+const tr = (schema, key) => {
+  return schema ? makeSchemaFormTr(schema, { locale: currentLocale.value })(key) : '-'
+}
+
+const canResume = (caseReport) => {
+  return caseReport.state === 'in_progress' && getForm(caseReport.crfId)
+}
+
+const canSave = (caseReport) => {
+  return caseReport.state === 'completed' && getForm(caseReport.crfId)
+}
+
+const canView = (caseReport) => {
+  return caseReport.state !== 'saved' && getForm(caseReport.crfId)
+}
+
+const onViewCaseReport = (caseReport) => {
+  const crf = getForm(caseReport.crfId)
+  viewData.value = caseReport.data
+  viewDataStr.value = JSON.stringify(caseReport.data, null, '  ')
+  if (crf) {
+    viewSchema.value = makeBlitzarQuasarSchemaForm(crf.schema, { locale: currentLocale.value })
+    remountCounter.value++
+  } else {
+    viewSchema.value = null
+  }
+  viewTab.value = 'form'
+  showViewCaseReport.value = true
+}
+
+const onSave = (caseReport) => {
+  recordStore.saveCaseReport({ id: caseReport.id, force: true })
+}
+
+const onConfirmDelete = (caseReport) => {
+  selectedCaseReport.value = caseReport
+  showConfirmDeleteCaseReport.value = true
+}
+
+const deleteCaseReport = () => {
+  recordStore.deleteCaseReport({ id: selectedCaseReport.value.id })
+}
 </script>

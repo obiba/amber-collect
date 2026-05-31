@@ -13,10 +13,7 @@
         </div>
     </div>
 </template>
-<script>
-import { defineComponent } from 'vue'
 
-export default defineComponent({
-  name: 'Banner'
-})
+<script setup>
+// No props, data, or methods needed - just a template component
 </script>

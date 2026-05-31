@@ -95,124 +95,155 @@
   </q-layout>
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
-import { mapState } from 'vuex'
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { Notify } from 'quasar'
+import { storeToRefs } from 'pinia'
 import { settings } from '../boot/settings'
-
-import LockMixin from '../mixins/LockMixin'
+import { useAuthStore } from '../stores/auth'
+import { useRecordStore } from '../stores/record'
+import { useLockStore } from '../stores/lock'
 import LockPad from '../components/LockPad.vue'
 
 const passwordLength = 4
 
-export default defineComponent({
-  name: 'LockScreen',
+// Router and i18n
+const router = useRouter()
+const { t } = useI18n()
 
-  components: {
-    LockPad
-  },
+// Stores
+const authStore = useAuthStore()
+const recordStore = useRecordStore()
+const lockStore = useLockStore()
 
-  mixins: [LockMixin],
+// Store state
+const { user } = storeToRefs(recordStore)
 
-  setup () {
-    return {
-      isPwd: ref('password'),
-      settings: settings,
-      password1: ref(''),
-      password2: ref(''),
-      password: ref('')
-    }
-  },
+// LockMixin functionality inlined - use state refs directly
+const { id: lockId, password: lockPassword, status: lockStatus } = storeToRefs(lockStore)
 
-  created () {
-    if (this.user) {
-      if (!this.isNewPwd) {
-        this.triggerLock({
-          status: true
-        })
-      }
+// Inlined LockMixin methods
+const triggerLock = (payload) => {
+  lockStore.triggerLock(payload)
+}
+
+const updatePassword = (payload) => {
+  lockStore.updatePassword(payload)
+}
+
+const clearPassword = (payload) => {
+  lockStore.clearPassword(payload)
+}
+
+const resetLock = (userId) => {
+  updatePassword({
+    id: userId
+  })
+  triggerLock({
+    status: false
+  })
+}
+
+const clearLock = (userId) => {
+  clearPassword({
+    id: userId
+  })
+  triggerLock({
+    status: false
+  })
+}
+
+// Local state
+const isPwd = ref('password')
+const password1 = ref('')
+const password2 = ref('')
+const password = ref('')
+
+// Computed properties
+const userName = computed(() => {
+  if (user.value) {
+    const fullname = user.value.firstname + ' ' + user.value.lastname
+    return fullname.trim().length === 0 ? user.value.email : fullname
+  } else {
+    return ''
+  }
+})
+
+const isNewPwd = computed(() => {
+  return !lockPassword.value || lockPassword.value.length === 0
+})
+
+const isFirstPwd = computed(() => {
+  return ('' + password1.value).length < 4
+})
+
+// Watchers
+watch(password2, (newValue) => {
+  const newStr = newValue + ''
+  if (newStr.length === passwordLength) {
+    if (newStr === (password1.value + '')) {
+      updatePassword({
+        id: user.value._id,
+        password: newStr
+      })
+      triggerLock({
+        status: true
+      })
     } else {
-      this.$router.push('/')
-    }
-  },
-
-  watch: {
-    password2 (newValue) {
-      const newStr = newValue + ''
-      if (newStr.length === passwordLength) {
-        if (newStr === (this.password1 + '')) {
-          this.updatePassword({
-            id: this.user._id,
-            password: newStr
-          })
-          this.triggerLock({
-            status: true
-          })
-        } else {
-          Notify.create({
-            message: this.$t('lock.not_matching_codes'),
-            color: 'negative'
-          })
-        }
-      }
-    },
-
-    password (newValue, oldValue) {
-      // verify code and remove lock wall
-      const newStr = newValue + ''
-      if (newStr.length === passwordLength) {
-        if (newStr === this.lockPassword) {
-          this.triggerLock({
-            status: false
-          })
-          this.$router.push('/')
-        } else {
-          Notify.create({
-            message: this.$t('lock.incorrect_unclock'),
-            color: 'negative'
-          })
-        }
-      }
-    }
-  },
-
-  computed: {
-    ...mapState({
-      user: state => state.record.user
-    }),
-    userName () {
-      if (this.user) {
-        const fullname = this.user.firstname + ' ' + this.user.lastname
-        return fullname.trim().length === 0 ? this.user.email : fullname
-      } else {
-        return ''
-      }
-    },
-    isNewPwd () {
-      return this.lockPassword.length === 0
-    },
-    isFirstPwd () {
-      console.log('$ ' + this.password1)
-      return ('' + this.password1).length < 4
-    }
-  },
-
-  methods: {
-    onCancel () {
-      this.$router.push('/')
-    },
-    onLogout () {
-      if (this.user) {
-        this.clearLock(this.user._id)
-        this.$store.dispatch('auth/logout')
-      } else {
-        this.triggerLock({ status: false })
-        this.$router.push('/login')
-      }
+      Notify.create({
+        message: t('lock.not_matching_codes'),
+        color: 'negative'
+      })
     }
   }
+})
 
+watch(password, (newValue) => {
+  // verify code and remove lock wall
+  const newStr = newValue + ''
+  if (newStr.length === passwordLength) {
+    if (lockPassword.value && newStr === lockPassword.value) {
+      triggerLock({
+        status: false
+      })
+      router.push('/')
+    } else {
+      Notify.create({
+        message: t('lock.incorrect_unclock'),
+        color: 'negative'
+      })
+    }
+  }
+})
+
+// Methods
+const onCancel = () => {
+  router.push('/')
+}
+
+const onLogout = () => {
+  if (user.value) {
+    clearLock(user.value._id)
+    authStore.logout()
+  } else {
+    triggerLock({ status: false })
+    router.push('/login')
+  }
+}
+
+// Lifecycle hook
+onMounted(() => {
+  if (user.value) {
+    if (!isNewPwd.value) {
+      triggerLock({
+        status: true
+      })
+    }
+  } else {
+    router.push('/')
+  }
 })
 </script>
 

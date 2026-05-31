@@ -107,92 +107,82 @@
   </q-page>
 </template>
 
-<script>
-import { ref, defineComponent } from 'vue'
-import { mapState, mapActions, mapGetters } from 'vuex'
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import CaseReportFormCard from 'components/CaseReportFormCard.vue'
+import { useFormStore } from '../stores/form'
+import { useRecordStore } from '../stores/record'
 
-export default defineComponent({
-  name: 'Dashboard',
-  components: {
-    CaseReportFormCard
-  },
+const formStore = useFormStore()
+const recordStore = useRecordStore()
+const { locale: currentLocale } = useI18n()
 
-  setup () {
-    return {
-      tab: ref('forms')
-    }
-  },
+const { crfs } = storeToRefs(formStore)
+const { user } = storeToRefs(recordStore)
 
-  mounted () {
-    this.getCaseReportForms({ silent: true })
-  },
+const tab = ref('forms')
 
-  computed: {
-    ...mapState({
-      crfs: state => state.form.crfs,
-      user: state => state.record.user
-    }),
-    caseReports () {
-      return this.getCaseReports()(this.user)
-    },
-    notSavedCaseReports () {
-      return this.caseReports
-        .filter(cr => ['in_progress', 'completed'].includes(cr.state) && this.getForm(cr.crfId))
-        .sort((cr1, cr2) => {
-          const action1 = cr1.actions[cr1.actions.length - 1]
-          const action2 = cr2.actions[cr2.actions.length - 1]
-          return action2.timestamp - action1.timestamp
-        })
-    },
-    currentLocale () {
-      return this.$root.$i18n.locale
-    }
-  },
+const caseReports = computed(() => {
+  return recordStore.getCaseReports(user.value)
+})
 
-  methods: {
-    ...mapActions({
-      getCaseReportForms: 'form/getCaseReportForms'
-    }),
-    ...mapGetters({
-      getCaseReports: 'record/getCaseReports'
-    }),
-    tr (schema, key) {
-      return schema ? makeSchemaFormTr(schema, { locale: this.currentLocale })(key) : '-'
-    },
-    getForm (crfId) {
-      return this.crfs.filter(f => f._id === crfId).pop()
-    },
-    getFormLabel (crfId) {
-      const form = this.getForm(crfId)
-      return form ? this.tr(form.schema, form.name ? form.name : form.schema.label) : '?'
-    },
-    getCaseReportId (cr) {
-      return (cr.data && cr.data._id) ? cr.data._id : ''
-    },
-    getCaseReportLastUpdate (cr) {
-      const action = cr.actions[cr.actions.length - 1]
-      return new Intl.DateTimeFormat(this.currentLocale, { dateStyle: 'full', timeStyle: 'short' }).format(action.timestamp)
-    },
-    getCaseReportLastUpdateAgo (cr) {
-      const action = cr.actions[cr.actions.length - 1]
-      const rtf = new Intl.RelativeTimeFormat(this.currentLocale, { style: 'long' })
-      const minutes = Math.ceil((action.timestamp - Date.now()) / 60000)
-      if (minutes <= -1440) {
-        return rtf.format(Math.ceil(minutes / 1440), 'day')
-      }
-      if (minutes <= -60) {
-        return rtf.format(Math.ceil(minutes / 60), 'hour')
-      }
-      return rtf.format(minutes, 'minute')
-    },
-    onRefresh (done) {
-      this.getCaseReportForms({}).then(() => done())
-    },
-    onSave (caseReport) {
-      this.$store.dispatch('record/saveCaseReport', { id: caseReport.id, force: true })
-    }
+const getForm = (crfId) => {
+  return crfs.value.filter(f => f._id === crfId).pop()
+}
+
+const notSavedCaseReports = computed(() => {
+  return caseReports.value
+    .filter(cr => ['in_progress', 'completed'].includes(cr.state) && getForm(cr.crfId))
+    .sort((cr1, cr2) => {
+      const action1 = cr1.actions[cr1.actions.length - 1]
+      const action2 = cr2.actions[cr2.actions.length - 1]
+      return action2.timestamp - action1.timestamp
+    })
+})
+
+const tr = (schema, key) => {
+  return schema ? makeSchemaFormTr(schema, { locale: currentLocale.value })(key) : '-'
+}
+
+const getFormLabel = (crfId) => {
+  const form = getForm(crfId)
+  return form ? tr(form.schema, form.name ? form.name : form.schema.label) : '?'
+}
+
+const getCaseReportId = (cr) => {
+  return (cr.data && cr.data._id) ? cr.data._id : ''
+}
+
+const getCaseReportLastUpdate = (cr) => {
+  const action = cr.actions[cr.actions.length - 1]
+  return new Intl.DateTimeFormat(currentLocale.value, { dateStyle: 'full', timeStyle: 'short' }).format(action.timestamp)
+}
+
+const getCaseReportLastUpdateAgo = (cr) => {
+  const action = cr.actions[cr.actions.length - 1]
+  const rtf = new Intl.RelativeTimeFormat(currentLocale.value, { style: 'long' })
+  const minutes = Math.ceil((action.timestamp - Date.now()) / 60000)
+  if (minutes <= -1440) {
+    return rtf.format(Math.ceil(minutes / 1440), 'day')
   }
+  if (minutes <= -60) {
+    return rtf.format(Math.ceil(minutes / 60), 'hour')
+  }
+  return rtf.format(minutes, 'minute')
+}
+
+const onRefresh = (done) => {
+  formStore.getCaseReportForms({}).then(() => done())
+}
+
+const onSave = (caseReport) => {
+  recordStore.saveCaseReport({ id: caseReport.id, force: true })
+}
+
+onMounted(() => {
+  formStore.getCaseReportForms({ silent: true })
 })
 </script>

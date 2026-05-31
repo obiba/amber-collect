@@ -2,12 +2,17 @@ import { boot } from 'quasar/wrappers'
 import { LocalStorage, Notify } from 'quasar'
 import { feathersClient } from './feathersClient'
 import { t } from './i18n'
+import { useAuthStore } from '../stores/auth'
+import { useRecordStore } from '../stores/record'
 
-export default boot(async ({ router, store }) => {
+export default boot(async ({ router }) => {
   router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth) {
+      const authStore = useAuthStore()
+      const recordStore = useRecordStore()
+      
       // if requires admin
-      const user = store.state.auth.user // ? store.state.auth.user : store.state.record.user
+      const user = authStore.user
       if (user) {
         if (to.meta.requiresAdmin) {
           if (user.role && user.role === 'administrator') {
@@ -25,7 +30,7 @@ export default boot(async ({ router, store }) => {
           next()
         }
       } else if (LocalStorage.getItem('feathers-jwt')) {
-        if (store.state.record.user) {
+        if (recordStore.user) {
           next()
         } else {
           next('/loading')
@@ -33,19 +38,19 @@ export default boot(async ({ router, store }) => {
         // could be not expired but also still not valid, then reauth
         feathersClient.reAuthenticate().then((response) => {
           // show application page
-          store.dispatch('auth/responseHandler', response)
+          authStore.responseHandler(response)
           // update user identity associated to records
-          store.dispatch('record/initUser', response.user)
+          recordStore.initUser(response.user)
           router.push(to.path)
         }).catch((err) => {
-          console.log(err)
+          console.error(err)
           if (err.response) {
             // remove expired/unusable token
             LocalStorage.remove('feathers-jwt')
             router.push('/login')
           } else {
             // network cannot be reached, go to login screen
-            if (!store.state.record.user) {
+            if (!recordStore.user) {
               router.push('/login')
             } else {
               Notify.create({

@@ -59,51 +59,41 @@
   </q-layout>
 </template>
 
-<script>
-import { mapState } from 'vuex'
+<script setup>
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { required, email } from '../boot/vuelidate'
 import useVuelidate from '@vuelidate/core'
 import { settings } from '../boot/settings'
+import { useAccountStore } from '../stores/account'
 
-import Banner from 'components/Banner'
+import Banner from 'components/Banner.vue'
 
-export default {
-  components: { Banner },
-  setup () {
-    return {
-      settings: settings
-    }
-  },
-  data () {
-    return {
-      v$: useVuelidate(),
-      resetEmail: ''
-    }
-  },
-  validations: {
-    resetEmail: {
-      required,
-      email
-    }
-  },
-  computed: {
-    ...mapState({
-      submitting: state => state.auth.showLoading
-    }),
-    disableSubmit () {
-      return this.v$.resetEmail.$invalid
-    }
-  },
-  methods: {
-    forgotPassword () {
-      this.$store
-        .dispatch('account/forgotPassword', {
-          emailAddress: this.resetEmail
-        })
-        .then(() => {
-          this.$router.push('/login')
-        })
-    }
+const router = useRouter()
+const accountStore = useAccountStore()
+
+const resetEmail = ref('')
+
+const rules = {
+  resetEmail: {
+    required,
+    email
   }
+}
+
+const v$ = useVuelidate(rules, { resetEmail })
+
+const disableSubmit = computed(() => {
+  return v$.value.resetEmail.$invalid
+})
+
+const forgotPassword = () => {
+  accountStore
+    .forgotPassword({
+      emailAddress: resetEmail.value
+    })
+    .then(() => {
+      router.push('/login')
+    })
 }
 </script>
