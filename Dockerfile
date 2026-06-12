@@ -5,8 +5,6 @@
 # develop stage
 FROM node:lts-alpine AS develop-stage
 WORKDIR /app
-RUN apk update && \
-    apk add git
 COPY package*.json ./
 COPY . .
 
@@ -17,8 +15,9 @@ RUN yarn quasar build --mode pwa
 
 # production stage
 FROM nginx:alpine AS production-stage
-COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
-COPY --from=build-stage /app/dist/pwa /usr/share/nginx/html
+RUN mkdir -p /etc/nginx/templates
+COPY ./nginx/default.conf.template /etc/nginx/templates/default.conf.template
+COPY --from=build-stage /app/dist/spa /usr/share/nginx/html
 EXPOSE 80
 
 RUN apk add --no-cache bash
