@@ -14,8 +14,7 @@ import path from 'node:path'
 export default configure(function (ctx) {
   const packageJson = readFileSync('./package.json', 'utf8')
   const version = JSON.parse(packageJson).version || 0
-  const settingsJson = readFileSync('./settings.json', 'utf8')
-
+  
   return {
     // https://v2.quasar.dev/quasar-cli-vite/supporting-ts
     supportTS: false,
@@ -27,14 +26,14 @@ export default configure(function (ctx) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
+      'settings',
       'auth',
       'axios',
       'feathersClient',
       'i18n',
       'vuelidate',
       'recaptcha',
-      'errors',
-      'settings'
+      'errors'
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
@@ -60,18 +59,16 @@ export default configure(function (ctx) {
       vueRouterMode: 'history',
 
       env: {
-        API: ctx.dev ? 'http://localhost:3030' : process.env.AMBER_URL,
-        RECAPTCHA_SITE_KEY: ctx.dev ? '6Lc3D34cAAAAANwhMFOH-yEB147CqspT-eBwF5-u' : process.env.RECAPTCHA_SITE_KEY,
-        SETTINGS: ctx.dev ? settingsJson : (process.env.SETTINGS ? process.env.SETTINGS : settingsJson),
-        REGISTER_ENABLED: ctx.dev ? 'true' : String(process.env.RECAPTCHA_SITE_KEY !== undefined),
         VERSION: version
       },
 
-      publicPath: process.env.PATH_PREFIX ? process.env.PATH_PREFIX : '/',
+      publicPath: '/',
       
       // https://v2.quasar.dev/quasar-cli-vite/handling-vite
       extendViteConf (viteConf) {
         const __dirname = fileURLToPath(new URL('.', import.meta.url))
+
+        viteConf.base = './'
         
         if (!viteConf.resolve) {
           viteConf.resolve = {}
