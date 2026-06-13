@@ -17,7 +17,7 @@ RUN yarn quasar build --mode pwa
 FROM nginx:alpine AS production-stage
 RUN mkdir -p /etc/nginx/templates
 COPY ./nginx/default.conf.template /etc/nginx/templates/default.conf.template
-COPY --from=build-stage /app/dist/spa /usr/share/nginx/html
+COPY --from=build-stage /app/dist/pwa /usr/share/nginx/html
 EXPOSE 80
 
 RUN apk add --no-cache bash
