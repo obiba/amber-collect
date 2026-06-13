@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div class="col text-center">
-            <img src="icons/apple-icon-60x60.png"/>
+        <div v-if="settings.theme.logo" class="col text-center">
+            <img :src="settings.theme.logo" />
         </div>
-        <div class="colcol text-center q-mb-lg">
+        <div class="col text-center q-mb-lg">
             <div class="text-h6">
                 {{$t('main.brand')}}
             </div>
@@ -14,6 +14,16 @@
     </div>
 </template>
 
-<script setup>
-// No props, data, or methods needed - just a template component
+<script>
+import { settings } from "../boot/settings";
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "AppBanner",
+  setup() {
+    return {
+      settings,
+    };
+  },
+});
 </script>
