@@ -15,7 +15,8 @@ export default {
     email_otp: 'Or send the temporary token to your email address.',
     send_email_token: 'Send token',
     failed: 'Incorrect email/password combination.',
-    failed_token: 'Incorrect token.'
+    failed_token: 'Incorrect token.',
+    continue_with: 'Or continue with'
   },
   register: {
     title: 'Register new membership',
@@ -171,5 +172,7 @@ export default {
   multi_steps: 'Multiple steps',
   required_field: 'Field is required',
   go_home: 'Go Home',
-  nothing_here: 'Oops. Nothing here...'
+  nothing_here: 'Oops. Nothing here...',
+  github: 'GitHub',
+  google: 'Google'
 }
