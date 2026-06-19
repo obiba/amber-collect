@@ -79,6 +79,13 @@
                   </div>
                 </q-form>
               </q-card-section>
+              <q-card-section v-if="authProviders.length > 0" class="text-center q-pt-none">
+                <div class="text-subtitle q-mb-md">{{ t('login.continue_with') }}</div>
+                <template v-for="provider in authProviders" :key="provider">
+                  <q-btn :label="t(provider)" no-caps :href="`${baseURL}/oauth/${provider}?redirect=/login`" color="dark" class="q-mr-md">
+                  </q-btn>
+                </template>
+              </q-card-section>
               <q-card-section>
                 <q-btn flat to="/forgot-password" dense no-caps class="text-bold">
                   {{ $t('login.forgot_password') }}
@@ -107,11 +114,12 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import { Notify, useQuasar, copyToClipboard } from 'quasar'
 import { useRouter } from 'vue-router'
 import { locales } from '../boot/i18n'
 import { settings } from '../boot/settings'
+import { baseURL } from '../boot/axios'
 import { useAuthStore } from '../stores/auth'
 import { useRecordStore } from '../stores/record'
 import { storeToRefs } from 'pinia'
@@ -144,6 +152,7 @@ const qr = ref('')
 const withToken = ref(false)
 const method = ref('')
 const showPassword = ref(false)
+const authProviders = ref([])
 
 // Watch locale changes to update Quasar language
 watch(locale, val => {
@@ -180,6 +189,30 @@ const localeOptions = computed(() => {
 
 const hasLocales = computed(() => {
   return locales.length > 1
+})
+
+onMounted(async () => {
+  const hash = new URLSearchParams(window.location.hash.substring(1))
+  const oauthToken = hash.get('access_token')
+  const oauthError = hash.get('error')
+
+  if (oauthToken || oauthError) {
+    window.history.replaceState(null, '', window.location.pathname)
+  }
+
+  if (oauthToken) {
+    try {
+      await authStore.authenticate({ strategy: 'jwt', accessToken: oauthToken })
+      return // watcher on authStore.user will redirect to '/'
+    } catch (err) {
+      Notify.create({ message: t('login.failed'), color: 'negative' })
+    }
+  } else if (oauthError) {
+    Notify.create({ message: t('login.failed'), color: 'negative' })
+  }
+  authStore.getOAuthProviders().then(resp => {
+    authProviders.value = resp.providers || []
+  })
 })
 
 // Methods

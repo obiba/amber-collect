@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { secureStorage } from './index'
 import { feathersClient } from '../boot/feathersClient'
+import { api } from '../boot/axios'
 
 export const useAuthStore = defineStore('auth', () => {
   // State
@@ -79,6 +80,11 @@ export const useAuthStore = defineStore('auth', () => {
     errorOnLogout.value = null
   }
 
+  async function getOAuthProviders() {
+    const response = await api.get('/auth/providers')
+    return response.data
+  }
+
   return {
     // State
     user,
@@ -91,7 +97,8 @@ export const useAuthStore = defineStore('auth', () => {
     authenticate,
     reAuthenticate,
     logout,
-    clearAuthErrors
+    clearAuthErrors,
+    getOAuthProviders
   }
 }, {
   persist: {

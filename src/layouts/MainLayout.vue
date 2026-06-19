@@ -230,7 +230,6 @@ const formStore = useFormStore()
 const lockStore = useLockStore()
 
 // Extract reactive state from stores
-const { user } = storeToRefs(recordStore)
 const { id: lockId, password: lockPassword, status: lockStatus } = storeToRefs(lockStore)
 
 const triggerLock = (payload) => {
@@ -279,6 +278,10 @@ const localeOptions = computed(() => {
 
 const hasLocales = computed(() => {
   return locales.length > 1
+})
+
+const user = computed(() => {
+  return authStore.user
 })
 
 const userName = computed(() => {

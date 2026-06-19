@@ -15,7 +15,8 @@ export default {
     send_email_token: 'Envoyer le jeton',
     secret_copied: 'Code secret copié.',
     failed: 'Combinaison courriel/mot de passe incorrecte.',
-    failed_token: 'Jeton incorrect.'
+    failed_token: 'Jeton incorrect.',
+    continue_with: 'Ou continuer avec'
   },
   register: {
     title: 'Créer un compte',
@@ -172,5 +173,7 @@ export default {
   multi_steps: 'Étapes multiples',
   required_field: 'Le champ est requis',
   go_home: 'Retour à l\'accueil',
-  nothing_here: 'Il n\'y a rien ici...'
+  nothing_here: 'Il n\'y a rien ici...',
+  github: 'GitHub',
+  google: 'Google',
 }
