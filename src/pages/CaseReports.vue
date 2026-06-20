@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pt-md q-pb-md">
-    <div class="text-h6 q-ml-md q-mr-md">{{ $t('main.case_reports') }}</div>
+    <div class="text-h3 text-bold q-mx-md q-my-sm">{{ $t('main.case_reports') }}</div>
     <q-table
       grid
       :rows="caseReports"
@@ -10,94 +10,81 @@
 
       <template v-slot:item="props">
         <div class="q-pt-md q-pr-md q-pl-md col-xs-12 col-sm-6 col-md-4">
-          <q-card :class="props.row.state !== 'saved' ? 'bg-secondary text-white' : ''">
+          <q-card class="ac-card" :class="props.row.state !== 'saved' ? 'bg-green-1' : ''">
             <q-card-section>
-              <q-item>
+              <q-item class="q-pa-none">
                 <q-item-section>
                   <q-item-label>
-                    <span class="q-mr-sm" :class="props.row.state === 'saved' ? 'text-grey' : 'text-grey-4'">#{{ props.row.id }}</span>
-                    <span class="text-bold q-mr-sm">{{ (props.row.data && props.row.data._id) ? props.row.data._id : '' }}</span>
-                    <q-badge color="accent">{{ $t('record.state.' + props.row.state) }}</q-badge>
+                    <span class="q-mr-sm" :class="props.row.state === 'saved' ? 'text-grey' : 'text-grey-8'">#{{ props.row.id }}</span>
+                    <span class="text-h3 text-bold q-mr-sm">{{ (props.row.data && props.row.data._id) ? props.row.data._id : '' }}</span>
                   </q-item-label>
                   <q-item-label>
-                    <p class="q-mt-sm">
-                      {{ getFormLabel(props.row.crfId) }} (v{{ getFormRevision(props.row.crfId) }})
-                    </p>
-                    <div>{{  }}</div>
+                    {{ getFormLabel(props.row.crfId) }} (v{{ getFormRevision(props.row.crfId) }})
                   </q-item-label>
-                  <q-item-label>
-                    <span class="text-caption" :class="props.row.state === 'saved' ? 'text-grey' : 'text-grey-4'">{{ $t('started_at', [startedDate(props.row)]) }}</span>
-                  </q-item-label>
-                  <q-item-label v-if="props.row.state === 'saved'">
-                    <span class="text-caption">{{ $t('updated_ago', [updatedAgo(props.row)]) }}</span>
-                  </q-item-label>
-                </q-item-section>
-                <q-item-section side v-if="props.row.state === 'saved'">
-                  <q-btn
-                    class="text-grey-8"
-                    size="12px"
-                    color="white"
-                    dense
-                    round
-                    :title="$t('delete')"
-                    icon="delete"
-                    @click='onConfirmDelete(props.row)'>
-                  </q-btn>
-                </q-item-section>
-              </q-item>
-              <q-item v-if="props.row.state !== 'saved'">
-                <q-item-section side v-if="canResume(props.row)">
-                  <q-btn
-                    class="text-grey-8"
-                    size="12px"
-                    color="white"
-                    dense
-                    round
-                    :title="$t('resume')"
-                    icon="play_arrow"
-                    :to="'/case-report/' + props.row.id">
-                  </q-btn>
-                </q-item-section>
-                <q-item-section side v-if="canSave(props.row)">
-                  <q-btn
-                    class="text-grey-8"
-                    size="12px"
-                    color="white"
-                    dense
-                    round
-                    :title="$t('save')"
-                    icon="cloud_upload"
-                    @click="onSave(props.row)">
-                  </q-btn>
-                </q-item-section>
-                <q-item-section side v-if="canView(props.row)">
-                  <q-btn
-                    class="text-grey-8"
-                    size="12px"
-                    color="white"
-                    dense
-                    round
-                    :title="$t('view')"
-                    icon="visibility"
-                    @click='onViewCaseReport(props.row)'>
-                  </q-btn>
-                </q-item-section>
-                <q-item-section side v-if="props.row.state !== 'saved'">
-                  <q-btn
-                    class="text-grey-8"
-                    size="12px"
-                    color="white"
-                    dense
-                    round
-                    :title="$t('delete')"
-                    icon="delete"
-                    @click='onConfirmDelete(props.row)'>
-                  </q-btn>
                 </q-item-section>
                 <q-item-section side>
-                  <span class="text-white text-caption">{{ $t('updated_ago', [updatedAgo(props.row)]) }}</span>
+                  <q-btn
+                    v-if="props.row.state === 'saved'"
+                    color="primary"
+                    flat
+                    dense
+                    :title="$t('delete')"
+                    icon="delete"
+                    @click='onConfirmDelete(props.row)'>
+                  </q-btn>
+                  <div v-else class="row no-wrap">
+                    <q-btn
+                      v-if="canResume(props.row)"
+                      color="secondary"
+                      flat
+                      dense
+                      :title="$t('resume')"
+                      icon="play_arrow"
+                      :to="'/case-report/' + props.row.id">
+                    </q-btn>
+                    <q-btn
+                      v-if="canSave(props.row)"
+                      color="primary"
+                      flat
+                      dense
+                      :title="$t('save')"
+                      icon="cloud_upload"
+                      @click="onSave(props.row)">
+                    </q-btn>
+                    <q-btn
+                      v-if="canView(props.row)"
+                      color="primary"
+                      flat
+                      dense
+                      :title="$t('view')"
+                      icon="visibility"
+                      @click='onViewCaseReport(props.row)'>
+                    </q-btn>
+                    <q-btn
+                      v-if="props.row.state !== 'saved'"
+                      color="primary"
+                      flat
+                      dense
+                      :title="$t('delete')"
+                      icon="delete"
+                      @click='onConfirmDelete(props.row)'>
+                    </q-btn>
+                  </div>
+                  <q-badge :color="props.row.state === 'saved' ? 'positive' : 'accent'">
+                      {{ $t('record.state.' + props.row.state) }}
+                      <q-icon :name="props.row.state === 'saved' ? 'check' : 'schedule'"  class="q-ml-xs"/>
+                    </q-badge>
                 </q-item-section>
               </q-item>
+            </q-card-section>
+            <q-separator />
+            <q-card-section class="q-pb-none text-caption" :class="props.row.state === 'saved' ? 'text-grey' : 'text-grey-8'">
+              <div>
+                {{ $t('started_at', [startedDate(props.row)]) }}
+              </div>
+              <div>
+                {{ $t('updated_ago', [updatedAgo(props.row)]) }}
+              </div>
             </q-card-section>
           </q-card>
         </div>

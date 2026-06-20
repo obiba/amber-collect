@@ -18,8 +18,6 @@
               <q-card-section>
                 <q-form @submit="forgotPassword">
                   <q-input
-                    dark
-                    color="white"
                     v-model="resetEmail"
                     :label="$t('email')"
                     type="email"

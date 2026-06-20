@@ -4,7 +4,7 @@
             <img :src="settings.theme.logo" />
         </div>
         <div class="col text-center q-mb-lg">
-            <div class="text-h6">
+            <div class="text-h1">
                 {{$t('main.brand')}}
             </div>
             <div v-if="$t('main.brand_caption')" class="text-subtitle1">

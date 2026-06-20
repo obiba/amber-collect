@@ -65,7 +65,6 @@ export default {
     upgrade_available: 'New app version available',
     dashboard: 'Dashboard',
     case_reports: 'Case Reports',
-    new_case_report: 'New Case Report',
     case_reports_in_progress: 'Case Reports in Progress',
     no_case_reports_in_progress: 'No case reports in progress',
     in_progress: 'In Progress',
@@ -74,7 +73,6 @@ export default {
     no_case_report_forms: 'No form could be found for reporting cases.',
     essential_links: 'Essential links',
     docs: 'Docs',
-    forum: 'Forum',
     powered_by: 'Powered by',
     show_all_case_reports: 'Show all case reports'
   },

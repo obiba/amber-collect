@@ -18,13 +18,13 @@
               </q-card-section>
               <q-card-section v-if="!withToken">
                 <q-form @submit="onSubmit" class="q-gutter-md">
-                  <q-input autofocus dark color="white" v-model="email" :label="$t('email')" lazy-rules>
+                  <q-input autofocus v-model="email" :label="$t('email')" lazy-rules>
                     <template v-slot:prepend>
                       <q-icon name="fas fa-envelope" size="xs" />
                     </template>
                   </q-input>
 
-                  <q-input :type="showPassword ? 'text' : 'password'" dark color="white" v-model="password"
+                  <q-input :type="showPassword ? 'text' : 'password'" v-model="password"
                     :label="$t('password')" lazy-rules>
                     <template v-slot:prepend>
                       <q-icon name="fas fa-lock" size="xs" />
@@ -52,7 +52,7 @@
                 <div class="col text-subtitle q-mt-md">
                   {{ $t('login.totp_secret') }}
                 </div>
-                <q-input dark dense color="white" v-model="secret" readonly>
+                <q-input dense v-model="secret" readonly>
                   <template v-slot:after>
                     <q-btn round dense flat icon="content_copy" @click="onCopySecret" />
                   </template>
@@ -67,7 +67,7 @@
               </q-card-section>
               <q-card-section v-if="withToken">
                 <q-form @submit="onSubmit" class="q-gutter-md">
-                  <q-input autofocus type="number" dark color="white" v-model="token" :label="$t('login.token')"
+                  <q-input autofocus type="number" v-model="token" :label="$t('login.token')"
                     lazy-rules class="no-spinner">
                     <template v-slot:prepend>
                       <q-icon name="fas fa-mobile" size="xs" />
@@ -90,12 +90,12 @@
                 <q-btn flat to="/forgot-password" dense no-caps class="text-bold">
                   {{ $t('login.forgot_password') }}
                 </q-btn>
-                <q-btn-dropdown v-show="hasLocales" flat :label="$t('locales.' + locale)" class="float-right">
+                <q-btn-dropdown v-show="hasLocales" flat :label="locale" :title="$t('locales.' + locale)" class="float-right">
                   <q-list>
                     <q-item clickable v-close-popup @click="onLocaleSelection(localeOpt)"
                       v-for="localeOpt in localeOptions" :key="localeOpt.value">
                       <q-item-section>
-                        <q-item-label>{{ localeOpt.label }}</q-item-label>
+                        <q-item-label :title="localeOpt.label" class="text-bold text-uppercase">{{ localeOpt.value }}</q-item-label>
                       </q-item-section>
                       <q-item-section avatar v-if="locale === localeOpt.value">
                         <q-icon color="primary" name="check" />
