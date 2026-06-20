@@ -1,40 +1,49 @@
 <template>
-  <q-page v-cloak class="bg-grey-2">
+  <q-page v-cloak>
 
-    <q-tabs
-      v-model="tab"
-      dense
-      class="text-grey bg-white"
-      active-color="primary"
-      indicator-color="primary"
-      narrow-indicator
-      no-caps
-    >
-      <q-tab name="forms" :label="$t('main.forms')" />
-      <q-tab name="in_progress">
-        <span class="q-mr-md">{{$t('main.in_progress')}}</span>
-        <q-badge floating>{{ notSavedCaseReports.length }}</q-badge>
-      </q-tab>
-    </q-tabs>
+    <div class="q-py-md q-px-md" :class="settings.theme.header">
+      <q-btn
+        :label="$t('main.forms')"
+        no-caps
+        unelevated
+        :color="tab === 'forms' ? 'amber-soft' : 'white'"
+        :class="tab === 'forms' ? 'text-ink' : 'text-muted'"
+        @click="tab = 'forms'"
+        style="width: 50%" />
+      <q-btn
+        no-caps
+        unelevated
+        :color="tab === 'in_progress' ? 'amber-soft' : 'white'"
+        :class="tab === 'in_progress' ? 'text-ink' : 'text-muted'"
+        @click="tab = 'in_progress'"
+        style="width: 50%">
+        <div>
+          <span>{{ $t('main.in_progress') }}</span>
+          <q-badge v-if="notSavedCaseReports.length" :color="tab === 'in_progress' ? 'amber' : 'grey-5'" class="q-ml-sm">{{ notSavedCaseReports.length }}</q-badge>
+        </div>
+      </q-btn>
+    </div>
 
     <q-separator />
 
-    <q-tab-panels v-model="tab">
-      <q-tab-panel name="forms" class="bg-grey-2">
+    <q-tab-panels v-model="tab" class="bg-page">
+      <q-tab-panel name="forms">
         <q-pull-to-refresh @refresh="onRefresh">
-          <div class="text-bold text-center text-uppercase">{{ $t('main.case_report_forms') }}</div>
           <div class="row">
             <div class="col">
             </div>
             <div class="col-md-6 col-sm-8 col-xs-12">
+              <div class="text-h3 text-bold q-mb-md">{{ $t('main.case_report_forms') }}</div>
               <div v-if="crfs.length>0">
-                <q-card v-for="form in crfs" :key="form._id" flat bordered class="q-ma-md">
-                  <q-card-section>
-                    <q-item  class="col-xs-12 col-sm-6 col-md-4">
-                      <case-report-form-card :form="form"/>
-                    </q-item>
-                  </q-card-section>
-                </q-card>
+                <q-list>
+                  <q-item v-for="form in crfs" :key="form._id" class="q-px-none">
+                    <q-item-section>
+                      <q-card class="ac-card">
+                        <case-report-form-card :form="form"/>
+                      </q-card>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
               </div>
               <div v-else class="text-grey">
                 {{ $t('main.no_case_report_forms') }}
@@ -46,53 +55,83 @@
         </q-pull-to-refresh>
       </q-tab-panel>
 
-      <q-tab-panel name="in_progress" class="bg-grey-2">
+      <q-tab-panel name="in_progress">
         <div v-if="notSavedCaseReports.length" class="row">
           <div class="col">
           </div>
           <div class="col-md-6 col-sm-8 col-xs-12">
-            <div class="text-bold text-center text-uppercase">{{ $t('main.case_reports_in_progress') }}</div>
-
-            <q-card flat bordered class="q-ma-md">
-              <q-card-section>
-                <q-list separator>
-
-                  <q-item v-for="cr in notSavedCaseReports" :key="cr.id">
-
-                    <q-item-section>
-                      <q-item-label>
-                        <span class="text-grey q-mr-sm">#{{ cr.id }}</span>
-                        <span class="text-bold">{{ getCaseReportId(cr) }}</span>
-                      </q-item-label>
-                      <q-item-label caption>{{ getFormLabel(cr.crfId) }}</q-item-label>
-                    </q-item-section>
-
-                    <q-item-section side top>
-                      <q-item-label :title="getCaseReportLastUpdate(cr)">{{ getCaseReportLastUpdateAgo(cr) }}</q-item-label>
-                      <q-btn
-                        v-if="cr.state === 'in_progress'"
-                        :label="$t('resume')"
-                        :icon-right="$q.lang.rtl ? 'chevron_left' : 'chevron_right'"
-                        class="text-capitalize q-mt-sm q-mb-sm"
-                        color="secondary"
-                        :to="'/case-report/' + cr.id"/>
-                      <q-btn
-                        v-if="cr.state === 'completed'"
-                        :label="$t('save')"
-                        icon-right="cloud_upload"
-                        class="text-capitalize q-mt-sm q-mb-sm"
-                        color="primary"
-                        @click="onSave(cr)"/>
-                    </q-item-section>
-
-                  </q-item>
-
-                </q-list>
-              </q-card-section>
-              <q-card-section class="text-center">
-                <router-link to="/case-reports">{{$t('main.show_all_case_reports')}}</router-link>
-              </q-card-section>
-            </q-card>
+            <div class="text-h3 text-bold q-mb-md">{{ $t('main.case_reports_in_progress') }}</div>
+            <q-list>
+              <q-item v-for="cr in notSavedCaseReports" :key="cr.id" class="q-px-none">
+                <q-item-section>
+                  <q-card class="ac-card">
+                    <q-card-section>
+                      <q-item class="q-pa-none">
+                        <q-item-section avatar>
+                          <div class="bg-green-1 rounded-borders q-pa-sm">
+                            <q-icon color="secondary" name="list_alt" size="md" />
+                          </div>
+                        </q-item-section>
+                        <q-item-section>
+                          <q-item-label>
+                            <span class="text-grey q-mr-sm">#{{ cr.id }}</span>
+                            <span class="text-h3 text-bold">{{ getCaseReportId(cr) }}</span>
+                          </q-item-label>
+                          <q-item-label>{{ getFormLabel(cr.crfId) }}</q-item-label>
+                        </q-item-section>
+                        <q-item-section v-if="!$q.screen.lt.sm" side top>
+                          <q-btn
+                            v-if="cr.state === 'in_progress'"
+                            :label="$t('resume')"
+                            :icon-right="$q.lang.rtl ? 'chevron_left' : 'chevron_right'"
+                            class="text-capitalize q-mt-sm q-mb-sm"
+                            color="secondary"
+                            :to="'/case-report/' + cr.id"/>
+                          <q-btn
+                            v-if="cr.state === 'completed'"
+                            :label="$t('save')"
+                            icon-right="cloud_upload"
+                            class="text-capitalize q-mt-sm q-mb-sm"
+                            color="primary"
+                            @click="onSave(cr)"/>
+                          <q-item-label :title="getCaseReportLastUpdate(cr)" class="text-caption text-grey">{{ getCaseReportLastUpdateAgo(cr) }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+                      <q-item v-if="$q.screen.lt.sm" class="q-pa-none">
+                        <q-item-section>
+                          <q-item-label :title="getCaseReportLastUpdate(cr)" class="text-caption text-grey">{{ getCaseReportLastUpdateAgo(cr) }}</q-item-label>
+                        </q-item-section>
+                        <q-item-section side>
+                          <q-btn
+                            v-if="cr.state === 'in_progress'"
+                            :label="$t('resume')"
+                            :icon-right="$q.lang.rtl ? 'chevron_left' : 'chevron_right'"
+                            class="text-capitalize q-mt-sm q-mb-sm"
+                            color="secondary"
+                            :to="'/case-report/' + cr.id"/>
+                          <q-btn
+                            v-if="cr.state === 'completed'"
+                            :label="$t('save')"
+                            icon-right="cloud_upload"
+                            class="text-capitalize q-mt-sm q-mb-sm"
+                            color="primary"
+                            @click="onSave(cr)"/>
+                        </q-item-section>
+                      </q-item>
+                    </q-card-section>
+                  </q-card>
+                </q-item-section>
+              </q-item>
+            </q-list>
+            <div class="text-center q-mt-md">
+              <q-btn
+                to="/case-reports"
+                :label="$t('main.show_all_case_reports')"
+                color="amber-soft"
+                class="text-ink"
+                no-caps
+                unelevated />
+            </div>
           </div>
           <div class="col">
           </div>
@@ -111,11 +150,14 @@
 import { ref, computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
+import { useQuasar } from 'quasar'
 import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import CaseReportFormCard from 'components/CaseReportFormCard.vue'
 import { useFormStore } from '../stores/form'
 import { useRecordStore } from '../stores/record'
+import { settings } from '../boot/settings'
 
+const $q = useQuasar()
 const formStore = useFormStore()
 const recordStore = useRecordStore()
 const { locale: currentLocale } = useI18n()

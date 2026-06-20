@@ -1,7 +1,9 @@
 // app global css in SCSS form
+@use "sass:color";
 
 a {
-    color: #007bff;
+    color: $primary;
+    font-weight: 600;
     text-decoration: none;
     background-color: transparent;
 }
@@ -131,4 +133,304 @@ a {
 
 .no-spinner input[type=number] {
     -moz-appearance: textfield;
+}
+
+// ============================================================================
+//  Amber Collect — app.scss
+//  Component styling layered on top of quasar.variables.scss.
+//  Import AFTER Quasar in your entry (e.g. import 'src/css/app.scss').
+//  Targets Quasar component classes; no markup changes required.
+// ============================================================================
+
+// Pull the tokens in (CLI already injects quasar.variables.scss globally,
+// but importing keeps this file usable standalone / in IDE tooling).
+// @import 'quasar.variables';
+
+// ----------------------------------------------------------------------------
+//  Base
+// ----------------------------------------------------------------------------
+body {
+  background: $surface-app;
+  color: $ink;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.q-page,
+.q-layout__section--marginal,
+.bg-page { background: $surface; }
+
+// Display face for headings
+h1, h2, h3, .text-h1, .text-h2, .text-h3,
+.text-display {
+  font-family: $display-font-family;
+}
+
+// Utility
+.text-ink      { color: $ink !important; }
+.text-muted    { color: $text-muted !important; }
+.text-body2c   { color: $text-body !important; }
+.bg-surface    { background: $surface !important; }
+.bg-raised     { background: $surface-raised !important; }
+.bg-amber-soft { background: $amber-soft !important; }
+
+// ----------------------------------------------------------------------------
+//  App bar / header
+// ----------------------------------------------------------------------------
+.app-header.q-toolbar {
+  background: $surface-raised;
+  color: $ink;
+  border-bottom: 1px solid $border;
+  min-height: 64px;
+
+  .q-toolbar__title {
+    font-family: $display-font-family;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.4px;
+  }
+
+  // Brand chip beside the title
+  .brand-dot {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    background: $primary;
+  }
+
+  // Soft square buttons (menu / language)
+  .q-btn {
+    border-radius: 12px;
+    background: $surface-sunken;
+    color: $ink;
+    &:hover {
+        background: color.scale($surface-sunken, $lightness: -4%, $space: hsl);
+    }
+  }
+}
+
+// Dark header variant — add `.app-header--dark`
+.app-header--dark.q-toolbar {
+  background: $dark;
+  color: #fff;
+  border-bottom: 1px solid rgba(255,255,255,0.10);
+  .q-btn { background: rgba(255,255,255,0.08); color:#fff;
+           &:hover { background: rgba(255,255,255,0.16); } }
+}
+
+// ----------------------------------------------------------------------------
+//  Segmented tabs (Forms / In Progress)
+// ----------------------------------------------------------------------------
+.seg-tabs.q-tabs {
+  background: $surface-raised;
+  border-bottom: 1px solid $border;
+  padding: 14px 16px;
+
+  .q-tabs__content { gap: 8px; }
+  .q-tab {
+    flex: 1;
+    min-height: 44px;
+    border-radius: 13px;
+    color: $text-muted;
+    font-weight: 700;
+    text-transform: none;
+    font-size: 15px;
+
+    &--active {
+      background: $amber-soft;
+      color: $ink;
+    }
+    .q-tab__indicator { display: none; }   // pill, not underline
+  }
+
+  .count-badge {
+    min-width: 20px; height: 20px;
+    padding: 0 6px;
+    border-radius: 7px;
+    background: $border;
+    color: $text-muted;
+    font-size: 11.5px; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .q-tab--active .count-badge { background: $primary; color: $on-amber; }
+}
+
+// ----------------------------------------------------------------------------
+//  Cards (form card, record card, in-progress card)
+// ----------------------------------------------------------------------------
+.ac-card.q-card {
+  background: $surface-raised;
+  border: 1px solid $border;
+  border-radius: $card-border-radius;
+  box-shadow: $card-shadow;
+  padding: 20px;
+
+  .q-separator { background: $hairline; }
+}
+
+// Square icon tile inside cards
+.icon-tile {
+  width: 50px; height: 50px;
+  border-radius: 15px;
+  background: $amber-soft;
+  color: $primary;
+  display: flex; align-items: center; justify-content: center;
+  flex: none;
+  &--sm { width: 34px; height: 34px; border-radius: 10px; }
+}
+
+// ----------------------------------------------------------------------------
+//  Status pills & badges
+// ----------------------------------------------------------------------------
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px; font-weight: 700; letter-spacing: 0.2px;
+
+  &--saved   { background: $positive-soft; color: $positive; }
+  &--version { background: $surface-sunken; color: $text-muted; }
+  &--ready   { color: $text-muted; text-transform: uppercase; letter-spacing: 0.4px; }
+}
+
+.uppercase-label {
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.4px; text-transform: uppercase;
+  color: $text-muted;
+}
+
+// ----------------------------------------------------------------------------
+//  Buttons
+// ----------------------------------------------------------------------------
+.q-btn.btn-primary {
+  background: $primary;
+  color: $on-amber;
+  border-radius: $button-border-radius;
+  font-weight: 700;
+  text-transform: none;
+  box-shadow: none;
+  padding: 10px 16px;
+  &:hover { filter: brightness(0.95); }
+}
+
+.q-btn.btn-secondary {
+  background: $secondary;
+  color: #fff;
+  border-radius: $button-border-radius;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.q-btn.btn-ghost {
+  background: $surface-raised;
+  color: $ink-2;
+  border: 1.5px solid $border-strong;
+  border-radius: $button-border-radius;
+  font-weight: 700;
+  text-transform: none;
+}
+
+.q-btn.btn-link {
+  color: $primary;
+  font-weight: 700;
+  text-transform: none;
+}
+
+// Icon-only square action (delete, toolbar)
+.q-btn.btn-square {
+  border-radius: 11px;
+  background: $surface-sunken;
+  border: 1px solid $border;
+  color: $text-body;
+}
+
+// ----------------------------------------------------------------------------
+//  Inputs (outlined, rounded, warm)
+// ----------------------------------------------------------------------------
+.ac-input.q-field--outlined .q-field__control {
+  border-radius: 14px;
+  background: $surface-raised;
+  &:before { border-color: $border-strong; }
+  &:hover:before { border-color: color.scale($border-strong, $lightness: -9%); }
+}
+.ac-input.q-field--outlined.q-field--focused .q-field__control:after {
+  border-color: $primary;
+  border-width: 1.5px;
+}
+.ac-input .q-field__native,
+.ac-input textarea { color: $ink; font-weight: 600; }
+.ac-input .q-field__native::placeholder { color: $placeholder; font-weight: 500; }
+.ac-input .q-field__prepend .q-icon { color: $text-faint; }
+
+// Active/filled emphasis (e.g. focused short-answer)
+.ac-input--active.q-field--outlined .q-field__control {
+  background: $amber-soft;
+  &:after { border-color: $primary; border-width: 1.5px; }
+}
+
+// ----------------------------------------------------------------------------
+//  Progress bar
+// ----------------------------------------------------------------------------
+.ac-progress.q-linear-progress {
+  height: 7px;
+  border-radius: 999px;
+  color: $primary;
+  background: #EBE6DD;
+  .q-linear-progress__track { opacity: 0; }
+  .q-linear-progress__model { border-radius: 999px; }
+}
+
+// ----------------------------------------------------------------------------
+//  Bottom navigation
+// ----------------------------------------------------------------------------
+.ac-bottom-nav.q-tabs {
+  background: $surface-raised;
+  border-top: 1px solid $border;
+  padding: 10px 16px;
+
+  .q-tab {
+    color: $text-faint;
+    font-weight: 700;
+    font-size: 11.5px;
+    text-transform: none;
+    .q-tab__indicator { display: none; }
+    &--active { color: $primary; }
+  }
+  .q-tab__label { margin-top: 4px; }
+
+  .nav-badge {
+    min-width: 18px; height: 18px; padding: 0 5px;
+    border-radius: 6px;
+    background: $primary; color: $on-amber;
+    font-size: 11px; font-weight: 700;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+}
+
+// ----------------------------------------------------------------------------
+//  Patient / progress band (form filling screen)
+// ----------------------------------------------------------------------------
+.patient-band {
+  background: $amber-soft;
+  border-top: 1px solid $border;
+  padding: 12px 20px 14px;
+  color: $amber-deep;
+  font-weight: 700;
+  font-size: 13.5px;
+}
+
+// ----------------------------------------------------------------------------
+//  Sign-in screen
+// ----------------------------------------------------------------------------
+.signin-logo {
+  width: 68px; height: 68px;
+  border-radius: 21px;
+  background: $primary;
+  color: $on-amber;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 16px 32px -12px $primary;
+}
+.signin-divider {
+  display: flex; align-items: center; gap: 14px;
+  color: $text-faint; font-size: 12px; font-weight: 600;
+  .line { flex: 1; height: 1px; background: $border-strong; }
 }

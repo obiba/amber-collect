@@ -21,11 +21,14 @@
           <q-btn-dropdown
             v-show="hasLocales"
             flat
-            :label="$t('locales.' + locale)">
+            :label="locale.toUpperCase()"
+            :title="$t('locales.' + locale)">
             <q-list>
               <q-item clickable v-close-popup @click="onLocaleSelection(localeOpt)" v-for="localeOpt in localeOptions" :key="localeOpt.value">
                 <q-item-section>
-                  <q-item-label>{{localeOpt.label}}</q-item-label>
+                  <q-item-label class="text-uppercase text-bold" :title="$t('locales.' + localeOpt.value)">
+                    {{localeOpt.value}}
+                  </q-item-label>
                 </q-item-section>
                 <q-item-section avatar v-if="locale === localeOpt.value">
                   <q-icon color="primary" name="check" />

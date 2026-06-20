@@ -13,7 +13,7 @@
             </q-btn></span>
         </q-toolbar-title>
       </q-toolbar>
-      <q-toolbar v-if="hasIdLabel()" class="bg-secondary q-pt-sm q-pb-sm" style="min-height: 20px">
+      <q-toolbar v-if="hasIdLabel()" class="bg-amber-soft q-pt-sm q-pb-sm text-primary text-bold" style="min-height: 20px">
         <div>{{ idLabel }}: {{ formData._id }}</div>
       </q-toolbar>
     </q-header>
@@ -26,9 +26,9 @@
         <div class="q-pa-md">
           <div class="row">
             <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2"
-              :class="(canPrevious() && isMulti()) ? 'text-grey-5 text-center flex flex-center cursor-pointer' : ''"
+              :class="(canPrevious() && isMulti()) ? 'text-grey-5 text-center q-mt-xl cursor-pointer' : ''"
               @click="previousStep">
-              <q-icon v-if="canPrevious()" :name="$q.lang.rtl ? 'arrow_forward' : 'arrow_back'" size="xl" class="" />
+              <q-icon v-if="canPrevious()" :name="$q.lang.rtl ? 'arrow_forward' : 'arrow_back'" size="xl" color="white" class="bg-amber rounded-borders fixed" />
             </div>
             <div class="col-md-4 col-sm-8 col-xs-12 q-mt-sm q-mb-sm">
               <div>
@@ -40,9 +40,9 @@
               </div-->
             </div>
             <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2"
-              :class="(canNext() && isMulti()) ? 'text-grey-5 text-center flex flex-center cursor-pointer' : ''"
+              :class="(canNext() && isMulti()) ? 'text-grey-5 text-center q-mt-xl cursor-pointer' : ''"
               @click="nextStep">
-              <q-icon v-if="canNext()" :name="$q.lang.rtl ? 'arrow_back' : 'arrow_forward'" size="xl" />
+              <q-icon v-if="canNext()" :name="$q.lang.rtl ? 'arrow_back' : 'arrow_forward'" size="xl" color="white" class="bg-amber rounded-borders fixed" />
             </div>
           </div>
         </div>

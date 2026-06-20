@@ -1,24 +1,128 @@
-// Quasar SCSS (& Sass) Variables
-// --------------------------------------------------
-// To customize the look and feel of this app, you can override
-// the Sass/SCSS variables found in Quasar's source Sass/SCSS files.
+// ============================================================================
+//  Amber Collect — Quasar design tokens
+//  Modernized identity: warm-neutral surfaces + amber accent.
+//  Quasar v2 (Vue 3). Imported automatically by the Quasar CLI before any
+//  framework SCSS, so every $var below overrides Quasar's defaults.
+// ============================================================================
 
-// Check documentation for full list of Quasar variables
+// ----------------------------------------------------------------------------
+//  Brand colors  (generate .text-* / .bg-* helpers + <q-* color="primary">)
+// ----------------------------------------------------------------------------
+$primary   : #DD8A12;   // amber — primary actions, active nav, links
+$secondary : #0E8A7D;   // teal — secondary / "Resume" style actions
+$accent    : #8A5402;   // deep amber — emphasis on amber surfaces
 
-// Your own variables (that are declared here) and Quasar's own
-// ones will be available out of the box in your .vue/.scss/.sass files
+$dark      : #1C1915;   // dark header / reversed surfaces
+$dark-page : #211D17;   // primary ink / dark page background
 
-// It's highly recommended to change the default colors
-// to match your app's branding.
-// Tip: Use the "Theme Builder" on Quasar's documentation website.
+$positive  : #1F7A3D;   // "Saved" state, success
+$negative  : #C0594B;   // destructive (delete record)
+$info      : #2A6FA8;   // informational
+$warning   : #DD8A12;   // shares the amber accent
 
-$primary   : #2E72AC;
-$secondary : #26A69A;
-$accent    : #9C27B0;
+// ----------------------------------------------------------------------------
+//  Extended brand palette  (custom tokens — use via map-get or the helpers
+//  generated below). Not part of Quasar's core set.
+// ----------------------------------------------------------------------------
+$amber-deep      : #8A5402;
+$amber           : #DD8A12;
+$amber-lite      : #daaf6f;
+$amber-soft      : #FAEFD6;   // tinted fills, active tabs, icon tiles
+$on-amber        : #241B0B;   // text/icon on top of $amber
 
-$dark      : #1D1D1D;
+// Warm-neutral surfaces
+$surface-app     : #E9E6DF;   // app canvas / behind cards
+$surface         : #F7F5F1;   // screen background
+$surface-raised  : #FFFFFF;   // cards, sheets, inputs
+$surface-sunken  : #F4F1EB;   // chips, menu buttons, subtle fills
 
-$positive  : #21BA45;
-$negative  : #F24718;
-$info      : #31CCEC;
-$warning   : #F2C037;
+// Borders & hairlines
+$border          : #EFEAE2;   // default card / divider border
+$border-strong   : #E6E0D6;   // input borders
+$hairline        : #F0ECE4;   // in-card separators
+
+// Text
+$ink             : #211D17;   // headings / primary text
+$ink-2           : #3B362E;   // strong body
+$text-body       : #7C756A;   // body copy
+$text-muted      : #938B7E;   // captions, metadata
+$text-faint      : #B7AFA2;   // counters, placeholders labels
+$placeholder     : #C2BAAD;   // input placeholder text
+
+// Semantic surface pairs
+$positive-soft   : #E1F2E4;   // "Saved" pill background
+
+// ----------------------------------------------------------------------------
+//  Typography
+// ----------------------------------------------------------------------------
+//  Load these in index.html / quasar.config (extras or a <link>):
+//  Plus+Jakarta+Sans:400,500,600,700,800  +  Space+Grotesk:500,600,700
+$typography-font-family : 'Plus Jakarta Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+// Display / headings — pair Space Grotesk with the body face.
+$display-font-family    : 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
+
+$min-line-height        : 1.5;
+$button-font-weight     : 700;
+
+$h1: (size: 1.75rem,  line-height: 1.25, letter-spacing: -0.6px, weight: 700) !default;
+$h2: (size: 1.4375rem,line-height: 1.3,  letter-spacing: -0.5px, weight: 700) !default;
+$h3: (size: 1.125rem, line-height: 1.35, letter-spacing: -0.3px, weight: 700) !default;
+$h4: (size: 1rem,     line-height: 1.4,  letter-spacing: normal, weight: 700) !default;
+$h5: (size: 0.875rem, line-height: 1.5,  letter-spacing: 0.3px,  weight: 600) !default;
+$h6: (size: 0.75rem,  line-height: 1.5,  letter-spacing: 0.4px,  weight: 700) !default;
+
+// ----------------------------------------------------------------------------
+//  Shape & elevation
+// ----------------------------------------------------------------------------
+$generic-border-radius   : 14px;   // inputs, buttons
+$button-border-radius    : 12px;
+$card-border-radius      : 22px;   // form / record cards
+$rounded-borders         : 12px;
+
+// Soft, warm-tinted shadow (replaces Quasar's neutral grays)
+$shadow-color            : #211D17;
+$card-shadow             : 0 10px 30px -18px rgba(33, 29, 23, 0.28);
+
+// ----------------------------------------------------------------------------
+//  Component-level overrides
+// ----------------------------------------------------------------------------
+$toolbar-min-height      : 56px;
+$tabs-active-color       : $primary;
+$tab-indicator-color     : $primary;
+$separator-color         : $border;
+
+// Make q-page / q-layout use the warm surface, not Quasar's white
+$layout-border           : $border;
+
+// ----------------------------------------------------------------------------
+//  Custom color map → auto-generates .text-* and .bg-* utility classes.
+//  Quasar exposes this through `setCssVar` / `--q-*` at runtime too.
+// ----------------------------------------------------------------------------
+$brand: (
+  "primary"        : $primary,
+  "secondary"      : $secondary,
+  "accent"         : $accent,
+  "dark"           : $dark,
+  "positive"       : $positive,
+  "negative"       : $negative,
+  "info"           : $info,
+  "warning"        : $warning,
+
+  "amber-deep"     : $amber-deep,
+  "amber-lite"     : $amber-lite,
+  "amber-soft"     : $amber-soft,
+  "on-amber"       : $on-amber,
+  "surface-app"    : $surface-app,
+  "surface"        : $surface,
+  "surface-raised" : $surface-raised,
+  "surface-sunken" : $surface-sunken,
+  "border"         : $border,
+  "border-strong"  : $border-strong,
+  "ink"            : $ink,
+  "ink-2"          : $ink-2,
+  "text-body"      : $text-body,
+  "text-muted"     : $text-muted,
+  "text-faint"     : $text-faint,
+  "positive-soft"  : $positive-soft,
+);
