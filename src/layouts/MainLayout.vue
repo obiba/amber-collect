@@ -63,7 +63,7 @@
           </q-item-section>
         </q-item>
 
-        <q-item
+        <!-- q-item
           clickable
           @click="onLock"
            v-if="settings.lock.enabled"
@@ -74,7 +74,7 @@
           <q-item-section>
             <q-item-label>{{$t('main.lock')}}</q-item-label>
           </q-item-section>
-        </q-item>
+        </q-item -->
 
         <q-separator/>
 
