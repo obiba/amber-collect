@@ -1,22 +1,20 @@
 <template>
   <q-page v-cloak>
 
-    <div class="q-py-md q-px-md" :class="settings.theme.header">
+    <div class="q-py-md" :class="settings.theme.header" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-left: 16px; padding-right: 16px;">
       <q-btn
         :label="$t('main.forms')"
         no-caps
         unelevated
         :color="tab === 'forms' ? 'amber-soft' : 'white'"
         :class="tab === 'forms' ? 'text-ink' : 'text-muted'"
-        @click="tab = 'forms'"
-        style="width: 50%" />
+        @click="tab = 'forms'" />
       <q-btn
         no-caps
         unelevated
         :color="tab === 'in_progress' ? 'amber-soft' : 'white'"
         :class="tab === 'in_progress' ? 'text-ink' : 'text-muted'"
-        @click="tab = 'in_progress'"
-        style="width: 50%">
+        @click="tab = 'in_progress'">
         <div>
           <span>{{ $t('main.in_progress') }}</span>
           <q-badge v-if="notSavedCaseReports.length" :color="tab === 'in_progress' ? 'amber' : 'grey-5'" class="q-ml-sm">{{ notSavedCaseReports.length }}</q-badge>
