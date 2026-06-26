@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { secureStorage } from './index'
 import caseReportService from '../services/record'
 import { t } from '../boot/i18n'
@@ -12,25 +12,24 @@ export const useRecordStore = defineStore('record', () => {
   const caseReportsInProcess = ref({})
   const caseReportsInError = ref({})
 
-
   // Actions
-  function getCaseReportById(userParam, id) {
+  function getCaseReportById (userParam, id) {
     return caseReports.value.filter(rec => rec.id === id && userParam && rec.actions[0].user === userParam.email).pop()
   }
 
-  function getCaseReportsCount(userParam) {
+  function getCaseReportsCount (userParam) {
     return caseReports.value.filter(rec => userParam && rec.actions[0].user === userParam.email).length
   }
 
-  function getCaseReports(userParam) {
+  function getCaseReports (userParam) {
     return caseReports.value.filter(rec => userParam && rec.actions[0].user === userParam.email)
   }
 
-  async function initUser(payload) {
+  async function initUser (payload) {
     user.value = payload
   }
 
-  async function initCaseReport(payload) {
+  async function initCaseReport (payload) {
     const recordId = caseReports.value.map(cr => cr.id).reduce((a, b) => Math.max(a, b), 0) + 1 + ''
     const record = {
       id: recordId,
@@ -47,7 +46,7 @@ export const useRecordStore = defineStore('record', () => {
     return recordId
   }
 
-  function addCaseReport(payload) {
+  function addCaseReport (payload) {
     // add case report if not already done
     const record = caseReports.value.filter(rec => rec.id === payload.id).pop()
     if (!record) {
@@ -61,13 +60,13 @@ export const useRecordStore = defineStore('record', () => {
     }
   }
 
-  async function deleteCaseReport(payload) {
+  async function deleteCaseReport (payload) {
     caseReports.value = caseReports.value.filter(rec => rec.id !== payload.id)
     delete caseReportsInProcess.value[payload.id]
     delete caseReportsInError.value[payload.id]
   }
 
-  function lockCaseReport(payload) {
+  function lockCaseReport (payload) {
     if (payload.lock) {
       caseReportsInProcess.value[payload.id] = true
     } else {
@@ -75,7 +74,7 @@ export const useRecordStore = defineStore('record', () => {
     }
   }
 
-  function markCaseReportInError(payload) {
+  function markCaseReportInError (payload) {
     if (payload.error) {
       caseReportsInError.value[payload.id] = true
     } else {
@@ -83,7 +82,7 @@ export const useRecordStore = defineStore('record', () => {
     }
   }
 
-  async function setCaseReportData(payload) {
+  async function setCaseReportData (payload) {
     const record = caseReports.value.filter(rec => rec.id === payload.id).pop()
     if (record) {
       record.data = payload.data
@@ -92,7 +91,7 @@ export const useRecordStore = defineStore('record', () => {
     }
   }
 
-  async function mergeCaseReportData(payload) {
+  async function mergeCaseReportData (payload) {
     const record = caseReports.value.filter(rec => rec.id === payload.id).pop()
     if (record) {
       if (record.data) {
@@ -107,7 +106,7 @@ export const useRecordStore = defineStore('record', () => {
     }
   }
 
-  function addCaseReportAction(payload) {
+  function addCaseReportAction (payload) {
     const record = caseReports.value.filter(rec => rec.id === payload.id).pop()
     if (record) {
       if (!record.actions) {
@@ -128,7 +127,7 @@ export const useRecordStore = defineStore('record', () => {
     }
   }
 
-  async function pauseCaseReport(payload) {
+  async function pauseCaseReport (payload) {
     addCaseReportAction({
       id: payload.id,
       action: {
@@ -139,7 +138,7 @@ export const useRecordStore = defineStore('record', () => {
     })
   }
 
-  async function completeCaseReport(payload) {
+  async function completeCaseReport (payload) {
     addCaseReportAction({
       id: payload.id,
       revision: payload.revision,
@@ -151,7 +150,7 @@ export const useRecordStore = defineStore('record', () => {
     })
   }
 
-  async function saveCaseReport(payload) {
+  async function saveCaseReport (payload) {
     if (caseReportsInProcess.value[payload.id]) {
       console.log(`CR #${payload.id} is already being processed`)
       return
@@ -160,7 +159,7 @@ export const useRecordStore = defineStore('record', () => {
       console.log(`CR #${payload.id} is in error`)
       return
     }
-    
+
     lockCaseReport({
       id: payload.id,
       lock: true
@@ -205,13 +204,13 @@ export const useRecordStore = defineStore('record', () => {
           lock: false
         })
       })
-      
+
     if (result) {
       lockCaseReport({
         id: payload.id,
         lock: false
       })
-      
+
       addCaseReportAction({
         id: payload.id,
         revision: payload.revision,
@@ -221,7 +220,7 @@ export const useRecordStore = defineStore('record', () => {
           type: 'save'
         }
       })
-      
+
       if (payload.silent !== true) {
         Notify.create({
           message: t('success.save_case_report'),

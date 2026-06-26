@@ -122,7 +122,7 @@ const lockStore = useLockStore()
 const { user } = storeToRefs(recordStore)
 
 // LockMixin functionality inlined - use state refs directly
-const { id: lockId, password: lockPassword, status: lockStatus } = storeToRefs(lockStore)
+const { password: lockPassword } = storeToRefs(lockStore)
 
 // Inlined LockMixin methods
 const triggerLock = (payload) => {
@@ -135,15 +135,6 @@ const updatePassword = (payload) => {
 
 const clearPassword = (payload) => {
   lockStore.clearPassword(payload)
-}
-
-const resetLock = (userId) => {
-  updatePassword({
-    id: userId
-  })
-  triggerLock({
-    status: false
-  })
 }
 
 const clearLock = (userId) => {

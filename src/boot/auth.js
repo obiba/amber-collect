@@ -10,7 +10,7 @@ export default boot(async ({ router }) => {
     if (to.meta.requiresAuth) {
       const authStore = useAuthStore()
       const recordStore = useRecordStore()
-      
+
       // if requires admin
       const user = authStore.user
       if (user) {

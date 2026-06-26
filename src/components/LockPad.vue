@@ -90,7 +90,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-function shuffleArray(arr) {
+function shuffleArray (arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [arr[i], arr[j]] = [arr[j], arr[i]]
@@ -107,26 +107,26 @@ const nums3 = nums.slice(6, 9)
 const nums4 = nums.slice(9, 10)
 
 const value = computed({
-  get() {
+  get () {
     return props.modelValue
   },
-  set(val) {
+  set (val) {
     emit('update:modelValue', val)
   }
 })
 
-function onAppend(val) {
+function onAppend (val) {
   const nval = value.value ? value.value + '' + val : val + ''
   value.value = nval
 }
 
-function onErase() {
+function onErase () {
   if (value.value && (value.value + '').length > 0) {
     value.value = (value.value + '').substring(0, (value.value + '').length - 1)
   }
 }
 
-function onClear() {
+function onClear () {
   value.value = ''
 }
 </script>

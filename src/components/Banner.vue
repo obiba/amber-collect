@@ -15,15 +15,15 @@
 </template>
 
 <script>
-import { settings } from "../boot/settings";
-import { defineComponent } from "vue";
+import { settings } from '../boot/settings'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "AppBanner",
-  setup() {
+  name: 'AppBanner',
+  setup () {
     return {
-      settings,
-    };
-  },
-});
+      settings
+    }
+  }
+})
 </script>

@@ -211,19 +211,6 @@ const isFinalStep = computed(() => {
   return isMulti() && formData.value.__step === crf.value.schema.items.length - 1
 })
 
-const modeOptions = computed(() => {
-  return [
-    {
-      value: 'single',
-      label: t('single_page')
-    },
-    {
-      value: 'multi',
-      label: t('multi_steps')
-    }
-  ]
-})
-
 // Methods
 const hasIdLabel = () => {
   return crf.value.schema.idLabel

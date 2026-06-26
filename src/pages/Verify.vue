@@ -51,7 +51,7 @@ const { t } = useI18n()
 
 const success = ref(undefined)
 
-async function verifyAccount() {
+async function verifyAccount () {
   const token = route.query.token
   let result
   if (token) {

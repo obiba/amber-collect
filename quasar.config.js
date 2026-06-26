@@ -14,7 +14,7 @@ import path from 'node:path'
 export default configure(function (ctx) {
   const packageJson = readFileSync('./package.json', 'utf8')
   const version = JSON.parse(packageJson).version || 0
-  
+
   return {
     // https://v2.quasar.dev/quasar-cli-vite/supporting-ts
     supportTS: false,
@@ -60,13 +60,13 @@ export default configure(function (ctx) {
       },
 
       publicPath: '/',
-      
+
       // https://v2.quasar.dev/quasar-cli-vite/handling-vite
       extendViteConf (viteConf) {
         const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
         viteConf.base = './'
-        
+
         if (!viteConf.resolve) {
           viteConf.resolve = {}
         }
@@ -115,7 +115,7 @@ export default configure(function (ctx) {
 
       extendViteConf (viteConf) {
         const __dirname = fileURLToPath(new URL('.', import.meta.url))
-        
+
         if (!viteConf.resolve) {
           viteConf.resolve = {}
         }
@@ -132,7 +132,7 @@ export default configure(function (ctx) {
       injectPwaMetaTags: true,
       swFilename: 'sw.js',
       manifestFilename: 'manifest.json',
-      
+
       extendGenerateSWOptions (cfg) {
         Object.assign(cfg, {
           maximumFileSizeToCacheInBytes: 5000000,
@@ -198,7 +198,7 @@ export default configure(function (ctx) {
 
       extendViteConf (viteConf) {
         const __dirname = fileURLToPath(new URL('.', import.meta.url))
-        
+
         if (!viteConf.resolve) {
           viteConf.resolve = {}
         }

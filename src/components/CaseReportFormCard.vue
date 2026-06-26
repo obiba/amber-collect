@@ -137,10 +137,6 @@ const md = (text) => {
   return text ? marked.parse(tr(text), { headerIds: false, mangle: false }) : text
 }
 
-const onShowDetails = () => {
-  showCaseReportFormDetails.value = true
-}
-
 const onStart = () => {
   const idSchema = {
     items: [{

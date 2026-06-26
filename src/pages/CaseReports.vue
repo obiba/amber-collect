@@ -212,10 +212,6 @@ const caseReports = computed(() => {
   return recordStore.getCaseReports(user.value)
 })
 
-const pagesNumber = computed(() => {
-  return Math.ceil(caseReports.value.length / pagination.value.rowsPerPage)
-})
-
 const currentLocale = computed(() => {
   return locale.value
 })
@@ -237,11 +233,6 @@ const getFormRevision = (crfId) => {
 
 const startedDate = (cr) => {
   const action = cr.actions.filter(a => a.type === 'init').pop()
-  return action ? date.formatDate(action.timestamp, 'YYYY-MM-DD HH:mm') : '?'
-}
-
-const updatedDate = (cr) => {
-  const action = cr.actions[cr.actions.length - 1]
   return action ? date.formatDate(action.timestamp, 'YYYY-MM-DD HH:mm') : '?'
 }
 

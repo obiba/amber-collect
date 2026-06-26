@@ -233,7 +233,7 @@ const formStore = useFormStore()
 const lockStore = useLockStore()
 
 // Extract reactive state from stores
-const { id: lockId, password: lockPassword, status: lockStatus } = storeToRefs(lockStore)
+const { id: lockId, status: lockStatus } = storeToRefs(lockStore)
 
 const triggerLock = (payload) => {
   lockStore.triggerLock(payload)
@@ -243,21 +243,8 @@ const updatePassword = (payload) => {
   lockStore.updatePassword(payload)
 }
 
-const clearPassword = (payload) => {
-  lockStore.clearPassword(payload)
-}
-
 const resetLock = (userId) => {
   updatePassword({
-    id: userId
-  })
-  triggerLock({
-    status: false
-  })
-}
-
-const clearLock = (userId) => {
-  clearPassword({
     id: userId
   })
   triggerLock({
@@ -321,16 +308,8 @@ const onLogout = () => {
   resetLock()
 }
 
-const onLock = () => {
-  router.push('/lock')
-}
-
 const onUpdate = () => {
   formStore.getCaseReportForms({})
-}
-
-const onUpgrade = () => {
-  window.location.reload()
 }
 
 // Watch locale changes

@@ -10,11 +10,11 @@ export const useLockStore = defineStore('lock', () => {
   const locks = ref({})
 
   // Actions
-  function triggerLock(payload) {
+  function triggerLock (payload) {
     status.value = payload.status
   }
 
-  function clearPassword(payload) {
+  function clearPassword (payload) {
     if (payload.id) {
       locks.value[payload.id] = undefined
       id.value = ''
@@ -22,7 +22,7 @@ export const useLockStore = defineStore('lock', () => {
     }
   }
 
-  function updatePassword(payload) {
+  function updatePassword (payload) {
     id.value = payload.id
     if (payload.password) {
       // set current lock

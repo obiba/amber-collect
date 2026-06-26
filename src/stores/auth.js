@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
   const errorOnLogout = ref(null)
 
   // Actions
-  function responseHandler(response) {
+  function responseHandler (response) {
     if (response && response.user) {
       user.value = response.user
     }
@@ -24,10 +24,10 @@ export const useAuthStore = defineStore('auth', () => {
     return response
   }
 
-  async function authenticate(credentials) {
+  async function authenticate (credentials) {
     isAuthenticatePending.value = true
     errorOnAuthenticate.value = null
-    
+
     try {
       const response = await feathersClient.authenticate(credentials)
       responseHandler(response)
@@ -40,10 +40,10 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function reAuthenticate() {
+  async function reAuthenticate () {
     isAuthenticatePending.value = true
     errorOnAuthenticate.value = null
-    
+
     try {
       const response = await feathersClient.reAuthenticate()
       responseHandler(response)
@@ -59,10 +59,10 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  async function logout() {
+  async function logout () {
     isLogoutPending.value = true
     errorOnLogout.value = null
-    
+
     try {
       await feathersClient.logout()
       user.value = null
@@ -75,12 +75,12 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  function clearAuthErrors() {
+  function clearAuthErrors () {
     errorOnAuthenticate.value = null
     errorOnLogout.value = null
   }
 
-  async function getOAuthProviders() {
+  async function getOAuthProviders () {
     const response = await api.get('/auth/providers')
     return response.data
   }

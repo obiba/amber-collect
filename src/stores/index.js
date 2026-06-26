@@ -20,10 +20,10 @@ const secureStorage = {
 
 export default function (/* { ssrContext } */) {
   const pinia = createPinia()
-  
+
   // Configure persistence plugin with encryption
   pinia.use(piniaPluginPersistedstate)
-  
+
   return pinia
 }
 

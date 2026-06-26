@@ -173,5 +173,5 @@ export default {
   go_home: 'Retour à l\'accueil',
   nothing_here: 'Il n\'y a rien ici...',
   github: 'GitHub',
-  google: 'Google',
+  google: 'Google'
 }

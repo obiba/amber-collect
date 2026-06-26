@@ -6,7 +6,7 @@ import { Notify } from 'quasar'
 
 export const useAccountStore = defineStore('account', () => {
   // Actions
-  async function registerUser(payload) {
+  async function registerUser (payload) {
     const result = await userService
       .register(
         payload.formData.firstname,
@@ -34,7 +34,7 @@ export const useAccountStore = defineStore('account', () => {
           }
         }
       })
-    
+
     if (result && result.status >= 201) {
       Notify.create({
         message: t('success.create_account'),
@@ -46,7 +46,7 @@ export const useAccountStore = defineStore('account', () => {
     return { success: false }
   }
 
-  async function forgotPassword(payload) {
+  async function forgotPassword (payload) {
     return userService
       .forgotPassword(payload.emailAddress)
       .then(() => {

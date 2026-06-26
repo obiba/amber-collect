@@ -11,7 +11,7 @@ export const useFormStore = defineStore('form', () => {
   const data = ref({})
 
   // Actions
-  async function getCaseReportForms(payload = {}) {
+  async function getCaseReportForms (payload = {}) {
     const result = await crfsService.getCaseReportForms(payload.filter).catch(err => {
       const errorCode = err.code
       if (!payload.silent) {
@@ -33,17 +33,17 @@ export const useFormStore = defineStore('form', () => {
         }
       }
     })
-    
+
     if (result) {
       crfs.value = [...result.data]
     }
   }
 
-  function clearCaseReportForms() {
+  function clearCaseReportForms () {
     crfs.value = []
   }
 
-  function setCaseReportFormData(payload) {
+  function setCaseReportFormData (payload) {
     if (!data.value[payload.user]) {
       data.value[payload.user] = {}
     }
