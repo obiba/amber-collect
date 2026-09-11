@@ -128,7 +128,7 @@ import { storeToRefs } from 'pinia'
 import langEnUS from 'quasar/lang/en-US'
 import langFr from 'quasar/lang/fr'
 
-import Banner from 'components/Banner.vue'
+import Banner from '@/components/Banner.vue'
 
 // Map locale codes to Quasar language objects
 const quasarLangMap = {

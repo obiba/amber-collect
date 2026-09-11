@@ -199,8 +199,8 @@ import { useLockStore } from '../stores/lock'
 import langEnUS from 'quasar/lang/en-US'
 import langFr from 'quasar/lang/fr'
 
-import EssentialLink from 'components/EssentialLink.vue'
-import amberMark from 'src/assets/amber-mark-negative.svg'
+import EssentialLink from '@/components/EssentialLink.vue'
+import amberMark from '@/assets/amber-mark-negative.svg'
 
 // Map locale codes to Quasar language objects
 const quasarLangMap = {
