@@ -150,7 +150,7 @@ import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import { useQuasar } from 'quasar'
 import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
-import CaseReportFormCard from 'components/CaseReportFormCard.vue'
+import CaseReportFormCard from '@/components/CaseReportFormCard.vue'
 import { useFormStore } from '../stores/form'
 import { useRecordStore } from '../stores/record'
 

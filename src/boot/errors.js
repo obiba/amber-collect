@@ -1,4 +1,4 @@
-import { boot } from 'quasar/wrappers'
+import { defineBoot } from '#q-app'
 import { Notify } from 'quasar'
 
 class ErrorHandler {
@@ -34,7 +34,7 @@ class ErrorHandler {
 
 const errorHandler = new ErrorHandler()
 
-export default boot(async ({ router }) => {
+export default defineBoot(async ({ router }) => {
   errorHandler.init(router)
 })
 

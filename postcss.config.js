@@ -1,8 +1,8 @@
 // https://github.com/michael-ciniawsky/postcss-load-config
 
-const rtlcss = require('postcss-rtlcss')
+import rtlcss from 'postcss-rtlcss'
 
-module.exports = {
+export default {
   plugins: [
     rtlcss()
   ]

@@ -1,11 +1,11 @@
-import { boot } from 'quasar/wrappers'
+import { defineBoot } from '#q-app'
 import { LocalStorage, Notify } from 'quasar'
 import { feathersClient } from './feathersClient'
 import { t } from './i18n'
 import { useAuthStore } from '../stores/auth'
 import { useRecordStore } from '../stores/record'
 
-export default boot(async ({ router }) => {
+export default defineBoot(async ({ router }) => {
   router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth) {
       const authStore = useAuthStore()

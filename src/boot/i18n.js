@@ -1,6 +1,6 @@
-import { boot } from 'quasar/wrappers'
+import { defineBoot } from '#q-app'
 import { createI18n } from 'vue-i18n'
-import messages from 'src/i18n'
+import messages from '@/i18n'
 import { settings } from './settings'
 import { merge } from 'merge-anything'
 import { Quasar } from 'quasar'
@@ -13,13 +13,14 @@ if (!locales.includes(detectedLocale)) {
 }
 
 const i18n = createI18n({
+  legacy: false,
   locale: detectedLocale,
   fallbackLocale: locales[0],
   messages: merge(messages, settings.i18n ? settings.i18n : {})
 })
 const t = i18n.global.t
 
-export default boot(({ app }) => {
+export default defineBoot(({ app }) => {
   // Set instance on app
   app.use(i18n)
 })

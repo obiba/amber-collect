@@ -1,12 +1,11 @@
 import { register } from 'register-service-worker'
 import { Notify } from 'quasar'
-import { mdiCached } from '@quasar/extras/mdi-v7'
 
 // The ready(), registered(), cached(), updatefound() and updated()
 // events passes a ServiceWorkerRegistration instance in their arguments.
 // ServiceWorkerRegistration: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
 
-register(process.env.SERVICE_WORKER_FILE, {
+register(import.meta.env.QUASAR_SERVICE_WORKER_FILE, {
   // The registrationOptions object will be passed as the second argument
   // to ServiceWorkerContainer.register()
   // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register#Parameter
@@ -33,7 +32,7 @@ register(process.env.SERVICE_WORKER_FILE, {
     // console.log('New content is available; please refresh.')
     Notify.create({
       color: 'negative',
-      icon: mdiCached,
+      icon: 'cached',
       message: 'Updated content is available. Please refresh the page.',
       timeout: 0,
       multiLine: true,

@@ -44,7 +44,7 @@ import { useI18n } from 'vue-i18n'
 import { Notify } from 'quasar'
 import userService from '../services/user'
 import { settings } from '../boot/settings'
-import Banner from 'components/Banner.vue'
+import Banner from '@/components/Banner.vue'
 
 const route = useRoute()
 const { t } = useI18n()

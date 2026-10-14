@@ -149,7 +149,7 @@ import { settings } from '../boot/settings'
 import { useAccountStore } from '../stores/account'
 import { storeToRefs } from 'pinia'
 
-import Banner from 'components/Banner.vue'
+import Banner from '@/components/Banner.vue'
 
 const { locale, t } = useI18n({ useScope: 'global' })
 const router = useRouter()
