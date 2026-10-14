@@ -27,6 +27,19 @@ export default boot(async ({ router }) => {
         } else if (!LocalStorage.getItem('feathers-jwt')) {
           next('/login')
         } else {
+          // after a page reload, the stored token must be re-attached to the API requests
+          // (no-op when already authenticated; pending requests wait for it)
+          feathersClient.reAuthenticate().catch((err) => {
+            console.error(err)
+            if (err.code === 401) {
+              // remove expired/unusable token
+              LocalStorage.remove('feathers-jwt')
+              router.push('/login')
+            } else {
+              // network cannot be reached: retry on next navigation
+              feathersClient.set('authentication', undefined)
+            }
+          })
           next()
         }
       } else if (LocalStorage.getItem('feathers-jwt')) {
