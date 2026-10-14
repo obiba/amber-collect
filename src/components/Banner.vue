@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div v-if="settings.theme.logo" class="col text-center">
-            <img :src="settings.theme.logo" />
+        <div class="col text-center q-mb-md">
+            <img :src="settings.theme.logo || amberMark" :class="settings.theme.logo ? '' : 'banner-mark'" alt="" />
         </div>
         <div class="col text-center q-mb-lg">
             <div class="text-h1">
@@ -17,12 +17,14 @@
 <script>
 import { settings } from '../boot/settings'
 import { defineComponent } from 'vue'
+import amberMark from '../assets/amber-mark-negative.svg'
 
 export default defineComponent({
   name: 'AppBanner',
   setup () {
     return {
-      settings
+      settings,
+      amberMark
     }
   }
 })

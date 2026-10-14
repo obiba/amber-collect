@@ -7,7 +7,7 @@
             <banner/>
           </div>
           <div class="col">
-            <q-card color="white" :class="settings.theme.front.card">
+            <q-card :class="settings.theme.front.card">
               <q-card-section>
                 <div class="text-center q-pt-sm">
                   <div class="col text-subtitle">
@@ -38,7 +38,7 @@
                     <q-btn
                       :label="$t('forgot_password.submit')"
                       type="submit"
-                      color="dark"
+                      color="primary"
                       :disable="disableSubmit"/>
                     <q-btn
                       :label="$t('forgot_password.login')"

@@ -1,7 +1,7 @@
 <template>
   <q-layout v-cloak view="hHh lpR fFf">
 
-    <q-header elevated :class="settings.theme.header" v-touch-swipe.mouse.left.right="handleSwipe">
+    <q-header :class="settings.theme.header" v-touch-swipe.mouse.left.right="handleSwipe">
       <q-toolbar>
         <q-toolbar-title>
           {{ $t('case_report') }}
@@ -19,7 +19,7 @@
     </q-header>
 
     <q-page-container>
-      <q-page class="bg-grey-2">
+      <q-page class="bg-page">
         <div v-if="isMulti()">
           <q-linear-progress :value="progress" animation-speed="100" />
         </div>
@@ -28,7 +28,7 @@
             <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2"
               :class="(canPrevious() && isMulti()) ? 'text-grey-5 text-center q-mt-xl cursor-pointer' : ''"
               @click="previousStep">
-              <q-icon v-if="canPrevious()" :name="$q.lang.rtl ? 'arrow_forward' : 'arrow_back'" size="xl" color="white" class="bg-amber rounded-borders fixed" />
+              <q-icon v-if="canPrevious()" :name="$q.lang.rtl ? 'arrow_forward' : 'arrow_back'" size="xl" color="white" class="bg-primary rounded-borders fixed" />
             </div>
             <div class="col-md-4 col-sm-8 col-xs-12 q-mt-sm q-mb-sm">
               <div>
@@ -42,14 +42,14 @@
             <div v-if="!$q.screen.lt.sm" class="col-md-4 col-sm-2"
               :class="(canNext() && isMulti()) ? 'text-grey-5 text-center q-mt-xl cursor-pointer' : ''"
               @click="nextStep">
-              <q-icon v-if="canNext()" :name="$q.lang.rtl ? 'arrow_back' : 'arrow_forward'" size="xl" color="white" class="bg-amber rounded-borders fixed" />
+              <q-icon v-if="canNext()" :name="$q.lang.rtl ? 'arrow_back' : 'arrow_forward'" size="xl" color="white" class="bg-primary rounded-borders fixed" />
             </div>
           </div>
         </div>
       </q-page>
     </q-page-container>
 
-    <q-footer elevated :class="settings.theme.footer" v-touch-swipe.mouse.left.right="handleSwipe">
+    <q-footer :class="settings.theme.footer" v-touch-swipe.mouse.left.right="handleSwipe">
       <q-toolbar>
         <q-btn v-if="mode === 'single'" stretch flat icon="dynamic_feed" @click="toggleMode('multi')"
           :title="$t('multi_steps')" />

@@ -42,7 +42,7 @@
     <div class="row q-mb-lg">
       <div class="col">
         <q-btn
-          class="q-ml-xs bg-blue-5"
+          class="q-ml-xs bg-secondary"
           round
           dense
           color="primary"

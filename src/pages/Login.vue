@@ -36,7 +36,7 @@
                   </q-input>
 
                   <div>
-                    <q-btn :label="$t('login.submit')" type="submit" color="dark" :disable="disableSubmit" />
+                    <q-btn :label="$t('login.submit')" type="submit" color="primary" :disable="disableSubmit" />
                     <q-btn v-if="settings.register_enabled" :label="$t('login.register')" flat to="/register" stretch
                       class="text-bold q-ml-md" />
                   </div>
@@ -74,7 +74,7 @@
                     </template>
                   </q-input>
                   <div>
-                    <q-btn :label="$t('login.validate')" type="submit" color="dark" :disable="disableValidate" />
+                    <q-btn :label="$t('login.validate')" type="submit" color="primary" :disable="disableValidate" />
                     <q-btn :label="$t('cancel')" @click="onCancelToken" flat stretch class="text-bold q-ml-md" />
                   </div>
                 </q-form>
@@ -90,7 +90,7 @@
                 <q-btn flat to="/forgot-password" dense no-caps class="text-bold">
                   {{ $t('login.forgot_password') }}
                 </q-btn>
-                <q-btn-dropdown v-show="hasLocales" flat :label="locale" :title="$t('locales.' + locale)" class="float-right">
+                <q-btn-dropdown v-show="hasLocales" flat :label="locale.toUpperCase()" :title="$t('locales.' + locale)" class="float-right">
                   <q-list>
                     <q-item clickable v-close-popup @click="onLocaleSelection(localeOpt)"
                       v-for="localeOpt in localeOptions" :key="localeOpt.value">

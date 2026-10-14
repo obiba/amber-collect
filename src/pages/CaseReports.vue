@@ -10,7 +10,7 @@
 
       <template v-slot:item="props">
         <div class="q-pt-md q-pr-md q-pl-md col-xs-12 col-sm-6 col-md-4">
-          <q-card class="ac-card" :class="props.row.state !== 'saved' ? 'bg-green-1' : ''">
+          <q-card class="ac-card" :class="props.row.state !== 'saved' ? 'bg-amber-soft' : ''">
             <q-card-section>
               <q-item class="q-pa-none">
                 <q-item-section>

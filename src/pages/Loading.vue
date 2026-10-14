@@ -9,7 +9,7 @@
               size="100px"
               :thickness="0.22"
               color="white"
-              track-color="blue-4"
+              track-color="secondary"
               class="q-ma-xl"
             />
           </div>
