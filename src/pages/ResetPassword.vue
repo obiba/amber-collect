@@ -18,7 +18,7 @@
               </q-card-section>
               <q-card-section>
                 <q-form @submit="resetPassword" class="q-gutter-md">
-                  <q-input dark color="white" :type="showPassword ? 'text' : 'password'" v-model="formData.password"
+                  <q-input :type="showPassword ? 'text' : 'password'" v-model="formData.password"
                     :label="$t('password')" lazy-rules :hint="$t('password_hint')" @blur="v$.formData.password.$touch"
                     :error="v$.formData.password.$error">
                     <template v-slot:prepend>
@@ -35,7 +35,7 @@
                     </template>
                   </q-input>
                   <div class="q-pt-md">
-                    <q-btn :label="$t('reset.submit')" type="submit" color="dark" :disable="disableSubmit" />
+                    <q-btn :label="$t('reset.submit')" type="submit" color="primary" :disable="disableSubmit" />
                     <q-btn :label="$t('cancel')" flat to="/login" stretch class="text-bold q-ml-md" />
                   </div>
                 </q-form>

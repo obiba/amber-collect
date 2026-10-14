@@ -37,12 +37,15 @@ export default configure(function (ctx) {
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
-    css: ['app.scss'],
+    css: [
+      '~@fontsource-variable/sora/index.css',
+      '~@fontsource-variable/instrument-sans/index.css',
+      'app.scss'
+    ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       'fontawesome-v7',
-      'roboto-font',
       'material-icons'
     ],
 
@@ -129,7 +132,7 @@ export default configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
     pwa: {
       workboxMode: 'GenerateSW',
-      injectPwaMetaTags: true,
+      injectPwaMetaTags: false, // icons and theme-color are declared in index.html
       swFilename: 'sw.js',
       manifestFilename: 'manifest.json',
 
@@ -140,43 +143,6 @@ export default configure(function (ctx) {
           skipWaiting: true,
           clientsClaim: true
         })
-      },
-
-      manifest: {
-        name: 'Amber Collect',
-        short_name: 'Amber Collect',
-        description: 'Electronic Data Collection Tool',
-        display: 'standalone',
-        orientation: 'portrait',
-        background_color: '#2E72AC',
-        theme_color: '#2E72AC',
-        icons: [
-          {
-            src: './icons/icon-128x128.png',
-            sizes: '128x128',
-            type: 'image/png'
-          },
-          {
-            src: './icons/icon-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
-          },
-          {
-            src: './icons/icon-256x256.png',
-            sizes: '256x256',
-            type: 'image/png'
-          },
-          {
-            src: './icons/icon-384x384.png',
-            sizes: '384x384',
-            type: 'image/png'
-          },
-          {
-            src: './icons/icon-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
-          }
-        ]
       }
     },
 

@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated :class="settings.theme.header">
+    <q-header :class="settings.theme.header">
       <q-toolbar>
         <q-btn
           flat
@@ -11,7 +11,8 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title>
+        <q-toolbar-title class="row items-center no-wrap">
+          <img :src="amberMark" alt="" class="brand-mark q-mr-sm" />
           <span :style="$q.screen.lt.sm?{'font-size': 'smaller'}:{}">
             {{$t('main.brand')}}
           </span>
@@ -128,7 +129,7 @@
       </q-list>
     </q-drawer>
 
-    <q-footer elevated class="bg-white text-grey-10">
+    <q-footer bordered class="bg-white text-ink">
       <q-tabs no-caps dense>
         <q-route-tab to="/" icon="dashboard" :label="$t('main.dashboard')" />
         <q-route-tab to="/case-reports" icon="summarize" :label="$t('main.case_reports')">
@@ -199,6 +200,7 @@ import langEnUS from 'quasar/lang/en-US'
 import langFr from 'quasar/lang/fr'
 
 import EssentialLink from 'components/EssentialLink.vue'
+import amberMark from 'src/assets/amber-mark-negative.svg'
 
 // Map locale codes to Quasar language objects
 const quasarLangMap = {

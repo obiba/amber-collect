@@ -1,7 +1,7 @@
 <template>
   <q-page v-cloak>
 
-    <div class="q-py-md" :class="settings.theme.header" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-left: 16px; padding-right: 16px;">
+    <div class="q-py-md bg-white" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding-left: 16px; padding-right: 16px;">
       <q-btn
         :label="$t('main.forms')"
         no-caps
@@ -17,7 +17,7 @@
         @click="tab = 'in_progress'">
         <div>
           <span>{{ $t('main.in_progress') }}</span>
-          <q-badge v-if="notSavedCaseReports.length" :color="tab === 'in_progress' ? 'amber' : 'grey-5'" class="q-ml-sm">{{ notSavedCaseReports.length }}</q-badge>
+          <q-badge v-if="notSavedCaseReports.length" :color="tab === 'in_progress' ? 'primary' : 'grey-5'" class="q-ml-sm">{{ notSavedCaseReports.length }}</q-badge>
         </div>
       </q-btn>
     </div>
@@ -66,7 +66,7 @@
                     <q-card-section>
                       <q-item class="q-pa-none">
                         <q-item-section avatar>
-                          <div class="bg-green-1 rounded-borders q-pa-sm">
+                          <div class="bg-surface rounded-borders q-pa-sm">
                             <q-icon color="secondary" name="list_alt" size="md" />
                           </div>
                         </q-item-section>
@@ -153,7 +153,6 @@ import { makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import CaseReportFormCard from 'components/CaseReportFormCard.vue'
 import { useFormStore } from '../stores/form'
 import { useRecordStore } from '../stores/record'
-import { settings } from '../boot/settings'
 
 const $q = useQuasar()
 const formStore = useFormStore()

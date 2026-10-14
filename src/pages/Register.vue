@@ -107,7 +107,7 @@
                     <q-btn
                       :label="$t('register.submit')"
                       type="submit"
-                      color="dark"
+                      color="primary"
                       :disable='disableSubmit'/>
                     <q-btn
                       :label="$t('register.login')"

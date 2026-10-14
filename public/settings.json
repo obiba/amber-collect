@@ -1,11 +1,11 @@
 {
   "theme": {
     "front": {
-      "bg": "bg-white text-ink",
-      "card": "bg-primary no-shadow"
+      "bg": "bg-dark text-white",
+      "card": "ac-card"
     },
-    "header": "bg-white text-ink",
-    "footer": "bg-grey-8 text-white"
+    "header": "bg-dark text-white",
+    "footer": "bg-dark text-white"
   },
   "lock": {
     "enabled": true,
