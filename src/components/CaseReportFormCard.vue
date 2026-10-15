@@ -65,12 +65,12 @@
     <q-card>
       <q-card-section>
         <div>
-          <BlitzForm
+          <AmberForm
+            ref="idForm"
             :key="remountCounter"
-            :schema="schema"
+            :schema="idSchema"
             v-model="formData"
-            :columnCount="1"
-            gridGap='32px' />
+            :locale="currentLocale" />
         </div>
       </q-card-section>
       <q-card-actions align='right'>
@@ -98,8 +98,7 @@ import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { storeToRefs } from 'pinia'
 import { marked } from 'marked'
-import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
-import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
+import { AmberForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import { useRecordStore } from '../stores/record'
 
 const props = defineProps({
@@ -118,7 +117,8 @@ const showCaseReportFormDetails = ref(false)
 const showCreateCaseReportRecord = ref(false)
 const remountCounter = ref(0)
 const formData = ref({})
-const schema = ref([])
+const idSchema = ref({ items: [] })
+const idForm = ref(null)
 
 const instance = getCurrentInstance()
 const currentLocale = computed(() => instance?.proxy?.$root?.$i18n?.locale)
@@ -138,7 +138,7 @@ const md = (text) => {
 }
 
 const onStart = () => {
-  const idSchema = {
+  idSchema.value = {
     items: [{
       name: '_id',
       type: 'text',
@@ -149,23 +149,15 @@ const onStart = () => {
       validationMessage: props.form.schema.idValidationMessage,
       required: true
     }],
-    i18n: props.form.schema.i18n
+    i18n: props.form.schema.i18n || props.form.schema.translations
   }
-  schema.value = makeBlitzarQuasarSchemaForm(idSchema, { locale: currentLocale.value })
   formData.value = {}
   remountCounter.value++
   showCreateCaseReportRecord.value = true
 }
 
 const startRecord = () => {
-  const result = validateFormPerSchema(formData.value, schema.value)
-  const errors = Object.keys(result)
-    .filter(key => result[key] !== null && result[key] !== false)
-    .reduce((obj, key) => {
-      obj[key] = result[key]
-      return obj
-    }, {})
-  if (Object.keys(errors).length === 0) {
+  if (idForm.value.validate().length === 0) {
     recordStore.initCaseReport({
       crf: props.form,
       data: formData.value,
