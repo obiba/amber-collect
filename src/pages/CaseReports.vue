@@ -112,7 +112,7 @@
           <q-tab-panels v-model="viewTab">
             <q-tab-panel name="form" class="q-pl-none q-pr-none">
               <q-scroll-area v-if="viewSchema" style="height: 400px" class="q-pt-md">
-                <BlitzForm :key='remountCounter' :schema='viewSchema' v-model='viewData' mode="disabled"/>
+                <AmberForm :key='remountCounter' :schema='viewSchema' v-model='viewData' :locale="currentLocale" readonly/>
               </q-scroll-area>
               <div v-else>
                 {{ $t('record.case_report_form_not_found') }}
@@ -173,8 +173,7 @@ import { ref, computed } from 'vue'
 import { storeToRefs } from 'pinia'
 import { date, useQuasar } from 'quasar'
 import { useI18n } from 'vue-i18n'
-import { BlitzForm } from '@blitzar/form'
-import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
+import { AmberForm, makeSchemaFormTr } from '@obiba/quasar-ui-amber'
 import { useFormStore } from '../stores/form'
 import { useRecordStore } from '../stores/record'
 
@@ -201,7 +200,7 @@ const pagination = ref({
 const viewTab = ref('form')
 const viewData = ref({})
 const viewDataStr = ref('{}')
-const viewSchema = ref({})
+const viewSchema = ref(null)
 const remountCounter = ref(0)
 const showViewCaseReport = ref(false)
 const selectedCaseReport = ref({})
@@ -274,7 +273,7 @@ const onViewCaseReport = (caseReport) => {
   viewData.value = caseReport.data
   viewDataStr.value = JSON.stringify(caseReport.data, null, '  ')
   if (crf) {
-    viewSchema.value = makeBlitzarQuasarSchemaForm(crf.schema, { locale: currentLocale.value })
+    viewSchema.value = crf.schema
     remountCounter.value++
   } else {
     viewSchema.value = null

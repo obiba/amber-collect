@@ -32,8 +32,8 @@
             </div>
             <div class="col-md-4 col-sm-8 col-xs-12 q-mt-sm q-mb-sm">
               <div>
-                <BlitzForm ref="form" :key="remountCounter" :schema="schema" v-model="formData" :columnCount="1"
-                  :show-errors-on="errorMode" :lang="lang" gridGap='32px' @update:model-value="onFormDataUpdated" />
+                <AmberForm ref="form" :key="remountCounter" :schema="crf.schema" v-model="formData" :locale="currentLocale"
+                  :page="isMulti() ? formData.__step : undefined" :lang="lang" apply-defaults @update:model-value="onFormDataUpdated" />
               </div>
               <!--div class="bg-black text-white q-mt-lg q-pa-md">
                 <pre>{{ JSON.stringify(formData, null, '  ') }}</pre>
@@ -105,9 +105,8 @@ import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { marked } from 'marked'
-import { makeBlitzarQuasarSchemaForm, makeSchemaFormTr, getBlitzarErrors } from '@obiba/quasar-ui-amber'
+import { AmberForm, makeSchemaFormTr, getPageCount } from '@obiba/quasar-ui-amber'
 import { Notify, scroll } from 'quasar'
-import { BlitzForm, validateFormPerSchema } from '@blitzar/form'
 import { t } from '../boot/i18n'
 import { settings } from '../boot/settings'
 import { useRecordStore } from '../stores/record'
@@ -160,18 +159,16 @@ const ccLicenses = [
 ]
 
 // Reactive state
-const debug = ref(false)
+const form = ref(null)
 const remountCounter = ref(0)
 const progress = ref(0)
 const formData = ref({})
-const schema = ref([])
 const crf = ref({ schema: { items: [] } })
 const showFormDescription = ref(false)
 const mode = ref('multi')
 const lastAutoSave = ref(null)
 const autoSavePending = ref(false)
 const errorsRemain = ref(false)
-const errorMode = ref('interaction')
 const errors = ref([])
 const lang = ref({})
 
@@ -208,7 +205,7 @@ const idLabel = computed(() => {
 })
 
 const isFinalStep = computed(() => {
-  return isMulti() && formData.value.__step === crf.value.schema.items.length - 1
+  return isMulti() && formData.value.__step === getPageCount(crf.value.schema) - 1
 })
 
 // Methods
@@ -231,7 +228,7 @@ const onScroll = (id) => {
 }
 
 const updateProgress = () => {
-  progress.value = formData.value.__step / (crf.value.schema.items.length - 1)
+  progress.value = formData.value.__step / Math.max(1, getPageCount(crf.value.schema) - 1)
 }
 
 const isMulti = () => {
@@ -274,14 +271,13 @@ const previousStep = () => {
     data: { __step: formData.value.__step - 1 }
   })
   updateProgress()
-  remountCounter.value++
   errorsRemain.value = false
   errors.value = undefined
   window.scrollTo(0, 0)
 }
 
 const canNext = () => {
-  return isMulti() && formData.value.__step < crf.value.schema.items.length - 1
+  return isMulti() && formData.value.__step < getPageCount(crf.value.schema) - 1
 }
 
 const nextStep = () => {
@@ -297,13 +293,11 @@ const nextStep = () => {
       color: 'negative'
     })
   } else {
-    errorMode.value = 'interaction'
     recordStore.mergeCaseReportData({
       id: caseReportId.value,
       data: { __step: formData.value.__step + 1 }
     })
     updateProgress()
-    remountCounter.value++
     window.scrollTo(0, 0)
   }
 }
@@ -316,8 +310,7 @@ const updateFormData = () => {
 }
 
 const onValidate = () => {
-  errorMode.value = 'always'
-  errors.value = getBlitzarErrors(schema.value, validateFormPerSchema(formData.value, schema.value))
+  errors.value = form.value.validate()
   errorsRemain.value = errors.value.length > 0
 }
 
@@ -379,13 +372,7 @@ const onFormDataUpdated = () => {
 // Watchers
 watch(mode, (newValue, oldValue) => {
   updateFormData()
-  if (newValue === 'single') {
-    schema.value = makeBlitzarQuasarSchemaForm(crf.value.schema, { locale: currentLocale.value, debug: debug.value })
-  } else {
-    schema.value = makeBlitzarQuasarSchemaForm(crf.value.schema, { locale: currentLocale.value, stepId: '__step', debug: debug.value })
-  }
   updateProgress()
-  remountCounter.value++
 })
 
 // Lifecycle hooks
@@ -396,7 +383,6 @@ onMounted(() => {
     if (crf.value.schema.layout) {
       mode.value = crf.value.schema.layout
     }
-    schema.value = makeBlitzarQuasarSchemaForm(crf.value.schema, { locale: currentLocale.value, stepId: '__step', debug: debug.value })
     if (!caseReport.data || !caseReport.data.__step) {
       recordStore.mergeCaseReportData({
         id: caseReportId.value,
