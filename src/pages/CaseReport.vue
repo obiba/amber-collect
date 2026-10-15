@@ -228,7 +228,7 @@ const onScroll = (id) => {
 }
 
 const updateProgress = () => {
-  progress.value = formData.value.__step / (getPageCount(crf.value.schema) - 1)
+  progress.value = formData.value.__step / Math.max(1, getPageCount(crf.value.schema) - 1)
 }
 
 const isMulti = () => {
@@ -271,7 +271,6 @@ const previousStep = () => {
     data: { __step: formData.value.__step - 1 }
   })
   updateProgress()
-  remountCounter.value++
   errorsRemain.value = false
   errors.value = undefined
   window.scrollTo(0, 0)
@@ -299,7 +298,6 @@ const nextStep = () => {
       data: { __step: formData.value.__step + 1 }
     })
     updateProgress()
-    remountCounter.value++
     window.scrollTo(0, 0)
   }
 }
@@ -375,7 +373,6 @@ const onFormDataUpdated = () => {
 watch(mode, (newValue, oldValue) => {
   updateFormData()
   updateProgress()
-  remountCounter.value++
 })
 
 // Lifecycle hooks
