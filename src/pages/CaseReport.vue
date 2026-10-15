@@ -105,7 +105,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { storeToRefs } from 'pinia'
 import { marked } from 'marked'
-import { AmberForm, makeSchemaFormTr, getPageCount } from '@obiba/quasar-ui-amber'
+import { AmberForm, makeSchemaFormTr, getPageCount, getToc, getTocElement } from '@obiba/quasar-ui-amber'
 import { Notify, scroll } from 'quasar'
 import { t } from '../boot/i18n'
 import { settings } from '../boot/settings'
@@ -189,16 +189,7 @@ const caseReportLicense = computed(() => {
   return license
 })
 
-const toc = computed(() => {
-  const tocList = []
-  if (crf.value.schema && crf.value.schema.items) {
-    crf.value.schema.items.filter(item => ['group', 'section'].includes(item.type)).forEach(item => tocList.push({
-      id: item.name.replaceAll('.', '_').toLowerCase(),
-      label: tr(item.label)
-    }))
-  }
-  return tocList.filter(entry => entry.label)
-})
+const toc = computed(() => getToc(crf.value.schema, { locale: currentLocale.value }))
 
 const idLabel = computed(() => {
   return crf.value.schema.idLabel ? tr(crf.value.schema.idLabel) : 'ID'
@@ -218,7 +209,7 @@ const onShowFormDescription = () => {
 }
 
 const onScroll = (id) => {
-  const ele = document.getElementById(id)
+  const ele = getTocElement(id)
   if (ele) {
     const target = getScrollTarget(ele)
     const offset = ele.offsetTop
